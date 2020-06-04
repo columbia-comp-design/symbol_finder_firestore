@@ -1,0 +1,123 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <!-- Page title -->
+  <title>Brainstorm Web</title>
+
+  <!-- Load 3rd party CSS -->
+  <!-- Load CSS for vis.js -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/vis/4.16.1/vis.css" type="text/css" />
+  <!-- Load ionicons -->
+  <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css" type="text/css"/>
+
+  <link rel="stylesheet" href="./../../static/css/style.css" type="text/css"/>
+
+  <link rel="stylesheet" href="./../../static/css/image.css" type="text/css"/>
+  <!-- Load CSS for top bar -->
+  <link rel="stylesheet" href="./../../static/css/bar.css" type="text/css"/>
+  <!-- Load CSS for bottom right buttons -->
+  <link rel="stylesheet" href="./../../static/css/buttongroup.css" type="text/css"/>
+  <!-- Load css for comma input field -->
+  <!-- <link rel="stylesheet" href="./../static/css/commafield.css" type="text/css"/>-->
+  <link rel="stylesheet" href="./../../static/css/commafield.css" type="text/css"/>
+
+  <!-- <link rel="stylesheet" href="./../static/css/sidebar.css" type="text/css"/>-->
+  <link rel="stylesheet" href="./../../static/css/sidebar.css" type="text/css"/>
+
+
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
+
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.fancytree/2.33.0/jquery.fancytree-all.min.js"></script>
+
+  <link rel="stylesheet" href="./../../static/css/skin-bootstrap-ui-fancytree.css" type="text/css"/>
+
+</head>
+
+<body>
+
+  <!-- left sidebar that contains the related words from SPACY --> 
+  <div class="sidenav" id='sidebar'> 
+  </div>
+
+  <!-- <div class="progress" id="progress" class="block_container"> </div> -->
+
+
+  <!-- Will hold the network -->
+  <div class="main" id = 'main'>
+    <div class="progresss" id="progress" class="block_container"> </div>
+
+    <div id="container" class="fullscreen"> </div>
+     <!-- <button id ="delete_button" class="delete_button"> delete</button> --> 
+
+     <div class="symbol_bank" id="symbol_bank" style="display:none"> 
+      <div id = "progress_summary" class="progress_summary"> </div>
+      <div>
+        <button id="see_all_symbols" class="see_all_symbols_btn" onclick="toggle_show_all_symbols(this)"> show symbols </button>
+      </div>
+      <div id = "chosen_symbol_table_div" class="chosen_symbol_table_div"> 
+        <!--<table id="symbol_bank_table"> </table>
+        <tr></tr>-->
+      <!-- <button id="see_all_symbols" class="see_all_symbols_btn" onclick="toggle_show_all_symbols(this)"> show symbols </button> -->
+      </div>
+     </div>
+     <br>
+     <div id="under_progress_bar" class="under_progress_bar"> 
+       <div id="instructions" class="instructions"> </div>
+       <br>
+       <div id = "image_grids"> </div>
+     </div>
+  </div>
+
+
+
+  <!-- 3rd Party -->
+  <!-- Load vis.js (just Network) -->
+  <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/vis/4.16.1/vis-network.min.js"> </script>
+  <!-- Load clipboard.js -->
+  <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/1.5.12/clipboard.min.js"> </script>
+
+
+
+  <!-- Transform comma field -->
+  <script type="text/javascript" src="./../../static/js/main.js"> </script>
+  <script type="text/javascript" src="./../../static/js/select_custom.js"></script> 
+  <script type="text/javascript" src="./../../static/js/network_helper.js"></script>
+  <script type="text/javascript" src="./../../static/js/network.js"></script>
+  <script type="text/javascript" src="./../../static/js/commafield.js"> </script> 
+  <script type="text/javascript" src="./../../static/js/google.js"></script>
+
+  <script>
+    var concept = "{{ concept }}";
+    var username = "{{ username }}";
+    var seen_swow_words = {{ all_cluster_words|tojson }};
+    console.log("SEEN_SWOW_WORDS")
+    console.log(seen_swow_words)
+    var version = 2;
+    var swow_dict = {{ swow_dict|tojson }};
+    swow_dict = JSON.parse(swow_dict);
+    var tree_view_json = {{ tree_view_json|tojson }} ;
+    tree_view_json = JSON.parse(tree_view_json);
+    var concept_searched = concept;
+
+    concept_dict = swow_dict;
+
+    // fill_treeview_sidebar(concept,tree_view_json);
+    // fill_cluster_image_grids(tree_view_json);
+    var clusters = []
+    for (var i = 0; i < tree_view_json.length; i++){
+      var cluster_title = tree_view_json[i]["title"];
+      clusters.push(cluster_title);
+    }
+    //console.log(clusters)
+    google_all_clusters(clusters);
+    updateProgress();
+    populate_first_step_instructions();
+  </script>
+
+
+</body>
+
+</html>

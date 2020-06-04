@@ -1,0 +1,25 @@
+
+
+
+.table_image {
+  width: 150px;
+  padding: 5px;
+  margin: 2px;
+  border: 2px solid rgba(242, 242, 242, 1);
+  /*border-color: #f2f2f2;;*/
+
+}
+
+.table_image.selected {
+  width: 150px;
+  padding: 5px;
+  margin: 2px;
+  border: 2px solid rgba(66, 134, 244, 1);
+}
+
+.table_image:hover{
+  border: 2px solid rgba(66, 134, 244, 1);
+}
+
+
+

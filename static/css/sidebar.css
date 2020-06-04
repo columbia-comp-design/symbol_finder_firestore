@@ -1,0 +1,269 @@
+.sidenav {
+  height: 100%;
+  width: 300px;
+  position: fixed;
+  z-index: 1;
+  top: 0px;
+  left: 0;
+  background-color: #f2f2f2;
+  overflow-x: hidden;
+  padding-top: 20px;
+}
+
+.sidenav a {
+  padding: 3px 4px 3px 8px;
+  text-decoration: none;
+  font-size: 15px;
+  color: #818181;
+  display: block;
+}
+
+.sidenav a:hover {
+  color: #4286f4;
+}
+
+.question_span {
+  font-size: 40px;
+}
+
+.main {
+  margin-left: 300px; /* Same as the width of the sidenav */
+  font-size: 28px; /* Increased text to enable scrolling */
+  padding: 0px 10px;
+}
+
+
+/* =========================================================== */
+/* IMAGE GRID STUFF */
+
+.img_table_title {
+  padding-left: 10px;
+}
+
+/*.img_in_table {
+  width: 250px; border: 3px solid white; padding: 5px; margin: 3px;
+}*/ 
+
+.img_in_table {
+  display: block;
+  max-width:200px;
+  max-height:200px;
+  width: auto;
+  height: auto;
+  /* width: 200px; */
+  border: 5px solid white; 
+  padding: 5px; 
+  margin: 3px;
+}
+
+.img_in_table:hover {
+  border: 5px solid #7bed90;
+}
+
+.cluster_div {
+  /*border: 1px solid black; */
+  padding-top: 125px;
+}
+
+.within_cluster_div {
+  border: 1px solid black;
+  padding: 30px;
+}
+
+.image_instruction_div{
+  padding-top: 20px;
+}
+
+.show_second_row_button{
+  border-style: solid;
+  border-color: black;
+  background-color: inherit;
+  padding: 7px 14px;
+  font-size: 14px;
+  margin-right: 6px;
+  margin-bottom: 6px;
+  cursor: pointer;
+  display: inline-block;
+}
+
+.chosen_symbol_table_div {
+  /*border-style: solid;
+  border-color: black;
+  padding: 10px;
+  width: fit-content;*/
+}
+
+.progress_summary {
+  float:left;
+  margin-right:5px;
+}
+
+.confirm_btn {
+  border-style: solid;
+  border-color: black;
+  background-color: inherit;
+  font-size: 14px;
+  text-align: center;
+  padding: 5px 8px;
+  /*display: flex;
+  justify-content: center;*/
+}
+
+.see_all_symbols_btn{
+  border-style: solid;
+  border-color: black;
+  background-color: inherit;
+  padding: 14px 28px;
+  font-size: 14px;
+  margin-left: 40px;
+  margin-bottom: 6px;
+  cursor: pointer;
+  display: inline-block;
+}
+
+.under_progress_bar {
+  top: 50px;
+  position: absolute;
+}
+
+.see_all_symbols_btn:hover{
+  background: #eee;
+}
+
+.username_btn { 
+  border-style: solid;
+  border-color: black;
+  background-color: inherit;
+  padding: 14px 28px;
+  font-size: 16px;
+  margin-right: 6px;
+  margin-bottom: 6px;
+  cursor: pointer;
+  display: inline-block;
+}
+
+.username_btn:hover {
+   background: #eee;
+}
+
+.username_active {
+  background-color: #6bed78;
+}
+
+.confirm_btn:hover {
+  background: #eee;
+}
+
+.explore_btn {
+  border-style: solid;
+  border-color: black;
+  background-color: inherit;
+  font-size: 50px;
+  margin-left: 350px;
+  margin-bottom: 100px;
+}
+
+.explore_btn:hover {
+  background: #eee;
+}
+
+.yes_button {
+  border-style: solid;
+  border-color: black;
+  background-color: inherit;
+  font-size: 30px;
+  margin-left: 10px;
+  margin-bottom: 6px;
+  cursor: pointer;
+  display: inline-block;
+}
+
+.yes_active {
+  background-color: #6bed78;
+}
+
+.yes_button:hover {background: #6bed78;}
+
+.no_button {
+  border-style: solid;
+  border-color: black;
+  background-color: inherit;
+  font-size: 20px;
+  margin-left: 10px;
+  margin-bottom: 6px;
+  cursor: pointer;
+  display: inline-block;
+}
+
+.see_more_tree {
+  padding: none; 
+}
+
+.see_more_tree_btn {
+  border-style: solid;
+  border-color: black;
+  background-color: inherit;
+  cursor: pointer;
+  display: inline-block;
+  outline:none !important;
+}
+
+.see_more_tree_btn:hover {
+  background: #eee;
+}
+
+.no_button:hover {background: #e85151;}
+
+.no_active {
+  background-color: #e85151;
+}
+
+.question_div {
+  padding-top: 45px;
+}
+
+.headline {
+  padding-top: 1px;
+  background-color: #cbcdd1;
+  height: 40px;
+}
+
+/*
+.img_in_table.confirmed {
+  width: 250px;
+  padding: 5px;
+  margin: 3px;
+  border: 3px solid #7bed90;
+}*/
+
+.img_in_table.confirmed {
+  display: block;
+  max-width:200px;
+  max-height:200px;
+  width: auto;
+  height: auto;
+  padding: 5px;
+  margin: 3px;
+  border: 5px solid #7bed90;
+}
+
+.term_image_grid {
+  width: 1050px;
+  /* width: 1300px; */ 
+  border-width: thin;
+  border-style: solid;
+  /* border-color: #cbcdd1; */
+  border-color: black;
+  padding: 5px;
+}
+
+.padding_div {
+  padding-bottom: 25px;
+}
+
+/* END OF IMAGE GRID STUFF */
+
+@media screen and (max-height: 450px) {
+  .sidenav {padding-top: 15px;}
+  .sidenav a {font-size: 18px;}
+}

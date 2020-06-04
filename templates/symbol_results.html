@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<head> 
+  <title> Symbols Results </title>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"> 
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script> 
+  <link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='css/symbol_results.css') }}">
+</head>
+
+<body>
+
+
+<div id ="tree_sidebar" class="tree_sidebar">
+	<div id="tree">
+	</div>
+</div>
+
+<div id = "main" class="main"></div>
+
+
+<script type="text/javascript" src="./../../static/js/bootstrap-treeview.js"> </script> 
+
+
+<script> 
+
+fill_symbol_grids();
+
+function create_image_grid(term,urls_with_score) {
+  image_table = document.createElement('table');
+  row_num = 0;
+  col_num = 5; 
+  var row = image_table.insertRow(row_num)
+  cell_num = 0;
+  for(var i = 0; i < urls_with_score.length; i++){
+    var url_w_scr = urls_with_score[i];
+    var url = url_w_scr[0];
+    var scr = url_w_scr[1];
+
+    cell = row.insertCell(-1);
+    image = document.createElement('img');
+    image.setAttribute('src',url);
+    cell_id = term + '_' +String(i)
+    image.setAttribute('id',cell_id)
+    image.setAttribute('class','img_in_table');
+
+
+    if(scr == 1){
+      image.classList.add('selected')
+    }
+
+    cell.appendChild(image);
+
+    if((i+1)%col_num == 0){
+      row_num++;
+      row = image_table.insertRow(row_num);
+    }
+  }
+
+  return image_table;
+ }
+
+
+function fill_symbol_grids() {
+	var main_div = document.getElementById("main");
+	var concept = {{ concept|tojson }};
+
+
+  var simple_border_dict = {{ simple_border_dict|tojson }};
+
+  var json_simple_border_dict = JSON.stringify(simple_border_dict);
+  console.log('JSON_SIMPLE_BORDER_DICT: ');
+  console.log(json_simple_border_dict);
+
+
+
+
+  var good_file_dict = {{ good_file_dict|tojson }}; 
+
+  console.log("GOOD_FILES")
+  console.log(good_file_dict)
+  console.log("SIMPLE_BORDER_FILES")
+  console.log(simple_border_dict)
+
+	// fill top of main
+
+	var progress_div = document.createElement("div");
+	progress_div.setAttribute("id","progress");
+	progress_div.setAttribute("class","progress_report");
+
+
+	var main_concept = document.createElement("h2");
+	main_concept.innerHTML = String(concept);
+
+
+	progress_div.appendChild(main_concept);
+	main_div.appendChild(progress_div);
+
+	var concept_dict = {{ concept_dict|tojson }};
+
+  var json_concept_dict = JSON.stringify(concept_dict);
+  console.log('JSON_CONCEPT_DICT: ');
+  console.log(json_concept_dict);
+
+	for(concept in concept_dict){
+		var concept_entry = concept_dict[concept];
+		// var urls = concept_entry["urls"];
+
+    // good_urls 
+    var urls_with_border_scr = simple_border_dict[concept]["sorted_url_border"];  
+
+
+    // var urls = good_file_dict[concept];
+
+		var term_image_grid = document.createElement("div");
+		term_image_grid.setAttribute("class","term_image_grid");
+		
+
+		var headline_div = document.createElement("div");
+		headline_div.setAttribute("class","headline");
+
+		var term_headline = document.createElement("h4"); 
+		term_headline.setAttribute("class","img_table_title");
+		term_headline.innerHTML = String(concept);
+		
+		headline_div.appendChild(term_headline);
+		
+		term_image_grid.appendChild(headline_div);
+
+
+		var padding_div = document.createElement("div");
+		padding_div.setAttribute("class","padding_div");
+
+		image_table = create_image_grid(concept,urls_with_border_scr);
+		term_image_grid.appendChild(image_table);
+
+		padding_div.appendChild(term_image_grid);
+		main_div.appendChild(padding_div);
+	}
+}
+
+function get_concept_tree() {
+  // generate tree structure for tree-view
+  var concept_graph = {{ concept_graph|tojson }};
+
+  var json_concept_graph = JSON.stringify(concept_graph);
+  console.log('JSON_CONCEPT_GRAPH')
+  console.log(json_concept_graph)
+
+
+
+
+  var nodes = concept_graph["nodes"];
+
+  // find root node
+  var root_node = null;
+  for(node in nodes){
+  	var n = nodes[node];
+  	var level = n.level;
+  	if(level == 0){
+  		var root_node = n;
+  		break;
+  	}
+  }
+  var nodes_to_explore = [root_node.id];
+  var tree = [];
+  var root_obj = {};
+  root_obj.state = {};
+  root_obj.state.expanded = true;
+  root_obj.text = root_node.id;
+  root_obj.backColor = "#d9d9d9";
+  tree.push(root_obj);
+  nodes_to_explore = tree; 
+  var edges = concept_graph["edges"];
+
+  while(nodes_to_explore.length > 0) {
+  	var node = nodes_to_explore[0];
+  	node.nodes = [];
+	for(edge in edges){
+			var e = edges[edge];
+			if(e.parent == node.text && e.id != node.text) {
+				var new_node_obj = {};
+				new_node_obj.state = {};
+				new_node_obj.state.expanded = true;
+				new_node_obj.text = e.id;
+				node.nodes.push(new_node_obj);
+				nodes_to_explore.push(new_node_obj);
+			}
+	}
+	nodes_to_explore.shift();
+  }
+  tree.push(root_obj);
+  return tree;
+}
+
+$('#tree').treeview({
+	data: get_concept_tree(),
+	expandIcon: "glyphicon glyphicon-chevron-right",
+	collapseIcon: "glyphicon glyphicon-chevron-down",
+});
+
+
+
+</script>
+
+</body>
+</html>

@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<head> 
+  <title> Symbols </title>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+  <!-- <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.8/angular.min.js"></script> -->
+  <link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='css/style.css') }}">
+</head>
+
+<body>
+
+<div align="center">
+<br>
+<h2> Symbols for: <b> {{ concept }} </b> </h2>
+<br>
+<button id="find_symbol_btn" class="symbol_button" onclick="go_to_finder()"> Find more symbols! </button>
+<br>
+<hr>
+	<div id="symbol_grid"></div>
+</div>
+
+<script>
+var concept = '{{ concept }}'
+var username = '{{ username }}'
+function go_to_finder() {
+	window.location.href = '/' + username + '/finder/' + concept; 
+  // window.location.href = '/finder/' + concept; 
+}
+
+var concept_dict = null;
+
+window.onload = function() {
+  // load past concepts
+  $.ajax({
+	    type: "POST",
+	    url: "get_symbols_for_username",                
+	    contentType: "application/json; charset=utf-8",
+      data : JSON.stringify({"concept":concept,"username":username}),
+	    success: function(data, text){
+	    	console.log('success')
+	    	console.log(data)
+	    	populate_symbols(data)
+	    },
+	    error: function(request, status, error){
+	    	console.log("Error");
+	        console.log(request)
+	        console.log(status)
+	        console.log(error)
+	    }
+  });
+
+};
+
+populate_symbols = function(img_list){
+  console.log("populate_symbols")
+  console.log(img_list)
+  // var img_list = concept_dict[concept]['img_list']
+  image_table = document.createElement('table');
+  row_num = 0;
+  col_num = 5; 
+  var row = image_table.insertRow(row_num)
+  cell_num = 0;
+
+  var sorted_img_list = img_list.sort((a, b) => (a.confirm_time > b.confirm_time) ? 1 : -1);
+  for(var i = 0; i < sorted_img_list.length; i++){
+    var url = sorted_img_list[i]['url'];
+    var term = sorted_img_list[i]['search_term'];
+    var confirm_time = sorted_img_list[i]['confirm_time'];
+    var on_step_one = sorted_img_list[i]['on_step_one'];
+
+
+    var cf_seconds = confirm_time / 1000.0;
+    var cf_minutes = cf_seconds / 60.0;
+    cf_minutes = cf_minutes.toFixed(2);
+
+    var rem_seconds = (cf_minutes % 1) * 60.0;
+    var rem_seconds = Math.floor(rem_seconds);
+
+    var written_time = String(Math.floor(cf_minutes)) + " min " + String(rem_seconds) + " sec."
+
+
+    cell = row.insertCell(-1);
+
+    image_entry_div = document.createElement('div');
+    image_entry_div.innerHTML = String(term) + "<br>" + written_time + "<br> step one: " + String(on_step_one) + "<br>"
+
+    image = document.createElement('img');
+    image.setAttribute('src',url);
+    cell_id = term + '_' +String(i)
+    image.setAttribute('id',cell_id)
+    // image.setAttribute('style','width:150px');
+    image.setAttribute('class','table_image');
+    // image.setAttribute('onclick', 'select_image(\"'+url+'\",\"'+term+'\",\"'+cell_id+'\")');
+
+    image_entry_div.appendChild(image)
+
+    //cell.append(String(term))
+    //cell.append("<br>")
+    // cell.appendChild(image);
+    cell.append(image_entry_div)
+    if((i+1)%col_num == 0){
+      row_num++;
+      row = image_table.insertRow(row_num)
+    }
+  }
+
+  var symbol_grid  = document.getElementById('symbol_grid');
+  symbol_grid.appendChild(image_table);
+}
+
+</script>
+
+</body>
+</html>

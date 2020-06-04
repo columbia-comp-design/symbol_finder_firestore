@@ -1,0 +1,338 @@
+non-stop,nonstop
+non stop,nonstop
+ear-worm,earworm
+ear worm,earworm
+set-up,setup
+set up,setup
+tom-tom,tomtom
+tom tom,tomtom
+flip-flops,flip flops
+flipflops,flip flops
+second-hand,second hand
+secondhand,second hand
+white-out,whiteout
+white out,whiteout
+warm-blooded,warmblooded
+warm blooded,warmblooded
+work-out,work out
+workout,work out
+cold-blooded,cold blooded
+coldblooded,cold blooded
+witch-doctor,witchdoctor
+witch doctor,witchdoctor
+build-up,buildup
+build up,buildup
+land-mass,landmass
+land mass,landmass
+grown-up,grownup
+grown up,grownup
+absent-minded,absentminded
+absent minded,absentminded
+off-track,offtrack
+off track,offtrack
+check-up,checkup
+check up,checkup
+semi-colon,semicolon
+semi colon,semicolon
+upside-down,upside down
+upsidedown,upside down
+show-off,show off
+showoff,show off
+non-believer,nonbeliever
+non believer,nonbeliever
+chicken-pox,chicken pox
+chickenpox,chicken pox
+throw-away,throwaway
+throw away,throwaway
+look-alike,look alike
+lookalike,look alike
+run-away,run away
+runaway,run away
+take-off,take off
+takeoff,take off
+tattle-tale,tattletale
+tattle tale,tattletale
+non-professional,nonprofessional
+non professional,nonprofessional
+mid-week,midweek
+trashcan,trash can
+sky diving,skydiving
+self-,self
+takeout,take out
+small pox,smallpox
+cut throat,cutthroat
+anti-clockwise,anticlockwise
+break-up,breakup
+star ship,starship
+can't,cant
+mes mer,mesmer
+bathingsuit,bathing suit
+super-ego,superego
+other worldly,otherworldly
+lift off,liftoff
+joe's,joes
+hotdog,hot dog
+cave men,cavemen
+super power,superpower
+make up,makeup
+half way,halfway
+note worthy,noteworthy
+street walker,streetwalker
+slowdown,slow down
+bird's,birds
+holdup,hold up
+i-pad,ipad
+soy beans,soybeans
+over-achiever,overachiever
+icecap,ice cap
+web page,webpage
+i-pod,ipod
+yoyo,yo-yo
+back side,backside
+a/c,ac
+run-down,rundown
+care taker,caretaker
+terry cloth,terrycloth
+dot-com,dotcom
+sub-continent,subcontinent
+spider-man,spiderman
+highschool,high school
+-oscopy,oscopy
+pin-up,pinup
+go to,goto
+mortar board,mortarboard
+busy-body,busybody
+tip-toe,tiptoe
+dale's,dales
+song writer,songwriter
+ha-ha,haha
+i’m,im
+con man,conman
+knockout,knock out
+cheer leading,cheerleading
+cease-fire,ceasefire
+1,000,1000
+won't,wont
+it's,its
+hydro cortisone,hydrocortisone
+.com,com
+hand rail,handrail
+duck bill,duckbill
+under-age,underage
+blastoff,blast off
+men's,mens
+farmer's,farmers
+free-loader,freeloader
+bird watching,birdwatching
+pom-poms,pompoms
+levi's,levis
+birth stone,birthstone
+far away,faraway
+blue grass,bluegrass
+turnover,turn over
+etc.,etc
+non-fiction,nonfiction
+ocean's,oceans
+heart burn,heartburn
+i's,is
+tell-tale,telltale
+hard hat,hardhat
+polka dot,polkadot
+workday,work day
+-bye,bye
+some way,someway
+ripoff,rip off
+space suit,spacesuit
+9/11,911
+d.c.,dc
+fortuneteller,fortune teller
+chi ming,chiming
+-ness,ness
+knick knack,knickknack
+co-op,coop
+takeover,take over
+light-hearted,lighthearted
+women's,womens
+mid-day,midday
+people's,peoples
+world-wide,worldwide
+pick up,pickup
+nit-picking,nitpicking
+lockup,lock up
+lookup,look up
+x-box,xbox
+m.a.s.h.,mash
+in action,inaction
+metal worker,metalworker
+hard working,hardworking
+bull's eye,bullseye
+red-head,redhead
+1/2,12
+life saver,lifesaver
+hang nail,hangnail
+blue prints,blueprints
+pay-off,payoff
+laugh track,laughtrack
+blue's,blues
+rainforest,rain forest
+door stop,doorstop
+bi-weekly,biweekly
+letdown,let down
+reader's,readers
+gum boots,gumboots
+b.i.g,big
+bodybuilding,body building
+free masons,freemasons
+checkout,check out
+foot rest,footrest
+letter s,letters
+chick peas,chickpeas
+go on,goon
+anti-matter,antimatter
+flowchart,flow chart
+touch screen,touchscreen
+folk tale,folktale
+any place,anyplace
+chap stick,chapstick
+start up,startup
+wide spread,widespread
+milk float,milkfloat
+squeeze box,squeezebox
+weight lifting,weightlifting
+ms.,ms
+crock pot,crockpot
+pan's,pans
+light-headed,lightheaded
+easy-going,easygoing
+swear word,swearword
+2.0,20
+neck ties,neckties
+we're,were
+god's,gods
+hangout,hang out
+&m,m
+anti-,anti
+grown-ups,grownups
+child minder,childminder
+salt water,saltwater
+no way,noway
+look over,lookover
+breakthrough,break through
+co-worker,coworker
+put in,putin
+eye glass,eyeglass
+cut out,cutout
+sun shade,sunshade
+driver's,drivers
+life span,lifespan
+whore house,whorehouse
+white face,whiteface
+carrot top,carrottop
+pig-headed,pigheaded
+anti-social,antisocial
+wild cat,wildcat
+stock broker,stockbroker
+bi-polar,bipolar
+valentine's,valentines
+tea cup,teacup
+shutdown,shut down
+3-d,3d
+hand-made,handmade
+non-religious,nonreligious
+be late,belate
+shuttle-cock,shuttlecock
+bird song,birdsong
+counter-clockwise,counterclockwise
+handout,hand out
+all state,allstate
+ship-wreck,shipwreck
+e-mail,email
+carryout,carry out
+de-ice,deice
+come back,comeback
+road runner,roadrunner
+post box,postbox
+hide away,hideaway
+stomach ache,stomachache
+good year,goodyear
+cry-baby,crybaby
+master's,masters
+fairytale,fairy tale
+in-between,inbetween
+a-ha,aha
+non-fat,nonfat
+water logged,waterlogged
+doo-hickey,doohickey
+day dreaming,daydreaming
+to me,tome
+book keeper,bookkeeper
+l.a.,la
+stand-offish,standoffish
+smalltalk,small talk
+anti-inflammatory,antiinflammatory
+stop watch,stopwatch
+'sup,sup
+red breast,redbreast
+heaven's,heavens
+extra-marital,extramarital
+dropout,drop out
+re-do,redo
+good-bye,goodbye
+life boat,lifeboat
+a lot,alot
+trap door,trapdoor
+trouble maker,troublemaker
+teacher's,teachers
+eyepatch,eye patch
+out-dated,outdated
+douche bag,douchebag
+scatter-brained,scatterbrained
+king's,kings
+do-able,doable
+lilly pad,lillypad
+harper's,harpers
+giveaway,give away
+green house,greenhouse
+getaway,get away
+kit-kat,kitkat
+corn starch,cornstarch
+back-up,backup
+over cooked,overcooked
+pre-teen,preteen
+non-specific,nonspecific
+burnout,burn out
+care-free,carefree
+well-being,wellbeing
+body-builder,bodybuilder
+lunch time,lunchtime
+monkey's,monkeys
+over-priced,overpriced
+down's,downs
+e.t.,et
+dog house,doghouse
+standout,stand out
+draw bridge,drawbridge
+s&m,sm
+knee cap,kneecap
+watchout,watch out
+brother's,brothers
+hee-haw,heehaw
+see-saw,seesaw
+red skins,redskins
+breath taking,breathtaking
+e.g.,eg
+boom box,boombox
+takeaway,take away
+b.i.g.,big
+cross-roads,crossroads
+power-point,powerpoint
+ring master,ringmaster
+mother's,mothers
+bread winner,breadwinner
+baker's,bakers
+turnaround,turn around
+air waves,airwaves
+breakdown,break down
+sea shells,seashells
+swingset,swing set
+loin cloth,loincloth

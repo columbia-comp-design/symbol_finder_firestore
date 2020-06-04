@@ -1,0 +1,54 @@
+
+.img_in_table {
+  width: 150px; border: 3px solid white; padding: 5px; margin: 3px;
+}
+
+.img_in_table.selected {
+  width: 150px;
+  padding: 5px;
+  margin: 3px;
+  border: 3px solid green;
+}
+
+.term_image_grid {
+  width: 800px;
+  border-width: thin;
+  border-style: solid;
+  border-color: #cbcdd1;
+}
+
+.progress_report {
+  height: 200px;
+}
+
+.headline {
+  padding-top: 1px;
+  background-color: #cbcdd1;
+  height: 40px;
+}
+
+.padding_div {
+  padding-bottom: 50px;
+}
+
+.img_table_title {
+  padding-left: 10px;
+}
+
+.tree_sidebar {
+  border-style: solid;
+  border-color: #cbcdd1;
+  height: 100%;
+  width: 350px;
+  position: fixed;
+  overflow-x: hidden;
+  z-index: 1;
+  top: 0px;
+  left: 0;
+}
+
+.main {
+  margin-left: 350px; /* Same as the width of the sidenav */
+  font-size: 28px; /* Increased text to enable scrolling */
+  padding: 0px 10px;
+}

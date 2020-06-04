@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<head> 
+  <title> Symbol Dictionary </title>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+  <link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='css/style.css') }}">
+  <link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='css/sidebar.css') }}">
+</head>
+
+<body>
+
+<div id="main" align="center">
+	<br>
+	<h1> Symbol Finder </h1>
+	<br>
+
+	<h2> Select a username:  </h2>
+	<div id = "username_btns"> </div>
+
+	<div id = "username_enter">
+	Or enter new username: 
+	<label for="inp" class="inp" id = "username_input">
+	  <input type="text" id="username_text" placeholder="&nbsp;">
+	  <span class="label">Username</span>
+	  <span class="border"></span>
+	</label>
+	</div>
+
+	<hr>
+
+	<div id = "concepts_div" style="display:none">
+	<div id = "symbol_enter">
+	Enter a concept to symbolize: 
+	<label for="inp" class="inp" id = "concept_input">
+	  <input type="text" id="concept_text" placeholder="&nbsp;">
+	  <span class="label">Concept</span>
+	  <span class="border"></span>
+	</label>
+	</div>
+
+	<br>
+	<hr>
+	<br>
+
+	<div id = "concept_btns"> </div>
+	</div>
+
+
+
+</div>
+
+
+<script>
+
+var concept_dict = null;
+var username_dict = null;
+var selected_username = null;
+var new_users = [];
+
+
+
+window.onload = function() {
+  // load past concepts
+  /*$.ajax({
+	    type: "POST",
+	    url: "get_concepts",                
+	    contentType: "application/json; charset=utf-8",
+	    success: function(data, text){
+	    	console.log('success')
+	    	console.log(data)
+	    	concept_dict = data;
+	    	populate_symbol_btns();
+	    },
+	    error: function(request, status, error){
+	    	console.log("Error");
+	        console.log(request)
+	        console.log(status)
+	        console.log(error)
+	    }
+  });*/
+
+  $.ajax({
+  	type: "POST",
+	    url: "get_usernames_and_concepts",                
+	    contentType: "application/json; charset=utf-8",
+		async: false,
+	    success: function(data, text){
+	    	console.log('success')
+	    	console.log(data)
+	    	username_dict = data;
+	    	populate_username_btns();
+	    },
+	    error: function(request, status, error){
+	    	console.log("Error");
+	        console.log(request)
+	        console.log(status)
+	        console.log(error)
+	    }
+
+  });
+
+};
+
+var username_input = document.getElementById("username_input");
+username_input.addEventListener("keydown", function (e){
+	if(e.keyCode == 13){
+		var entered_username = document.getElementById("username_text").value;
+		if(entered_username != "" && username_dict.hasOwnProperty(entered_username) == false){
+			// username_dict[entered_username] = {"concepts":{}}; 
+			    $.ajax({
+			    type: "POST",
+			    url: "save_username",
+			    contentType: "application/json; charset=utf-8",
+			    data : JSON.stringify(entered_username),
+			    success: function(data, text){
+			    	new_users.push(entered_username);
+			    	console.log('success')
+			    	add_username_button(entered_username);
+			    	select_username(entered_username);
+			    },
+			    error: function(request, status, error){
+			    	console.log("Error");
+			        console.log(request)
+			        console.log(status)
+			        console.log(error)
+			    }
+			  });
+		}
+	}
+});
+
+var concept_input = document.getElementById("concept_input");
+concept_input.addEventListener("keydown", function (e) {
+    if (e.keyCode === 13) {  //checks whether the pressed key is "Enter"
+    	var entered_concept = document.getElementById("concept_text").value;
+    	var username_concepts = username_dict[selected_username];
+    	if(entered_concept != "" && username_concepts.hasOwnProperty(entered_concept) == false){
+    		$.ajax({
+			    type: "POST",
+			    url: "save_concept",
+			    contentType: "application/json; charset=utf-8",
+			    data : JSON.stringify({"concept":entered_concept,"username":selected_username}),
+			    success: function(data, text){
+			    	console.log('success')
+			    	add_concept_button(entered_concept);
+			    },
+			    error: function(request, status, error){
+			    	console.log("Error");
+			        console.log(request)
+			        console.log(status)
+			        console.log(error)
+			    }
+			  });
+    	}
+    }
+});
+
+function populate_symbol_btns(username){
+	document.getElementById("concept_btns").innerHTML = "";
+	var concept_dict = username_dict[username]["concepts"];
+	for (var concept in concept_dict) {
+	    if (Object.prototype.hasOwnProperty.call(concept_dict, concept)) {
+	    	add_concept_button(concept);
+	    }
+	}
+}
+
+function populate_username_btns(){
+	for (var username in username_dict) {
+		if (Object.prototype.hasOwnProperty.call(username_dict, username)) {
+			add_username_button(username);
+		}
+	}
+}
+
+function go_to_symbol_page(concept,username){
+	console.log(concept)
+	window.location.href = username + '/symbols/' + concept; 
+}
+
+function select_username(username){
+
+	selected_username = username;
+	var concepts_div = document.getElementById("concepts_div");
+	if (concepts_div.style.display === "none"){
+		concepts_div.style.display = "block";
+	}
+	if(new_users.includes(username) == false){
+		populate_symbol_btns(username);
+	}
+
+	var username_btns_div = document.getElementById("username_btns");
+	var child_elements = username_btns_div.childNodes;
+	for(var i = 0; i < child_elements.length; i++){
+		var child = child_elements[i];
+		if(child.className == "username_btn" || child.className == "username_btn username_active"){
+			if(child.innerHTML != selected_username){
+				child.classList.remove("username_active");
+			}
+			else{
+				child.classList.add("username_active");
+			}
+		}
+	}
+}
+
+function add_username_button(username){
+	console.log(username)
+	var username_btn = document.createElement("BUTTON");
+	username_btn.innerHTML = username;
+	username_btn.id = username + '_btn';
+	username_btn.className = "username_btn";
+	username_btn.setAttribute("onclick", "select_username(\""+username+"\")");
+	document.getElementById("username_btns").appendChild(username_btn);
+}
+
+function add_concept_button(concept) {
+    console.log(concept)
+    var concept_btn = document.createElement("BUTTON");
+    concept_btn.innerHTML = concept;
+    concept_btn.id = concept + '_btn';
+    concept_btn.className = "symbol_button";
+    concept_btn.setAttribute("onclick", "go_to_symbol_page(\""+concept+"\",\""+selected_username+"\")");
+    document.getElementById("concept_btns").appendChild(concept_btn);
+    
+}
+	
+/* send_page_info = function(state){
+
+	console.log('sending page info!')
+
+	var version = null;
+	if(document.getElementById('version_1').checked) {
+		version = 1;
+	}else if(document.getElementById('version_2').checked) {
+		version = 2;
+	}
+
+	var practice = true;
+	if(state == 1){
+		practice = false;
+	}
+
+	if(practice){
+		if(version == 1){
+			window.location.href = '/finder/practice/1'
+		}
+		else{
+			window.location.href = '/finder/practice/2'
+		}
+	}
+	else{
+		if(version == 1){
+			window.location.href = '/finder/real/1'
+		}
+		else{
+			window.location.href = '/finder/real/2'
+		}
+	}*/
+
+	/*$.ajax({
+        type: "POST",
+        url: "send_page_info",                
+        dataType : "json",
+        contentType: "application/json; charset=utf-8",
+        data : JSON.stringify({"version": version, "practice": practice}),
+        //data : JSON.stringify({"version": version}),
+	    success: function(data, text){
+	    	console.log('success')
+	    },
+	    error: function(request, status, error){
+	    	console.log("Error");
+	        console.log(request)
+	        console.log(status)
+	        console.log(error)
+	    }
+    });*/	
+	
+
+</script> 
+
+
+<!-- <script type=text/javascript src="{{ url_for('static', filename='js/start.js') }}"></script>-->
+
+</body>
+</html>
