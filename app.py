@@ -8,6 +8,16 @@ from datetime import datetime
 from word import *
 import time
 
+import firebase_admin
+from firebase_admin import credentials, firestore
+import json 
+cred = credentials.Certificate("./symbolFinderSecret.json")
+firebase_admin.initialize_app(cred, {
+    'projectId' : 'symbolfinder-visiblends'
+})
+db = firestore.client()
+
+
 tmpl_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'templates')
 app = Flask(__name__, template_folder=tmpl_dir)
 
@@ -130,14 +140,24 @@ def save_username():
 	# concept_dict_with_new_concept = request.get_json()
 	username = request.get_json()
 	print(username)
-	with open('username_symbols.json') as json_file:
-		username_dict = json.load(json_file)
-		if username not in username_dict:
-			username_dict[username] = {"concepts": {}}
-			with open('new_username_symbols.json','w') as outfile:
-				json.dump(username_dict, outfile)
-				os.remove("./username_symbols.json")
-				os.rename("./new_username_symbols.json","./username_symbols.json")
+    
+	doc_ref = db.collection(u'users').document(u'alovelace')
+	doc = doc_ref.get()
+	json_data = doc.to_dict()
+	# create username
+	# with open('username_symbols.json') as json_file:
+	#print("/save_username ->  ", json_data)
+	username_dict = json_data
+	print(username_dict)
+	if username not in username_dict:
+		username_dict[username] = {"concepts": {}}
+		 # create new user 
+	# 		with open('new_username_symbols.json','w') as outfile:
+	# 			json.dump(username_dict, outfile)
+	# 			os.remove("./username_symbols.json")
+	# 			os.rename("./new_username_symbols.json","./username_symbols.json")
+	print(username_dict)
+	doc_ref.set(username_dict)
 	return 'ok'
 
 
