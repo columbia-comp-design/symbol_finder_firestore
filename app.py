@@ -16,6 +16,8 @@ firebase_admin.initialize_app(cred, {
     'projectId' : 'symbolfinder-visiblends'
 })
 db = firestore.client()
+#document has the json data backup for each month 
+doc_ref = db.collection(u'users').document(u'testJune')
 
 
 tmpl_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'templates')
@@ -123,16 +125,22 @@ def save_concept():
 	concept = concept_dict["concept"]
 	username = concept_dict["username"]
 
-	with open('username_symbols.json') as json_file:
-		username_dict = json.load(json_file)
-		if concept not in username_dict[username]["concepts"]:
-			username_dict[username]["concepts"][concept] = {}
-			username_dict[username]["concepts"][concept]["img_list"] = []
-			username_dict[username]["concepts"][concept]["img_dict"] = {}
-			with open('new_username_symbols.json','w') as outfile:
-				json.dump(username_dict, outfile)
-				os.remove("./username_symbols.json")
-				os.rename("./new_username_symbols.json","./username_symbols.json")
+	print("concept: ", concept)
+	#get data from firestore
+	doc = doc_ref.get()
+	json_data = doc.to_dict()
+
+	# with open('username_symbols.json') as json_file:
+	# username_dict = json.load(json_file)
+	username_dict = json_data
+
+	if concept not in username_dict[username]["concepts"]:
+		username_dict[username]["concepts"][concept] = {}
+		username_dict[username]["concepts"][concept]["img_list"] = []
+		username_dict[username]["concepts"][concept]["img_dict"] = {}
+	
+	doc_ref.set(username_dict)
+
 	return 'ok'
 
 @app.route('/save_username', methods=['POST'])
@@ -141,7 +149,7 @@ def save_username():
 	username = request.get_json()
 	print(username)
     
-	doc_ref = db.collection(u'users').document(u'alovelace')
+	#get data from firestore
 	doc = doc_ref.get()
 	json_data = doc.to_dict()
 	# create username
