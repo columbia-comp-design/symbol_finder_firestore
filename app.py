@@ -44,26 +44,32 @@ def save_symbols(username):
 	print()
 	data = 0
 	concept_symbols = []
-	with open('username_symbols.json') as symbol_file:
-		username_dict = json.load(symbol_file)
-		img_list = username_dict[username]["concepts"][concept]['img_list']
-		img_dict = username_dict[username]["concepts"][concept]['img_dict']
-		if to_remove:
-			for img in img_list:
-				if img['url'] == url:
-					img_list.remove(img)
-					break
-			username_dict[username]["concepts"][concept]['img_list'] = img_list
-			del username_dict[username]["concepts"][concept]['img_dict'][url]
-		else:
-			if url not in img_dict:
-				username_dict[username]["concepts"][concept]['img_dict'][url] = True
-				username_dict[username]["concepts"][concept]['img_list'].append(new_symbol)
 
-		with open('new_username_symbols.json','w') as outfile:
-			json.dump(username_dict, outfile)
-			os.remove("./username_symbols.json")
-			os.rename("./new_username_symbols.json","./username_symbols.json")
+	#read
+	# with open('username_symbols.json') as symbol_file:
+	# 	username_dict = json.load(symbol_file)
+
+	#get data from firestore
+	doc = doc_ref.get()
+	json_data = doc.to_dict()
+	username_dict = json_data
+
+	img_list = username_dict[username]["concepts"][concept]['img_list']
+	img_dict = username_dict[username]["concepts"][concept]['img_dict']
+	if to_remove:
+		for img in img_list:
+			if img['url'] == url:
+				img_list.remove(img)
+				break
+		username_dict[username]["concepts"][concept]['img_list'] = img_list
+		del username_dict[username]["concepts"][concept]['img_dict'][url]
+	else:
+		if url not in img_dict:
+			username_dict[username]["concepts"][concept]['img_dict'][url] = True
+			username_dict[username]["concepts"][concept]['img_list'].append(new_symbol)
+
+	#write data 
+	doc_ref.set(username_dict)
 	return 'ok'
 
 @app.route('/<username>/symbols/get_symbols_for_username', methods=['POST'])
@@ -184,7 +190,7 @@ def symbols_for_concept(username,concept):
 def finder_for_concept(username,concept):
 	print("/<username>/finder/<concept> called. username: ", username, " concept: ", concept)
 	tree_view_json, all_cluster_words = get_cluster_json_for_root(concept)
-	print("done with /<username>/finder/<concept> called. username:")
+	print("done with /<username>/finder/<concept> called.")
 	return render_template("finder.html",concept=concept, username=username, tree_view_json=json.dumps(tree_view_json), swow_dict=json.dumps(swow_dict), all_cluster_words = all_cluster_words)
 
 @app.route('/', methods=['POST','GET'])
