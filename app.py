@@ -139,6 +139,7 @@ def save_concept():
 		username_dict[username]["concepts"][concept]["img_list"] = []
 		username_dict[username]["concepts"][concept]["img_dict"] = {}
 	
+	#write data 
 	doc_ref.set(username_dict)
 
 	return 'ok'
