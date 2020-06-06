@@ -1,5 +1,10 @@
+pip==20.1
 Flask==1.1.2
 # gunicorn==20.0.4
 gunicorn==19.10.0
 python-louvain==0.14
-firebase==8.1.1
+firebase==3.0.1
+# grpcio==1.27.2 does not work neither 
+# firebase-admin==4.3.0 not working
+firebase-admin==4.3.0 
+google-cloud-firestore==1.7.0

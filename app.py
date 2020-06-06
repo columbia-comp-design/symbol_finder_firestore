@@ -17,7 +17,7 @@ firebase_admin.initialize_app(cred, {
 })
 db = firestore.client()
 #document has the json data backup for each month 
-doc_ref = db.collection(u'users').document(u'testJune')
+doc_ref = db.collection(u'jsonByDate').document(u'testing')
 
 
 tmpl_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'templates')
@@ -100,15 +100,25 @@ def get_concepts():
 @app.route('/get_usernames_and_concepts', methods=['POST'])
 def get_usernames_and_concepts():
 		# check if symbols.json exists
-	if not os.path.exists('./username_symbols.json'): 
-		concept_dict = {}; 
-		# if not, make it
-		with open('username_symbols.json','w') as outfile:
-			json.dump(concept_dict, outfile)
-	# if exists, get the full concept_dict
-	with open('username_symbols.json') as json_file:
-		username_dict = json.load(json_file)
-		return jsonify(username_dict)
+	# if not os.path.exists('./username_symbols.json'): 
+	# 	concept_dict = {}; 
+	# 	# if not, make it
+	# 	with open('username_symbols.json','w') as outfile:
+	# 		json.dump(concept_dict, outfile)
+	doc = doc_ref.get()
+
+	if doc.exists:
+		print(u'Document data: {}'.format(doc.to_dict()))
+	else:
+		username_dict = {}
+		db.collection(u'jsonByDate').document(u'testing2').set(username_dict)
+		print("created a new document named testing2 ")
+
+	# # if exists, get the full concept_dict
+	#with open('username_symbols.json') as json_file:
+	# 	username_dict = json.load(json_file)
+	username_dict = doc.to_dict()
+	return jsonify(username_dict)
 
 '''
 @app.route('/symbols/get_concepts', methods=['POST'])
@@ -124,7 +134,7 @@ def get_sconcepts():
 		concept_dict = json.load(json_file)
 		return jsonify(concept_dict)
 '''
-
+#done
 @app.route('/save_concept', methods=['POST'])
 def save_concept():
 	concept_dict = request.get_json()
@@ -150,6 +160,7 @@ def save_concept():
 
 	return 'ok'
 
+#done
 @app.route('/save_username', methods=['POST'])
 def save_username():
 	# concept_dict_with_new_concept = request.get_json()

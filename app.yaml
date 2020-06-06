@@ -1,4 +1,5 @@
 runtime: python
+# runtime: custome
 env: flex
 # threadsafe: yes
 entrypoint: gunicorn -b :$PORT app:app
@@ -10,7 +11,7 @@ manual_scaling:
   instances: 1
 resources:
   cpu: 1
-  memory_gb: 2
+  memory_gb: 5
   disk_size_gb: 10
 
 
