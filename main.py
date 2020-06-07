@@ -15,6 +15,8 @@ cred = credentials.Certificate("./symbolFinderSecret.json")
 firebase_admin.initialize_app(cred, {
     'projectId' : 'symbolfinder-visiblends'
 })
+# from google.cloud import firestore
+
 db = firestore.client()
 #document has the json data backup for each month 
 doc_ref = db.collection(u'jsonByDate').document(u'june2020')
