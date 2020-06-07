@@ -743,7 +743,7 @@ function topFunction() {
 explore = function(){
   var symbol_bank = document.getElementById("symbol_bank")
   symbol_bank.style.display="block";
-  fill_treeview_sidebar(concept,tree_view_json);
+  fill_treeview_sidebar(concept,tree_view_json); // 1
   topFunction();
   populate_second_step_instructions();
   var image_grids_div = document.getElementById("image_grids");

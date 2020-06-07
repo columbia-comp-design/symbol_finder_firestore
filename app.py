@@ -17,7 +17,7 @@ firebase_admin.initialize_app(cred, {
 })
 db = firestore.client()
 #document has the json data backup for each month 
-doc_ref = db.collection(u'jsonByDate').document(u'testing')
+doc_ref = db.collection(u'jsonByDate').document(u'june2020')
 
 
 tmpl_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'templates')
