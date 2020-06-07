@@ -23,7 +23,7 @@ doc_ref = db.collection(u'jsonByDate').document(u'testing')
 tmpl_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'templates')
 app = Flask(__name__, template_folder=tmpl_dir)
 
-
+#done
 @app.route('/<username>/finder/save_symbols',  methods=['POST','GET'])
 def save_symbols(username):
 	json_data = request.get_json() 
@@ -40,7 +40,7 @@ def save_symbols(username):
 		print("DELETING SYMBOL:")
 	else:
 		print("SAVING SYMBOL:")
-	print(json_data)
+	#print(json_data)
 	print()
 	data = 0
 	concept_symbols = []
@@ -72,15 +72,20 @@ def save_symbols(username):
 	doc_ref.set(username_dict)
 	return 'ok'
 
+#done
 @app.route('/<username>/symbols/get_symbols_for_username', methods=['POST'])
 def get_symbols_for_username(username):
 	request_dict = request.get_json()
 	username = request_dict["username"]
 	print("USERNAME: " + username)
 	concept = request_dict["concept"]
-	with open('username_symbols.json') as json_file:
-		username_dict = json.load(json_file)
-		return jsonify(username_dict[username]["concepts"][concept]["img_list"])
+
+	doc = doc_ref.get()
+	json_data = doc.to_dict()
+
+	# with open('username_symbols.json') as json_file:
+	username_dict = json_data
+	return jsonify(username_dict[username]["concepts"][concept]["img_list"])
 
 '''
 @app.route('/get_concepts', methods=['POST'])
@@ -96,7 +101,7 @@ def get_concepts():
 		concept_dict = json.load(json_file)
 		return jsonify(concept_dict)
 '''
-
+#done
 @app.route('/get_usernames_and_concepts', methods=['POST'])
 def get_usernames_and_concepts():
 		# check if symbols.json exists
