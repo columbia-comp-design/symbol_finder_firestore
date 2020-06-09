@@ -529,6 +529,7 @@ function confirm_image(term,url,image_id){
     updateProgress();
     // updateNodes();
   }
+  //random
   // update_progress_info();
   update_saved_symbols(url,term,to_remove);
 }*/
