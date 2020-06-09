@@ -32,6 +32,7 @@ goog = function(t){
                      'searchType': 'image',
                      'filter': '1', // removes duplicates?
                      'start': '1', // starting image for search (can only return 10 at a time)
+                     'safe': 'active',
                   }),
             jsonp: "$callback",
             success: function( e, data ) {  
@@ -59,6 +60,7 @@ cluster_google_search = function(cluster_title){
                  'searchType': 'image',
                  'filter': '1', // removes duplicates?
                  'start': '1', // starting image for search (can only return 10 at a time)
+                 'safe': 'active',
               }),
         jsonp: "$callback",
         success: function( e, data ) {  
@@ -78,6 +80,7 @@ cluster_google_search = function(cluster_title){
                  'searchType': 'image',
                  'filter': '1', // removes duplicates?
                  'start': '1', // starting image for search (can only return 10 at a time)
+                 'safe': 'active',
               }),
         jsonp: "$callback",
         success: function( e, data ) {  
@@ -246,6 +249,7 @@ google_all_clusters = function(clusters){
                      'searchType': 'image',
                      'filter': '1', // removes duplicates?
                      'start': '1', // starting image for search (can only return 10 at a time)
+                     'safe': 'active',
                   }),
             jsonp: "$callback",
             success: function( e, data ) {  
@@ -319,6 +323,7 @@ root_google_search = function(term,term_image_grid,padding_div,main_div){
                      'searchType': 'image',
                      'filter': '1', // removes duplicates?
                      'start': '1', // starting image for search (can only return 10 at a time)
+                     'safe': 'active',
                   }),
             jsonp: "$callback",
             success: function( e, data ) {  
@@ -356,6 +361,7 @@ google_search = function(term,is_start,tree_click){
                      'searchType': 'image',
                      'filter': '1', // removes duplicates?
                      'start': '1', // starting image for search (can only return 10 at a time)
+                     'safe': 'active',
                   }),
             jsonp: "$callback",
             success: function( e, data ) {  
