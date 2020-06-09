@@ -2,7 +2,7 @@ runtime: python
 # runtime: custome
 env: flex
 # threadsafe: yes
-entrypoint: gunicorn -b :$PORT app:app
+entrypoint: gunicorn -b :$PORT main:app
 
 runtime_config:
   python_version: 3
