@@ -1,14 +1,13 @@
-<!DOCTYPE html>
-<head> 
-  <title> Symbol Dictionary </title>
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
-  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+{% extends "layout.html" %}
+
+{% block content %}
   <link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='css/style.css') }}">
   <link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='css/sidebar.css') }}">
-</head>
 
-<body>
+  <title> Symbol Dictionary </title>
+<!--   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script> -->
 
 <div id="main" align="center">
 	<br>
@@ -46,10 +45,7 @@
 	<div id = "concept_btns"> </div>
 	</div>
 
-
-
 </div>
-
 
 <script>
 
@@ -283,5 +279,4 @@ function add_concept_button(concept) {
 
 <!-- <script type=text/javascript src="{{ url_for('static', filename='js/start.js') }}"></script>-->
 
-</body>
-</html>
+{% endblock %}
