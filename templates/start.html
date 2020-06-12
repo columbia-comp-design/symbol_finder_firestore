@@ -132,7 +132,8 @@ username_input.addEventListener("keydown", function (e){
 var concept_input = document.getElementById("concept_input");
 concept_input.addEventListener("keydown", function (e) {
     if (e.keyCode === 13) {  //checks whether the pressed key is "Enter"
-    	var entered_concept = document.getElementById("concept_text").value;
+		var entered_concept = document.getElementById("concept_text").value;
+		entered_concept =  entered_concept.toLowerCase();
     	var username_concepts = username_dict[selected_username];
     	if(entered_concept != "" && username_concepts.hasOwnProperty(entered_concept) == false){
     		$.ajax({
