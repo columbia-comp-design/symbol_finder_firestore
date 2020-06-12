@@ -165,7 +165,10 @@ def save_concept():
 	#write data 
 	doc_ref.set(username_dict)
 
-	return 'ok'
+	doc = doc_ref.get()
+	username_dict = doc.to_dict()
+	return jsonify(username_dict)
+	#return 'ok'
 
 #done
 @app.route('/save_username', methods=['POST'])

@@ -56,6 +56,7 @@ var concept_dict = null;
 var username_dict = null;
 var selected_username = null;
 var new_users = [];
+var prev_concept ="";
 
 
 
@@ -134,14 +135,18 @@ concept_input.addEventListener("keydown", function (e) {
     if (e.keyCode === 13) {  //checks whether the pressed key is "Enter"
 		var entered_concept = document.getElementById("concept_text").value;
 		entered_concept =  entered_concept.toLowerCase();
-    	var username_concepts = username_dict[selected_username];
-    	if(entered_concept != "" && username_concepts.hasOwnProperty(entered_concept) == false){
+		var username_concepts = username_dict[selected_username];
+		let isNewConcept = username_dict[selected_username]["concepts"][entered_concept];
+		console.log("is ", entered_concept, "a new concept: " , (isNewConcept == undefined) );
+    	if(entered_concept != "" && isNewConcept == undefined && prev_concept!=entered_concept){
     		$.ajax({
 			    type: "POST",
 			    url: "save_concept",
 			    contentType: "application/json; charset=utf-8",
 			    data : JSON.stringify({"concept":entered_concept,"username":selected_username}),
 			    success: function(data, text){
+					prev_concept = entered_concept;
+					// console.log("data: " ,  data[select_username]["concepts"][entered_concept])
 			    	console.log('success')
 			    	add_concept_button(entered_concept);
 			    },
