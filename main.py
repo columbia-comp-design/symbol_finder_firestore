@@ -194,7 +194,9 @@ def save_username():
 	# 			os.rename("./new_username_symbols.json","./username_symbols.json")
 	print(username_dict)
 	doc_ref.set(username_dict)
-	return 'ok'
+	doc = doc_ref.get()
+	username_dict = doc.to_dict()
+	return jsonify(username_dict)
 
 
 '''

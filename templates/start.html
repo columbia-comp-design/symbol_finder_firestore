@@ -114,6 +114,7 @@ username_input.addEventListener("keydown", function (e){
 			    contentType: "application/json; charset=utf-8",
 			    data : JSON.stringify(entered_username),
 			    success: function(data, text){
+					username_dict = data;
 			    	new_users.push(entered_username);
 			    	console.log('success')
 			    	add_username_button(entered_username);
@@ -137,7 +138,7 @@ concept_input.addEventListener("keydown", function (e) {
 		entered_concept =  entered_concept.toLowerCase();
 		var username_concepts = username_dict[selected_username];
 		let isNewConcept = username_dict[selected_username]["concepts"][entered_concept];
-		console.log("is ", entered_concept, "a new concept: " , (isNewConcept == undefined) );
+		//console.log("is ", entered_concept, "a new concept: " , (isNewConcept == undefined) );
     	if(entered_concept != "" && isNewConcept == undefined && prev_concept!=entered_concept){
     		$.ajax({
 			    type: "POST",
