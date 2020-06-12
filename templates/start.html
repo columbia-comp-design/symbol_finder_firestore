@@ -118,7 +118,8 @@ username_input.addEventListener("keydown", function (e){
 			    	new_users.push(entered_username);
 			    	console.log('success')
 			    	add_username_button(entered_username);
-			    	select_username(entered_username);
+					select_username(entered_username);
+					populate_symbol_btns(entered_username); 
 			    },
 			    error: function(request, status, error){
 			    	console.log("Error");
