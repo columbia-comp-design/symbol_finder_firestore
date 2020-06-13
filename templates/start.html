@@ -135,8 +135,13 @@ username_input.addEventListener("keydown", function (e){
 var concept_input = document.getElementById("concept_input");
 concept_input.addEventListener("keydown", function (e) {
     if (e.keyCode === 13) {  //checks whether the pressed key is "Enter"
+		//get value
 		var entered_concept = document.getElementById("concept_text").value;
-		entered_concept =  entered_concept.toLowerCase();
+
+		// string edge cases, and trim takes out white spaces 
+		entered_concept =  entered_concept.toLowerCase().trim();
+
+
 		var username_concepts = username_dict[selected_username];
 		let isNewConcept = username_dict[selected_username]["concepts"][entered_concept];
 		//console.log("is ", entered_concept, "a new concept: " , (isNewConcept == undefined) );
