@@ -6,6 +6,8 @@
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
   <!-- <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.8/angular.min.js"></script> -->
   <link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='css/style.css') }}">
+  <link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='css/loader.css') }}">
+
 </head>
 
 <body>
@@ -17,13 +19,15 @@
 <button id="find_symbol_btn" class="symbol_button" onclick="go_to_finder()"> Find more symbols! </button>
 <br>
 <hr>
-	<div id="symbol_grid"></div>
+<div style="display:block" id="loader" class="loader"></div>
+  <div id="symbol_grid"></div>
 </div>
 
 <script>
 var concept = '{{ concept }}'
 var username = '{{ username }}'
 function go_to_finder() {
+  $('#loader').attr("style","display:block")
 	window.location.href = '/' + username + '/finder/' + concept; 
   // window.location.href = '/finder/' + concept; 
 }
@@ -38,6 +42,7 @@ window.onload = function() {
 	    contentType: "application/json; charset=utf-8",
       data : JSON.stringify({"concept":concept,"username":username}),
 	    success: function(data, text){
+        $('#loader').attr("style","display:none")
 	    	console.log('success')
 	    	console.log(data)
 	    	populate_symbols(data)

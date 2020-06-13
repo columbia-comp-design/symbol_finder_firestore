@@ -3,6 +3,7 @@
 {% block content %}
   <link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='css/style.css') }}">
   <link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='css/sidebar.css') }}">
+  <link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='css/loader.css') }}">
 
   <title> Symbol Dictionary </title>
 <!--   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
@@ -11,14 +12,16 @@
 
 <div id="main" align="center">
 	<br>
+	<div class="spinner-border m-5" role="status">
+		<span class="sr-only">Loading...</span>
+	</div>
 	<h1> Symbol Finder </h1>
 	<br>
 
 	<!-- <h2> Select a username:  </h2> -->
 	<div id = "username_btns"> </div>
 
-	<br>
-
+	<div style="display:block" id="startLoader" class="loader"></div>
 	<div id = "username_enter">
 
 	<label for="inp" class="inp" id = "username_input">
@@ -87,6 +90,7 @@ window.onload = function() {
 		async: false,
 	    success: function(data, text){
 	    	console.log('success')
+			$('#startLoader').attr("style","display:none")
 	    	console.log(data)
 	    	username_dict = data;
 	    	populate_username_btns();
