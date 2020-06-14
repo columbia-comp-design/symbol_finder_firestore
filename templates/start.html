@@ -40,6 +40,7 @@
 	
 	<label for="inp" class="inp" id = "concept_input">
 	 <h5>Enter concept:</h5>
+	 <div id = "concept_alert" style="display: none;">concept already exists</div>
 	  <input type="text" id="concept_text" placeholder="Enter a new concept to symbolize">
 	  <!-- <span class="label">Concept</span>
 	  <span class="border"></span> -->
@@ -49,7 +50,7 @@
 	<br>
 	<hr>
 	<br>
-	<h5> Saved Concept(s):  </h5>
+	<!-- <h5> Saved Concept(s):  </h5> -->
 
 	<div id = "concept_btns"> </div>
 	</div>
@@ -177,7 +178,10 @@ concept_input.addEventListener("keydown", function (e) {
 					prev_concept = entered_concept;
 					// console.log("data: " ,  data[select_username]["concepts"][entered_concept])
 			    	console.log('success')
+					username_dict = data;
 			    	add_concept_button(entered_concept);
+					$('#concept_alert').hide();
+
 			    },
 			    error: function(request, status, error){
 			    	console.log("Error");
@@ -187,7 +191,14 @@ concept_input.addEventListener("keydown", function (e) {
 			    }
 			  });
     	}
+		else{
+			$('#concept_alert').show();
+
+		}
     }
+	else{
+		$('#concept_alert').hide();
+	}
 });
 
 function populate_symbol_btns(username){
