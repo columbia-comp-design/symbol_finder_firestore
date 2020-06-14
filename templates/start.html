@@ -39,6 +39,7 @@
 
 	
 	<label for="inp" class="inp" id = "concept_input">
+	 <h5>Enter concept:</h5>
 	  <input type="text" id="concept_text" placeholder="Enter a new concept to symbolize">
 	  <!-- <span class="label">Concept</span>
 	  <span class="border"></span> -->
@@ -112,6 +113,10 @@ var username_input = document.getElementById("username_input");
 username_input.addEventListener("keydown", function (e){
 	if(e.keyCode == 13){
 		var entered_username = document.getElementById("username_text").value;
+		//Trim username, 
+		entered_username = entered_username.trim().toLowerCase();
+		entered_username =  entered_username.charAt(0).toUpperCase() + entered_username.slice(1);
+
 		console.log("username: ",  entered_username)
 		console.log(" user exist: ",  username_dict.hasOwnProperty(entered_username))
 		if(entered_username != "" && username_dict.hasOwnProperty(entered_username) == false){
@@ -210,7 +215,7 @@ function go_to_symbol_page(concept,username){
 
 function select_username(username){
 	$('#username_enter').hide();
-
+	$('#username_alert').hide();
 
 	selected_username = username;
 	var concepts_div = document.getElementById("concepts_div");
