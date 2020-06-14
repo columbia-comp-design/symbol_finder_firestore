@@ -278,6 +278,10 @@ a:hover {
   color: #4286f4;
 }
 
+#username_alert{
+  color: red;
+}
+
 
 .symbol_bank {
   top: 0;

@@ -20,6 +20,8 @@
 
 	<!-- <h2> Select a username:  </h2> -->
 	<div id = "username_btns"> </div>
+	<div style="display:none" id="usernameLoader" class="loader"></div>
+	<div id = "username_alert"></div>
 
 	<div style="display:block" id="startLoader" class="loader"></div>
 	<div id = "username_enter">
@@ -110,20 +112,28 @@ var username_input = document.getElementById("username_input");
 username_input.addEventListener("keydown", function (e){
 	if(e.keyCode == 13){
 		var entered_username = document.getElementById("username_text").value;
+		console.log("username: ",  entered_username)
+		console.log(" user exist: ",  username_dict.hasOwnProperty(entered_username))
 		if(entered_username != "" && username_dict.hasOwnProperty(entered_username) == false){
 			// username_dict[entered_username] = {"concepts":{}}; 
+			$('#usernameLoader').attr("style","display:block")
+
 			    $.ajax({
 			    type: "POST",
 			    url: "save_username",
 			    contentType: "application/json; charset=utf-8",
 			    data : JSON.stringify(entered_username),
 			    success: function(data, text){
+					console.log('save_username route called')
 					username_dict = data;
 			    	new_users.push(entered_username);
-			    	console.log('success')
 			    	add_username_button(entered_username);
 					select_username(entered_username);
 					populate_symbol_btns(entered_username); 
+					$('#usernameLoader').attr("style","display:none")
+					$('#username_alert').html("")
+					$('#username_enter').hide();
+
 			    },
 			    error: function(request, status, error){
 			    	console.log("Error");
@@ -132,6 +142,9 @@ username_input.addEventListener("keydown", function (e){
 			        console.log(error)
 			    }
 			  });
+		}
+		else{ // username exist 
+			$('#username_alert').html("username or group exist")
 		}
 	}
 });
