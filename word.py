@@ -458,7 +458,8 @@ def get_cluster_json_for_root(root_word):
 	G = create_networkx_graph(swow_dict,root_word,depth)
 	sorted_cluster_list = get_clusters(root_word,G)
 	remove_cw_from_swow(sorted_cluster_list)
-	print(sorted_cluster_list)
+	print('Getting sorted_cluster_list: ', sorted_cluster_list)
+
 	treeview_json, all_cluster_words = generate_treeview_json(sorted_cluster_list)
 	return treeview_json, all_cluster_words
 

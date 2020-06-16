@@ -115,7 +115,8 @@ def get_usernames_and_concepts():
 	doc = doc_ref.get()
 
 	if doc.exists:
-		print(u'Document data: {}'.format(doc.to_dict()))
+		print('hi doc exists')
+		# print(u'Document data: {}'.format(doc.to_dict()))
 	else:
 		username_dict = {}
 		db.collection(u'jsonByDate').document(u'testing2').set(username_dict)
@@ -172,7 +173,7 @@ def save_concept():
 def save_username():
 	# concept_dict_with_new_concept = request.get_json()
 	username = request.get_json()
-	print(username)
+	# print(username)
     
 	#get data from firestore
 	doc = doc_ref.get()
@@ -181,7 +182,7 @@ def save_username():
 	# with open('username_symbols.json') as json_file:
 	#print("/save_username ->  ", json_data)
 	username_dict = json_data
-	print(username_dict)
+	# print(username_dict)
 	if username not in username_dict:
 		username_dict[username] = {"concepts": {}}
 		 # create new user 
@@ -189,7 +190,7 @@ def save_username():
 	# 			json.dump(username_dict, outfile)
 	# 			os.remove("./username_symbols.json")
 	# 			os.rename("./new_username_symbols.json","./username_symbols.json")
-	print(username_dict)
+	# print(username_dict)
 	doc_ref.set(username_dict)
 	return 'ok'
 
