@@ -278,6 +278,14 @@ a:hover {
   color: #4286f4;
 }
 
+#username_alert{
+  color: red;
+}
+
+#concept_alert{
+  color: red;
+}
+
 
 .symbol_bank {
   top: 0;
@@ -426,4 +434,3 @@ body {
 }
 
 .dropbtn:hover {background: #a8a8a8;}
-

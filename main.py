@@ -166,14 +166,21 @@ def save_concept():
 	#write data 
 	doc_ref.set(username_dict)
 
-	return 'ok'
+	doc = doc_ref.get()
+	username_dict = doc.to_dict()
+	return jsonify(username_dict)
+	#return 'ok'
 
 #done
 @app.route('/save_username', methods=['POST'])
 def save_username():
 	# concept_dict_with_new_concept = request.get_json()
 	username = request.get_json()
+<<<<<<< HEAD
 	# print(username)
+=======
+	print('/save_username ', username)
+>>>>>>> 4486afed08d900dd928b4bf434d25aa7bba13a1f
     
 	#get data from firestore
 	doc = doc_ref.get()
@@ -182,7 +189,11 @@ def save_username():
 	# with open('username_symbols.json') as json_file:
 	#print("/save_username ->  ", json_data)
 	username_dict = json_data
+<<<<<<< HEAD
 	# print(username_dict)
+=======
+	#print(username_dict)
+>>>>>>> 4486afed08d900dd928b4bf434d25aa7bba13a1f
 	if username not in username_dict:
 		username_dict[username] = {"concepts": {}}
 		 # create new user 
@@ -192,7 +203,9 @@ def save_username():
 	# 			os.rename("./new_username_symbols.json","./username_symbols.json")
 	# print(username_dict)
 	doc_ref.set(username_dict)
-	return 'ok'
+	doc = doc_ref.get()
+	username_dict = doc.to_dict()
+	return jsonify(username_dict)
 
 
 '''

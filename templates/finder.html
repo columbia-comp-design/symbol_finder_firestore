@@ -33,7 +33,7 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.fancytree/2.33.0/jquery.fancytree-all.min.js"></script>
 
   <link rel="stylesheet" href="./../../static/css/skin-bootstrap-ui-fancytree.css" type="text/css"/>
-
+  <link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='css/loader.css') }}">
 </head>
 
 <body>
@@ -66,6 +66,7 @@
      <br>
      <div id="under_progress_bar" class="under_progress_bar"> 
        <div id="instructions" class="instructions"> </div>
+       <div style="display:block" id="loader" class="loader"></div>
        <br>
        <div id = "image_grids"> </div>
      </div>
@@ -115,6 +116,7 @@
     google_all_clusters(clusters);
     updateProgress();
     populate_first_step_instructions();
+    $('#loader').attr("style","display:none")
   </script>
 
 

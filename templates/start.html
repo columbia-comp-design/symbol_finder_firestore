@@ -3,6 +3,7 @@
 {% block content %}
   <link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='css/style.css') }}">
   <link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='css/sidebar.css') }}">
+  <link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='css/loader.css') }}">
 
   <title> Symbol Dictionary </title>
 <!--   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
@@ -11,14 +12,18 @@
 
 <div id="main" align="center">
 	<br>
+	<div class="spinner-border m-5" role="status">
+		<span class="sr-only">Loading...</span>
+	</div>
 	<h1> Symbol Finder </h1>
 	<br>
 
 	<!-- <h2> Select a username:  </h2> -->
 	<div id = "username_btns"> </div>
+	<div style="display:none" id="usernameLoader" class="loader"></div>
+	<div id = "username_alert"></div>
 
-	<br>
-
+	<div style="display:block" id="startLoader" class="loader"></div>
 	<div id = "username_enter">
 
 	<label for="inp" class="inp" id = "username_input">
@@ -34,6 +39,8 @@
 
 	
 	<label for="inp" class="inp" id = "concept_input">
+	 <h5>New concept:</h5>
+	 <div id = "concept_alert" style="display: none;">concept already exists</div>
 	  <input type="text" id="concept_text" placeholder="Enter a new concept to symbolize">
 	  <!-- <span class="label">Concept</span>
 	  <span class="border"></span> -->
@@ -43,7 +50,7 @@
 	<br>
 	<hr>
 	<br>
-	<h5> Saved Concept(s):  </h5>
+	<!-- <h5> Saved Concept(s):  </h5> -->
 
 	<div id = "concept_btns"> </div>
 	</div>
@@ -56,6 +63,7 @@ var concept_dict = null;
 var username_dict = null;
 var selected_username = null;
 var new_users = [];
+var prev_concept ="";
 
 
 
@@ -86,6 +94,7 @@ window.onload = function() {
 		async: false,
 	    success: function(data, text){
 	    	console.log('success')
+			$('#startLoader').attr("style","display:none")
 	    	console.log(data)
 	    	username_dict = data;
 	    	populate_username_btns();
@@ -105,18 +114,32 @@ var username_input = document.getElementById("username_input");
 username_input.addEventListener("keydown", function (e){
 	if(e.keyCode == 13){
 		var entered_username = document.getElementById("username_text").value;
+		//Trim username, 
+		entered_username = entered_username.trim().toLowerCase();
+		entered_username =  entered_username.charAt(0).toUpperCase() + entered_username.slice(1);
+
+		console.log("username: ",  entered_username)
+		console.log(" user exist: ",  username_dict.hasOwnProperty(entered_username))
 		if(entered_username != "" && username_dict.hasOwnProperty(entered_username) == false){
 			// username_dict[entered_username] = {"concepts":{}}; 
+			$('#usernameLoader').attr("style","display:block")
+
 			    $.ajax({
 			    type: "POST",
 			    url: "save_username",
 			    contentType: "application/json; charset=utf-8",
 			    data : JSON.stringify(entered_username),
 			    success: function(data, text){
+					console.log('save_username route called')
+					username_dict = data;
 			    	new_users.push(entered_username);
-			    	console.log('success')
 			    	add_username_button(entered_username);
-			    	select_username(entered_username);
+					select_username(entered_username);
+					populate_symbol_btns(entered_username); 
+					$('#usernameLoader').attr("style","display:none")
+					$('#username_alert').html("")
+					$('#username_enter').hide();
+
 			    },
 			    error: function(request, status, error){
 			    	console.log("Error");
@@ -126,23 +149,39 @@ username_input.addEventListener("keydown", function (e){
 			    }
 			  });
 		}
+		else{ // username exist 
+			$('#username_alert').html("username or group already exists")
+		}
 	}
 });
 
 var concept_input = document.getElementById("concept_input");
 concept_input.addEventListener("keydown", function (e) {
     if (e.keyCode === 13) {  //checks whether the pressed key is "Enter"
-    	var entered_concept = document.getElementById("concept_text").value;
-    	var username_concepts = username_dict[selected_username];
-    	if(entered_concept != "" && username_concepts.hasOwnProperty(entered_concept) == false){
+		//get value
+		var entered_concept = document.getElementById("concept_text").value;
+
+		// string edge cases, and trim takes out white spaces 
+		entered_concept =  entered_concept.toLowerCase().trim();
+
+
+		var username_concepts = username_dict[selected_username];
+		let isNewConcept = username_dict[selected_username]["concepts"][entered_concept];
+		//console.log("is ", entered_concept, "a new concept: " , (isNewConcept == undefined) );
+    	if(entered_concept != "" && isNewConcept == undefined && prev_concept!=entered_concept){
     		$.ajax({
 			    type: "POST",
 			    url: "save_concept",
 			    contentType: "application/json; charset=utf-8",
 			    data : JSON.stringify({"concept":entered_concept,"username":selected_username}),
 			    success: function(data, text){
+					prev_concept = entered_concept;
+					// console.log("data: " ,  data[select_username]["concepts"][entered_concept])
 			    	console.log('success')
+					username_dict = data;
 			    	add_concept_button(entered_concept);
+					$('#concept_alert').hide();
+
 			    },
 			    error: function(request, status, error){
 			    	console.log("Error");
@@ -152,7 +191,14 @@ concept_input.addEventListener("keydown", function (e) {
 			    }
 			  });
     	}
+		else{
+			$('#concept_alert').show();
+
+		}
     }
+	else{
+		$('#concept_alert').hide();
+	}
 });
 
 function populate_symbol_btns(username){
@@ -179,6 +225,8 @@ function go_to_symbol_page(concept,username){
 }
 
 function select_username(username){
+	$('#username_enter').hide();
+	$('#username_alert').hide();
 
 	selected_username = username;
 	var concepts_div = document.getElementById("concepts_div");
