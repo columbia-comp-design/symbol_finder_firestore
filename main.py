@@ -19,7 +19,7 @@ firebase_admin.initialize_app(cred, {
 
 db = firestore.client()
 #document has the json data backup for each month 
-doc_ref = db.collection(u'jsonByDate').document(u'june2020')
+doc_ref = db.collection(u'jsonByDate').document(u'testing3')
 
 
 tmpl_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'templates')
@@ -160,9 +160,14 @@ def save_concept():
 
 	if concept not in username_dict[username]["concepts"]:
 		username_dict[username]["concepts"][concept] = {}
+		username_dict[username]["concepts"][concept]["tree_view_json"] = {}
+		username_dict[username]["concepts"][concept]["all_cluster_words"] = {}
+		tree_view_json, all_cluster_words = get_cluster_json_for_root(concept)
+		username_dict[username]["concepts"][concept]["tree_view_json"] = tree_view_json
+		username_dict[username]["concepts"][concept]["all_cluster_words"] = all_cluster_words
 		username_dict[username]["concepts"][concept]["img_list"] = []
 		username_dict[username]["concepts"][concept]["img_dict"] = {}
-	
+		
 	#write data 
 	doc_ref.set(username_dict)
 
@@ -216,7 +221,36 @@ def symbols_for_concept(username,concept):
 @app.route('/<username>/finder/<concept>', methods=['POST','GET'])
 def finder_for_concept(username,concept):
 	print("/<username>/finder/<concept> called. username: ", username, " concept: ", concept)
-	tree_view_json, all_cluster_words = get_cluster_json_for_root(concept)
+
+
+	# tree_view_json, all_cluster_words = get_cluster_json_for_root(concept)
+	# print(json.dumps(tree_view_json, indent=4, sort_keys=True))
+
+	#get data from firestore
+	doc = doc_ref.get()
+	json_data = doc.to_dict()
+	username_dict = json_data
+	# tree_view_json, all_cluster_words = username_dict[username]["concepts"][concept]["tree_view_json"]
+
+	tree_view_json = username_dict[username]["concepts"][concept]["tree_view_json"]
+	# all_cluster_words = tree_view_json
+	print('Heres tree_view_json!!!\n\n\n')
+	print(json.dumps(tree_view_json, indent=4))
+
+	all_cluster_words = username_dict[username]["concepts"][concept]["all_cluster_words"]
+
+	# concept_json = username_dict[username]["concepts"][concept]
+	# username_dict[username]["concepts"][concept]["tree_view_json"] = tree_view_json
+	
+	print('Heres username_dict!!\n\n\n')
+	print(json.dumps(username_dict, indent=4))
+
+	#write data 
+	# tree_view_json_to_store = json.dumps(tree_view_json)
+	# obj = {"tree_view_json": tree_view_json}
+	# print("Here's obj: ", obj)
+	# doc_ref.set(username_dict)
+
 	print("done with /<username>/finder/<concept> called.")
 	return render_template("finder.html",concept=concept, username=username, tree_view_json=json.dumps(tree_view_json), swow_dict=json.dumps(swow_dict), all_cluster_words = all_cluster_words)
 

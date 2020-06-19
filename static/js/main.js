@@ -1054,6 +1054,7 @@ function fill_treeview_sidebar(node_name,tree_view_json){
     }
   }
 
+  console.log("Here's new_tree_view_json: ", new_tree_view_json)
   tree_view_json = new_tree_view_json;
 
   

@@ -509,8 +509,14 @@ def generate_treeview_json(sorted_cluster_list):
 			m_list_words = [i[0] for i in m_list]
 			child_node["regular_swow"] = m_list_words
 			parent_node["children"].append(child_node)
+		print('Heres parent_node\n\n\n', parent_node)
 		treeview_json.append(parent_node)
+
+	print('Heres treeview_json\n\n\n', treeview_json)
+	print('Heres all_cluster_words\n\n\n', all_cluster_words)
+
 	return treeview_json, all_cluster_words
+
 
 global swow_dict
 create_word_to_concreteness_dict()

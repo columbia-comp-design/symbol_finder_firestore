@@ -148,8 +148,10 @@ multi_google_search = function(term,parent_term,tree_title_click,tree_node_key){
     
     if(term in concept_dict){
       concept_dict[term].urls = url_obj;
+      console.log("Here's concept_dict[term].urls: " + concept_dict[term].urls)
     }
     else{
+      console.log("Initializing concept_dict[term]")
       concept_dict[term] = {}
       concept_dict[term].urls = url_obj;
     }

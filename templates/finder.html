@@ -100,7 +100,10 @@
     var swow_dict = {{ swow_dict|tojson }};
     swow_dict = JSON.parse(swow_dict);
     var tree_view_json = {{ tree_view_json|tojson }} ;
+    console.log("I'm printing tree_view_json now");
+    console.log(tree_view_json);
     tree_view_json = JSON.parse(tree_view_json);
+
     var concept_searched = concept;
 
     concept_dict = swow_dict;
@@ -108,11 +111,14 @@
     // fill_treeview_sidebar(concept,tree_view_json);
     // fill_cluster_image_grids(tree_view_json);
     var clusters = []
+    console.log("Here's tree_view_json: ", tree_view_json);
     for (var i = 0; i < tree_view_json.length; i++){
       var cluster_title = tree_view_json[i]["title"];
+      console.log("Here's cluster_title: ", cluster_title);
+      console.log('\n\n\n')
       clusters.push(cluster_title);
     }
-    //console.log(clusters)
+    // console.log(clusters)
     google_all_clusters(clusters);
     updateProgress();
     populate_first_step_instructions();
