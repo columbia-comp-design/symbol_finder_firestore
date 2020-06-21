@@ -223,7 +223,23 @@ def symbols_for_concept(username,concept):
 @app.route('/<username>/finder/<concept>', methods=['POST','GET'])
 def finder_for_concept(username,concept):
 	print("/<username>/finder/<concept> called. username: ", username, " concept: ", concept)
-	tree_view_json, all_cluster_words = get_cluster_json_for_root(concept)
+	# Call this function because modified swow_dict must be returned 
+	get_cluster_json_for_root(concept)
+	# Get data from firestore
+	doc = doc_ref.get()
+	json_data = doc.to_dict()
+	username_dict = json_data
+
+	# Retrieve tree_view_json and all_cluster_words, and convert them from string to dict
+	tree_view_json = json.loads(username_dict[username]["concepts"][concept]["tree_view_json"])
+	all_cluster_words = json.loads(username_dict[username]["concepts"][concept]["all_cluster_words"])
+	print('Heres tree_view_json!!!\n\n\n')
+	print(json.dumps(tree_view_json, indent=4))
+
+	print('Heres all_cluster_words!!!\n\n\n')
+	print(json.dumps(all_cluster_words, indent=4))
+
+
 	print("done with /<username>/finder/<concept> called.")
 	return render_template("finder.html",concept=concept, username=username, tree_view_json=json.dumps(tree_view_json), swow_dict=json.dumps(swow_dict), all_cluster_words = all_cluster_words)
 
