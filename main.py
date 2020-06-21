@@ -19,7 +19,7 @@ firebase_admin.initialize_app(cred, {
 
 db = firestore.client()
 #document has the json data backup for each month 
-doc_ref = db.collection(u'jsonByDate').document(u'june2020')
+doc_ref = db.collection(u'jsonByDate').document(u'testing6')
 
 
 tmpl_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'templates')
@@ -160,10 +160,17 @@ def save_concept():
 
 	if concept not in username_dict[username]["concepts"]:
 		username_dict[username]["concepts"][concept] = {}
+		username_dict[username]["concepts"][concept]["tree_view_json"] = {}
+		username_dict[username]["concepts"][concept]["all_cluster_words"] = {}
 		username_dict[username]["concepts"][concept]["img_list"] = []
 		username_dict[username]["concepts"][concept]["img_dict"] = {}
 	
+		tree_view_json, all_cluster_words = get_cluster_json_for_root(concept)
+		username_dict[username]["concepts"][concept]["tree_view_json"] = json.dumps(tree_view_json)
+		username_dict[username]["concepts"][concept]["all_cluster_words"] = json.dumps(all_cluster_words)
+
 	#write data 
+	# Maybe move into if-statement because we only set doc if concept is not already saved
 	doc_ref.set(username_dict)
 
 	doc = doc_ref.get()
