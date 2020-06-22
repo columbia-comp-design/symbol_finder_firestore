@@ -700,9 +700,21 @@ add_cluster = function(cluster_title,yes_btn){
   else{
     console.log("adding cluster!");
 
-    chosen_clusters[cluster_title] = true;
+    // chosen_clusters[cluster_title] = true;
+    // Iterate over tree_view_json, find the cluster_title, 
+    // and set its 'selected' field to true
+    for (var i = 0; i < tree_view_json.length; i++){
+        console.log("Here's tree_view_json[i]: ", tree_view_json[i]);
+
+        if (tree_view_json[i].title == cluster_title){
+            tree_view_json[i].selected = true
+            console.log("Here's the new value of selected: " + tree_view_json[i].selected);
+        }
+    }
     yes_btn.classList.add("yes_active");
   }
+
+  console.log("Here's the updated tree_view_json: ", tree_view_json);
 }
 
 /*yes_no_button = function(cluster_title,yn_button,button_type,other_button_id){
