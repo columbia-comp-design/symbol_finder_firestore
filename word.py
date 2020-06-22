@@ -494,6 +494,8 @@ def generate_treeview_json(sorted_cluster_list):
 		parent_node["children"] = []
 		parent_node["is_cluster"] = True
 		parent_node["expanded_once"] = False
+		# Field for tracking selected clusters 
+		parent_node["selected"] = False
 		for conc_word in sorted_eigen_list_just_words[:5]:
 		# for conc_word in sorted_conc_list_just_wrods[:5]:
 			child_node = {}

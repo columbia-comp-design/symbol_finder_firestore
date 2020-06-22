@@ -699,6 +699,7 @@ add_cluster = function(cluster_title,yes_btn){
   }
   else{
     console.log("adding cluster!");
+
     chosen_clusters[cluster_title] = true;
     yes_btn.classList.add("yes_active");
   }
@@ -1044,6 +1045,7 @@ function fill_treeview_sidebar(node_name,tree_view_json){
 
   console.log("TREE VIEW JSON")
   console.log(tree_view_json)
+  // if (tree_view_json[0].selected == true) 
 
   new_tree_view_json = [];
   for(var i = 0; i < tree_view_json.length; i++)
