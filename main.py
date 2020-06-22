@@ -210,6 +210,50 @@ def save_username():
 	return jsonify(username_dict)
 
 
+# New route for lazy deletion
+# User selects a cluster
+@app.route('/selected_cluster', methods=['POST'])
+def selected_cluster():
+	json_data = request.get_json()
+	retrieved_username = json_data["username"]
+	retrieved_concept = json_data["concept"]
+	retrieved_tree_view_json = json_data["tree_view_json"]
+	print ("Here's the retrieved_username for selected_cluster: \n\n\n", retrieved_username)
+	print ("Here's the retrieved_concept for selected_cluster: \n\n\n", retrieved_concept)
+	print ("Here's the retrieved_tree_view_json for selected_cluster: \n\n\n")
+	print(json.dumps(retrieved_tree_view_json, indent=4))
+
+	#get data from firestore
+	doc = doc_ref.get()
+	json_data = doc.to_dict()
+	username_dict = json_data
+	username_dict[retrieved_username]["concepts"][retrieved_concept]["tree_view_json"] = json.dumps(retrieved_tree_view_json)
+	doc_ref.set(username_dict)
+
+	return jsonify(retrieved_tree_view_json)
+
+
+# User deselects a cluster
+@app.route('/deselected_cluster', methods=['POST'])
+def deselected_cluster():
+	json_data = request.get_json()
+	retrieved_username = json_data["username"]
+	retrieved_concept = json_data["concept"]
+	retrieved_tree_view_json = json_data["tree_view_json"]
+	print ("Here's the retrieved_username for deselected_cluster: \n\n\n", retrieved_username)
+	print ("Here's the retrieved_concept for deselected_cluster: \n\n\n", retrieved_concept)
+	print ("Here's the retrieved_tree_view_json for deselected_cluster: \n\n\n")
+	print(json.dumps(retrieved_tree_view_json, indent=4))
+
+	#get data from firestore
+	doc = doc_ref.get()
+	json_data = doc.to_dict()
+	username_dict = json_data
+	username_dict[retrieved_username]["concepts"][retrieved_concept]["tree_view_json"] = json.dumps(retrieved_tree_view_json)
+	doc_ref.set(username_dict)
+
+	return jsonify(retrieved_tree_view_json)
+
 '''
 @app.route('/symbols/<concept>', methods=['POST','GET'])
 def symbols_for_concept(concept):
@@ -241,6 +285,8 @@ def finder_for_concept(username,concept):
 
 
 	print("done with /<username>/finder/<concept> called.")
+	# return render_template("finder.html",concept=concept, username=username, tree_view_json=json.dumps(tree_view_json), swow_dict=json.dumps({}), all_cluster_words = all_cluster_words)
+
 	return render_template("finder.html",concept=concept, username=username, tree_view_json=json.dumps(tree_view_json), swow_dict=json.dumps(swow_dict), all_cluster_words = all_cluster_words)
 
 @app.route('/', methods=['POST','GET'])

@@ -699,7 +699,24 @@ add_cluster = function(cluster_title,yes_btn){
         if (tree_view_json[i].title == cluster_title){
             tree_view_json[i].selected = false
             console.log("Here's the new value of selected after removing cluser: " + tree_view_json[i].selected);
-            yes_btn.classList.remove("yes_active");
+            $.ajax({ 
+                type: "POST", 
+                url: "/deselected_cluster",
+                dataType : "json",
+                contentType: "application/json; charset=utf-8",
+                data : JSON.stringify({"username":username,"concept":concept,"tree_view_json":tree_view_json}),
+                success: function(result){
+                    yes_btn.classList.remove("yes_active");
+                    console.log("Ajax worked for deselect_cluster().");
+                },
+                error: function(request, status, error){
+                    console.log("Error");
+                    console.log(request)
+                    console.log(status)
+                    console.log(error)
+                }
+            }); 
+                
         }
       }
 
@@ -715,7 +732,25 @@ add_cluster = function(cluster_title,yes_btn){
         if (tree_view_json[i].title == cluster_title){
             tree_view_json[i].selected = true
             console.log("Here's the new value of selected after adding cluster: " + tree_view_json[i].selected);
-            yes_btn.classList.add("yes_active");
+            console.log("Here's username: ", username);
+            console.log("Here's concept: ", concept);
+            $.ajax({ 
+                  type: "POST", 
+                  url: "/selected_cluster",
+                  dataType : "json",
+                  contentType: "application/json; charset=utf-8",
+                  data : JSON.stringify({"username":username,"concept":concept,"tree_view_json":tree_view_json}),
+                  success: function(result){
+                      yes_btn.classList.add("yes_active");
+                      console.log("Ajax worked for add_cluster().");
+                  },
+                  error: function(request, status, error){
+                      console.log("Error");
+                      console.log(request)
+                      console.log(status)
+                      console.log(error)
+                  }
+              }); 
         }
     }
   }

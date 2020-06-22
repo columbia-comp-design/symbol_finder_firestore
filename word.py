@@ -1,3 +1,4 @@
+import json
 import operator
 import networkx as nx
 # from networkx.algorithms import community
@@ -60,6 +61,8 @@ def create_master_list(swow_dict):
 		# print(sorted_comb_word_list)
 		# print("\n")
 		swow_dict[word]["comb_words"] = sorted_comb_word_list
+	
+	# print(json.dumps(swow_dict, indent=4))
 	return swow_dict
 
 def load_swow():
