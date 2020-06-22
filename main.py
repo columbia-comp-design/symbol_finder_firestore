@@ -221,7 +221,7 @@ def selected_cluster():
 	print ("Here's the retrieved_username for selected_cluster: \n\n\n", retrieved_username)
 	print ("Here's the retrieved_concept for selected_cluster: \n\n\n", retrieved_concept)
 	print ("Here's the retrieved_tree_view_json for selected_cluster: \n\n\n")
-	print(json.dumps(retrieved_tree_view_json, indent=4))
+	# print(json.dumps(retrieved_tree_view_json, indent=4))
 
 	#get data from firestore
 	doc = doc_ref.get()
@@ -243,7 +243,7 @@ def deselected_cluster():
 	print ("Here's the retrieved_username for deselected_cluster: \n\n\n", retrieved_username)
 	print ("Here's the retrieved_concept for deselected_cluster: \n\n\n", retrieved_concept)
 	print ("Here's the retrieved_tree_view_json for deselected_cluster: \n\n\n")
-	print(json.dumps(retrieved_tree_view_json, indent=4))
+	# print(json.dumps(retrieved_tree_view_json, indent=4))
 
 	#get data from firestore
 	doc = doc_ref.get()
@@ -278,10 +278,10 @@ def finder_for_concept(username,concept):
 	tree_view_json = json.loads(username_dict[username]["concepts"][concept]["tree_view_json"])
 	all_cluster_words = json.loads(username_dict[username]["concepts"][concept]["all_cluster_words"])
 	print('Heres tree_view_json!!!\n\n\n')
-	print(json.dumps(tree_view_json, indent=4))
+	# print(json.dumps(tree_view_json, indent=4))
 
 	print('Heres all_cluster_words!!!\n\n\n')
-	print(json.dumps(all_cluster_words, indent=4))
+	# print(json.dumps(all_cluster_words, indent=4))
 
 
 	print("done with /<username>/finder/<concept> called.")

@@ -1,8 +1,9 @@
-import json
+import os, json
 import operator
 import networkx as nx
 # from networkx.algorithms import community
 import community
+
 
 wtc_dict = {}
 new_conc_dict = {}
@@ -22,7 +23,8 @@ def create_word_to_concreteness_dict():
 			word = line[0]
 			wtc_dict[word] = round(float(line[2]) / 5.0,3)
 
-def create_master_list(swow_dict): 
+def create_master_list(swow_dict):
+	print("create_master_list(swow_dict) called") 
 	for word in swow_dict:
 		# print(word)
 		swow_entry_master_dict = {}
@@ -66,6 +68,7 @@ def create_master_list(swow_dict):
 	return swow_dict
 
 def load_swow():
+	print("load_swow() called")
 	swow_dict = {}
 	swow_f = open("./data/strength.SWOW-EN.R123.csv","r",encoding='UTF8')
 	swow_f = swow_f.read()
@@ -461,7 +464,7 @@ def get_cluster_json_for_root(root_word):
 	G = create_networkx_graph(swow_dict,root_word,depth)
 	sorted_cluster_list = get_clusters(root_word,G)
 	remove_cw_from_swow(sorted_cluster_list)
-	print('Getting sorted_cluster_list: ', sorted_cluster_list)
+	# print('Getting sorted_cluster_list: ', sorted_cluster_list)
 
 	treeview_json, all_cluster_words = generate_treeview_json(sorted_cluster_list)
 	return treeview_json, all_cluster_words
@@ -517,11 +520,64 @@ def generate_treeview_json(sorted_cluster_list):
 		treeview_json.append(parent_node)
 	return treeview_json, all_cluster_words
 
-global swow_dict
-create_word_to_concreteness_dict()
-create_word_replacement_dict()
-swow_dict = load_swow()
-swow_dict = create_master_list(swow_dict)
+
+
+
+# what we hvae before
+# global swow_dict
+# create_word_to_concreteness_dict()
+# create_word_replacement_dict()
+# swow_dict = load_swow()
+# swow_dict = create_master_list(swow_dict)
+
+
+# if the path exist, read from file 
+def create_swow_dict_filePath():
+	print("create_swow_dict_filePath() called")
+	global swow_dict
+	create_word_to_concreteness_dict()
+	create_word_replacement_dict()
+
+	swow_dict = load_swow()
+	swow_dict = create_master_list(swow_dict)
+
+	with open('swow_dict.json','w') as outfile:
+		json.dump(swow_dict, outfile)
+		print("created swow_dict.json file and finished writing to file")
+
+def load_swow_dict_filePath():
+	print("load_swow_dict_filePath() called")
+	global swow_dict
+	print("path exists for swow_dict")
+	# read
+	with open('swow_dict.json', 'r') as swow_dict_file:
+		swow_dict = json.load(swow_dict_file)
+		print("finish reading from swow_dict file")
+		# print(json.dumps(swow_dict))
+
+if not os.path.exists('./swow_dict.json'): 
+	create_swow_dict_filePath()
+else:
+	load_swow_dict_filePath()
+
+	# 	# global swow_dict
+
+	# 	create_word_to_concreteness_dict()
+	# 	create_word_replacement_dict()
+	# 	#read
+	# 	# with open('username_symbols.json') as symbol_file:
+	# 	# 	username_dict = json.load(symbol_file)
+	# 	print("path exists for swow_dict   ")
+	# 	# if not, make it
+	# 	with open('swow_dict.json','w') as outfile:
+	# 		json.dump(swow_dict, outfile)
+	# 		print("finish writing to file ")
+
+# if the path does not exist, create a new file 
+
+
+
+
 
 
 
