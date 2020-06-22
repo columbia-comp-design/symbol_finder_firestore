@@ -693,13 +693,19 @@ create_image_grid2 = function(term,urls,concept){
 add_cluster = function(cluster_title,yes_btn){
   // console.log("adding cluster!");
   if(yes_btn.classList.contains("yes_active")){
-    console.log("removing cluster!");
-      yes_btn.classList.remove("yes_active");
-      delete chosen_clusters.cluster_title;
+    // console.log("removing cluster!");
+      // delete chosen_clusters.cluster_title;
+      for (var i = 0; i < tree_view_json.length; i++){
+        if (tree_view_json[i].title == cluster_title){
+            tree_view_json[i].selected = false
+            console.log("Here's the new value of selected after removing cluser: " + tree_view_json[i].selected);
+            yes_btn.classList.remove("yes_active");
+        }
+      }
+
   }
   else{
-    console.log("adding cluster!");
-
+    // console.log("adding cluster!");
     // chosen_clusters[cluster_title] = true;
     // Iterate over tree_view_json, find the cluster_title, 
     // and set its 'selected' field to true
@@ -708,10 +714,10 @@ add_cluster = function(cluster_title,yes_btn){
 
         if (tree_view_json[i].title == cluster_title){
             tree_view_json[i].selected = true
-            console.log("Here's the new value of selected: " + tree_view_json[i].selected);
+            console.log("Here's the new value of selected after adding cluster: " + tree_view_json[i].selected);
+            yes_btn.classList.add("yes_active");
         }
     }
-    yes_btn.classList.add("yes_active");
   }
 
   console.log("Here's the updated tree_view_json: ", tree_view_json);
