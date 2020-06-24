@@ -93,21 +93,15 @@
   <script>
     var concept = "{{ concept }}";
     var username = "{{ username }}";
-    var seen_swow_words = {{ all_cluster_words|tojson }};
-    console.log("SEEN_SWOW_WORDS")
-    console.log(seen_swow_words)
     var version = 2;
     var swow_dict = {{ swow_dict|tojson }};
     swow_dict = JSON.parse(swow_dict);
-    var tree_view_json = {{ tree_view_json|tojson }} ;
-    tree_view_json = JSON.parse(tree_view_json);
-    console.log("Here is tree_view_json!~");
-    console.log(tree_view_json);
     var concept_searched = concept;
 
+    var tree_view_json = {{ tree_view_json|tojson }} ;
+    tree_view_json = JSON.parse(tree_view_json);
+
     concept_dict = swow_dict;
-    console.log("Here's concept_dict: ")
-    console.log(concept_dict)
 
     // fill_treeview_sidebar(concept,tree_view_json);
     // fill_cluster_image_grids(tree_view_json);
