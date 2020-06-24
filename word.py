@@ -4,6 +4,10 @@ import networkx as nx
 # from networkx.algorithms import community
 import community
 
+#https://stackoverflow.com/questions/55765372/python-error-global-declared-variable-is-not-declared-in-the-global-scope
+# https://stackoverflow.com/questions/10619600/assigning-nonetype-to-dict
+swow_dict = dict()
+swow_data_for_tree_view = dict()
 
 wtc_dict = {}
 new_conc_dict = {}
@@ -12,6 +16,7 @@ full_replace_dict = {}
 stopwords_file = open("./stopwords.txt","r")
 stopwords_file = stopwords_file.read()
 stop_words = stopwords_file.split("\n")
+
 
 def create_word_to_concreteness_dict():
 	turker_file = open('./data/abstract_concrete_5point_turk.csv','r')
@@ -448,7 +453,7 @@ def remove_cw_from_swow(sorted_cluster_list):
 				all_cluster_words[cw] = True
 
 	for cw in all_cluster_words:
-		cw_comb_words = swow_dict[cw]["comb_words"]
+		cw_comb_words = swow_dict[cw]["comb_words"]		
 		to_delete = []
 		for cw_comb_word in cw_comb_words:
 			if cw_comb_word in all_cluster_words:
@@ -456,6 +461,9 @@ def remove_cw_from_swow(sorted_cluster_list):
 		for dv in to_delete:
 			cw_comb_words.remove(dv)
 		swow_dict[cw]["comb_words"] = cw_comb_words
+		# 1% of swow_dict
+		# swow_data_for_tree_view[cw]["comb_words"] = cw_comb_words
+
 
 
 def get_cluster_json_for_root(root_word):
@@ -490,8 +498,13 @@ def generate_treeview_json(sorted_cluster_list):
 			cluster_title = cluster_title + word + ", "
 		cluster_title = cluster_title[:-2]
 		swow_dict[cluster_title] = {}
+		# 1% of swow_dict
+		swow_data_for_tree_view[cluster_title] = {}
+
 		# swow_dict[cluster_title]["comb_words"] = sorted_conc_list_just_wrods
 		swow_dict[cluster_title]["comb_words"] = sorted_eigen_list_just_words
+		# 1% of swow_dict
+		swow_data_for_tree_view[cluster_title]["comb_words"] = sorted_eigen_list_just_words
 		# print(sorted_eigen_list_just_words[:10])
 		#print()
 		parent_node["title"] = cluster_title
@@ -535,6 +548,7 @@ def generate_treeview_json(sorted_cluster_list):
 def create_swow_dict_filePath():
 	print("create_swow_dict_filePath() called")
 	global swow_dict
+	global swow_data_for_tree_view 
 	create_word_to_concreteness_dict()
 	create_word_replacement_dict()
 
@@ -548,6 +562,8 @@ def create_swow_dict_filePath():
 def load_swow_dict_filePath():
 	print("load_swow_dict_filePath() called")
 	global swow_dict
+	global swow_data_for_tree_view 
+	# print(swow_data_for_tree_view)
 	print("path exists for swow_dict")
 	# read
 	with open('swow_dict.json', 'r') as swow_dict_file:

@@ -277,14 +277,18 @@ def finder_for_concept(username,concept):
 	# Retrieve tree_view_json and all_cluster_words, and convert them from string to dict
 	tree_view_json = json.loads(username_dict[username]["concepts"][concept]["tree_view_json"])
 	all_cluster_words = json.loads(username_dict[username]["concepts"][concept]["all_cluster_words"])
-	print('Heres tree_view_json!!!\n\n\n')
+	# print('Heres tree_view_json!!!\n\n\n')
 	# print(json.dumps(tree_view_json, indent=4))
 
-	print('Heres all_cluster_words!!!\n\n\n')
+	# print('Heres all_cluster_words!!!\n\n\n')
 	# print(json.dumps(all_cluster_words, indent=4))
 
+	print("\n\n\n")
+	print("swow_data_for_tree_view: ")
+	print(json.dumps(swow_data_for_tree_view, indent=4))
 
-	print("done with /<username>/finder/<concept> called.")
+
+	# print("done with /<username>/finder/<concept> called.")
 	# return render_template("finder.html",concept=concept, username=username, tree_view_json=json.dumps(tree_view_json), swow_dict=json.dumps({}), all_cluster_words = all_cluster_words)
 
 	return render_template("finder.html",concept=concept, username=username, tree_view_json=json.dumps(tree_view_json), swow_dict=json.dumps(swow_dict), all_cluster_words = all_cluster_words)
