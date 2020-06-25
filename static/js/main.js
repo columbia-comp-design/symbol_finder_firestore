@@ -95,9 +95,10 @@ updateNodes = function(){
       nodes.update({id:node,label:node + "\n (" + String(cnt) + ")",shape:"circularImage",image:url, font:{color:'#4ead67'}});
     }
     else{
-      if(node in concept_dict){
+      if(node in swow_data_for_tree_view){
         //using 1% of swow_dict
         //  var search_terms = Object.keys(concept_dict[node].urls);
+        
         var search_terms = Object.keys(swow_data_for_tree_view[node].urls);
 
         var search_term = search_terms[0]; 
@@ -1135,10 +1136,10 @@ function fill_treeview_sidebar(node_name,tree_view_json){
   selected_tree_view_json = [];
   for(var i = 0; i < tree_view_json.length; i++)
   {
-    // console.log("outside if at ", i )
+    console.log("outside selected_tree_view_json ", i )
     // var cluster_title = tree_view_json[i].title;
     if(tree_view_json[i].selected){
-      // console.log("inside if")
+      console.log("inside selected_tree_view_json ", i)
       selected_tree_view_json.push(tree_view_json[i]);
     }
   }
@@ -1198,9 +1199,7 @@ function fill_treeview_sidebar(node_name,tree_view_json){
               for(var i = 0; i < children_list.length; i++){
                   var child_node = children_list[i];
                   var node_title = child_node.title; 
-                  // var regular_swow_words = concept_dict[node_title]["comb_words"];
-                  //using 1% of swow_dict
-                  var regular_swow_words = swow_data_for_tree_view[node_title]["comb_words"];
+                  var regular_swow_words = concept_dict[node_title]["comb_words"];
 
                   var max_nodes = 5;
                   for(var j = 0; j < regular_swow_words.length; j++){

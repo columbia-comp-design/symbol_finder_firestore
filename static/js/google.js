@@ -147,7 +147,7 @@ multi_google_search = function(term,parent_term,tree_title_click,tree_node_key){
     // url_obj[stock_search] = urls_4;
     
     //using 1% of swow_dict
-    if(term in concept_dict){
+    if(term in swow_data_for_tree_view){
       // concept_dict[term].urls = url_obj;
       swow_data_for_tree_view[term].urls = url_obj;
     }
