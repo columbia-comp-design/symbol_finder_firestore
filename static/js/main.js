@@ -1267,8 +1267,8 @@ function fill_treeview_sidebar(node_name,tree_view_json){
             }*/
 
             //using 1% of swow_dict
-            // var swow_words_for_node = concept_dict[node.title]["comb_words"];
-            var swow_words_for_node = swow_data_for_tree_view[node.title]["comb_words"];
+            var swow_words_for_node = concept_dict[node.title]["comb_words"];
+            // var swow_words_for_node = swow_data_for_tree_view[node.title]["comb_words"];
 
             // console.log(node.title)
             // console.log(concept_dict[node.title])
@@ -1377,8 +1377,8 @@ function fill_treeview_sidebar(node_name,tree_view_json){
             var node = data.node;
             var children_list = parent.children; 
             //using 1% of swow_dict
-            // var regular_swow_words = concept_dict[parent.title]["comb_words"];
-            var regular_swow_words = swow_data_for_tree_view[parent.title]["comb_words"];
+            var regular_swow_words = concept_dict[parent.title]["comb_words"];
+            // var regular_swow_words = swow_data_for_tree_view[parent.title]["comb_words"];
 
             if(children_list.length < regular_swow_words.length){
 
@@ -1398,8 +1398,8 @@ function fill_treeview_sidebar(node_name,tree_view_json){
                 // make grand children
                 var j = 0;
                 //using 1% of swow_dict
-                // var gc_swow_words = concept_dict[swow_word]["comb_words"];
-                var gc_swow_words = swow_data_for_tree_view[swow_word]["comb_words"];
+                var gc_swow_words = concept_dict[swow_word]["comb_words"];
+                // var gc_swow_words = swow_data_for_tree_view[swow_word]["comb_words"];
 
                 console.log("PATH_SPLIT LENGTH: " + String(path_split.length))
                 if(path_split.length < 4){
