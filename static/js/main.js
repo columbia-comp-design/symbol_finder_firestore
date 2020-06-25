@@ -471,7 +471,9 @@ function add_custom_node(node){
         console.log(new_node)
 
         if(val in concept_dict){
-          var regular_swow_words = concept_dict[val]["comb_words"];
+          // var regular_swow_words = concept_dict[val]["comb_words"];
+          //using 1% of swow_dict
+          var regular_swow_words = swow_data_for_tree_view[val]["comb_words"];
           var max_nodes = 5;
           var added_nodes_cnt = 0;
           for(var j = 0; j < regular_swow_words.length; j++){
@@ -481,7 +483,9 @@ function add_custom_node(node){
               var swow_word = regular_swow_words[j];
               var n_node = {"title": swow_word, "icon": false, "is_cluster": false, "expanded_once": false, "checkbox": false};
               var c_new_node = new_node.addNode(n_node);
-              var children_swow_words = concept_dict[swow_word]["comb_words"];
+              // var children_swow_words = concept_dict[swow_word]["comb_words"];
+              //using 1% of swow_dict
+              var children_swow_words = swow_data_for_tree_view[swow_word]["comb_words"];
               var max_g_nodes = 5;
               var g_nodes_added = 0;
               for(var i = 0; i < children_swow_words.length; i++){
@@ -941,8 +945,12 @@ fill_cluster_image_grids = function(clusters){
     image_instruction_span = document.createElement("span");
     image_instruction_span.innerHTML = "Select any images below that you think is a good symbol for " + concept + ".";
 
-    var urls = concept_dict[cluster_title].urls[cluster_title];
-    var url_to_gs_dict = concept_dict[cluster_title].url_to_gsterm;
+    // var urls = concept_dict[cluster_title].urls[cluster_title];
+    // var url_to_gs_dict = concept_dict[cluster_title].url_to_gsterm;
+    //using 1% of swow_dict
+    var urls = swow_data_for_tree_view[cluster_title].urls[cluster_title];
+    var url_to_gs_dict = swow_data_for_tree_view[cluster_title].url_to_gsterm;
+
     console.log("url_to_gs_dict")
     console.log(url_to_gs_dict);
     // image_table = create_image_grid(cluster_title,urls);
@@ -1164,8 +1172,10 @@ function fill_treeview_sidebar(node_name,tree_view_json){
               for(var i = 0; i < children_list.length; i++){
                   var child_node = children_list[i];
                   var node_title = child_node.title; 
-                  // var regular_swow_words = concept_dict[node_title]["master_words"];
-                  var regular_swow_words = concept_dict[node_title]["comb_words"];
+                  // var regular_swow_words = concept_dict[node_title]["comb_words"];
+                  //using 1% of swow_dict
+                  var regular_swow_words = swow_data_for_tree_view[node_title]["comb_words"];
+
                   var max_nodes = 5;
                   for(var j = 0; j < regular_swow_words.length; j++){
                     if(j >= max_nodes){
@@ -1231,9 +1241,12 @@ function fill_treeview_sidebar(node_name,tree_view_json){
               }
             }*/
 
-            var swow_words_for_node = concept_dict[node.title]["comb_words"];
-            console.log(node.title)
-            console.log(concept_dict[node.title])
+            //using 1% of swow_dict
+            // var swow_words_for_node = concept_dict[node.title]["comb_words"];
+            var swow_words_for_node = swow_data_for_tree_view[node.title]["comb_words"];
+
+            // console.log(node.title)
+            // console.log(concept_dict[node.title])
               if(node.children.length < swow_words_for_node.length){
                 var btn_text_area = '<button class="see_more_tree_btn" id="see_more_'+String(data.node.title)+'">see more</button>';
                 var see_more_btn = {"title": btn_text_area, "icon": "glyphicon glyphicon-plus", "checkbox": false, "is_add_your_own": false, "is_cluster": false, "is_see_more": true};
@@ -1338,7 +1351,9 @@ function fill_treeview_sidebar(node_name,tree_view_json){
             
             var node = data.node;
             var children_list = parent.children; 
-            var regular_swow_words = concept_dict[parent.title]["comb_words"];
+            //using 1% of swow_dict
+            // var regular_swow_words = concept_dict[parent.title]["comb_words"];
+            var regular_swow_words = swow_data_for_tree_view[parent.title]["comb_words"];
 
             if(children_list.length < regular_swow_words.length){
 
@@ -1357,7 +1372,10 @@ function fill_treeview_sidebar(node_name,tree_view_json){
                 nodes_added++;
                 // make grand children
                 var j = 0;
-                var gc_swow_words = concept_dict[swow_word]["comb_words"];
+                //using 1% of swow_dict
+                // var gc_swow_words = concept_dict[swow_word]["comb_words"];
+                var gc_swow_words = swow_data_for_tree_view[swow_word]["comb_words"];
+
                 console.log("PATH_SPLIT LENGTH: " + String(path_split.length))
                 if(path_split.length < 4){
                   while(j < gc_swow_words.length && j < 5){
