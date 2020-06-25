@@ -96,9 +96,16 @@ updateNodes = function(){
     }
     else{
       if(node in concept_dict){
-         var search_terms = Object.keys(concept_dict[node].urls);
-         var search_term = search_terms[0]; 
-         var first_url = concept_dict[node].urls[search_term][0];
+        //using 1% of swow_dict
+        //  var search_terms = Object.keys(concept_dict[node].urls);
+        var search_terms = Object.keys(swow_data_for_tree_view[node].urls);
+
+        var search_term = search_terms[0]; 
+
+        //using 1% of swow_dict
+        //  var first_url = concept_dict[node].urls[search_term][0];
+         var first_url = swow_data_for_tree_view[node].urls[search_term][0];
+
          nodes.update({id:node,label:node,shape:"circularImage",image:first_url, font:{color: 'black'}});
       }
     }
@@ -175,7 +182,9 @@ delete_node = function(node_to_delete){
 
 
   // show parent node images and related words after delete:
-  var parent_data = concept_dict[parent_node];
+  //using 1% of swow_dict
+  // var parent_data = concept_dict[parent_node];
+  var parent_data = swow_data_for_tree_view[parent_node];
   create_image_sidebar(parent_data['urls'],parent_node); 
 
   // hide delete button
@@ -1108,23 +1117,25 @@ function fill_treeview_sidebar(node_name,tree_view_json){
   console.log(tree_view_json)
   // if (tree_view_json[0].selected == true) 
 
-  new_tree_view_json = [];
+  selected_tree_view_json = [];
   for(var i = 0; i < tree_view_json.length; i++)
   {
-    var cluster_title = tree_view_json[i].title;
-    if(chosen_clusters.hasOwnProperty(cluster_title)){
-      new_tree_view_json.push(tree_view_json[i]);
+    // console.log("outside if at ", i )
+    // var cluster_title = tree_view_json[i].title;
+    if(tree_view_json[i].selected){
+      // console.log("inside if")
+      selected_tree_view_json.push(tree_view_json[i]);
     }
   }
 
-  tree_view_json = new_tree_view_json;
+  // tree_view_json = new_tree_view_json;
 
   
 
   // ===============================================================================
 
   console.log("tree_view_json")
-  console.log(tree_view_json)
+  // console.log(tree_view_json)
 
   var treeview = document.createElement("div");
   treeview.setAttribute("id","tree");
@@ -1145,7 +1156,7 @@ function fill_treeview_sidebar(node_name,tree_view_json){
       selectMode: 2,
       generateIds: true,
       glyph: glyph_opts,
-      source: tree_view_json,
+      source: selected_tree_view_json,
       expand: function (event, data){
           
           console.log('expand event!')

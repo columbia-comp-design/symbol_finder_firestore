@@ -146,12 +146,16 @@ multi_google_search = function(term,parent_term,tree_title_click,tree_node_key){
     url_obj[icon_search] = urls_3;
     // url_obj[stock_search] = urls_4;
     
+    //using 1% of swow_dict
     if(term in concept_dict){
-      concept_dict[term].urls = url_obj;
+      // concept_dict[term].urls = url_obj;
+      swow_data_for_tree_view[term].urls = url_obj;
     }
     else{
-      concept_dict[term] = {}
-      concept_dict[term].urls = url_obj;
+      // concept_dict[term] = {}
+      // concept_dict[term].urls = url_obj;
+      swow_data_for_tree_view[term] = {}
+      swow_data_for_tree_view[term].urls = url_obj;
     }
 
     fill_grids_for_concept(url_obj,term);
@@ -296,8 +300,12 @@ $.when.apply(null,async_request).done(function(){
       console.log(final_urls)
       var url_obj = {};
       url_obj[cluster_title] = final_urls;
-      concept_dict[cluster_title].urls = url_obj;
-      concept_dict[cluster_title].url_to_gsterm = final_url_dict;
+      
+      //using 1% of swow_dict
+      // concept_dict[cluster_title].urls = url_obj;
+      // concept_dict[cluster_title].url_to_gsterm = final_url_dict;
+      swow_data_for_tree_view[cluster_title].urls = url_obj;
+      swow_data_for_tree_view[cluster_title].url_to_gsterm = final_url_dict;
     }
 
     fill_cluster_image_grids(clusters);
@@ -370,13 +378,19 @@ google_search = function(term,is_start,tree_click){
               console.log(urls)
 
               if(is_start){
-                concept_dict[term].urls = urls;
+                //using 1% of swow_dict
+                // concept_dict[term].urls = urls;
+                swow_data_for_tree_view[term].urls = urls;
               }
               else{
-                console.log(term)
-                 console.log(concept_dict)
-                 console.log(concept_dict[term])
-                 concept_dict[term].urls = urls;
+                // console.log(term)
+                //  console.log(concept_dict)
+                //  console.log(concept_dict[term])
+
+                //using 1% of swow_dict
+                //  concept_dict[term].urls = urls;
+                swow_data_for_tree_view[term].urls = urls;
+
                  // var term_entry = {};
                 // term_entry.urls = urls;
                 // concept_dict[term] = term_entry;
