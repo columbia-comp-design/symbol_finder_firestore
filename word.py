@@ -497,12 +497,12 @@ def generate_treeview_json(sorted_cluster_list):
 		for word in first_three_eigen:
 			cluster_title = cluster_title + word + ", "
 		cluster_title = cluster_title[:-2]
-		swow_dict[cluster_title] = {}
+		# swow_dict[cluster_title] = {}
 		# 1% of swow_dict
 		swow_data_for_tree_view[cluster_title] = {}
 
 		# swow_dict[cluster_title]["comb_words"] = sorted_conc_list_just_wrods
-		swow_dict[cluster_title]["comb_words"] = sorted_eigen_list_just_words
+		# swow_dict[cluster_title]["comb_words"] = sorted_eigen_list_just_words
 		# 1% of swow_dict
 		swow_data_for_tree_view[cluster_title]["comb_words"] = sorted_eigen_list_just_words
 		# print(sorted_eigen_list_just_words[:10])
