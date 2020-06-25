@@ -161,13 +161,13 @@ def save_concept():
 	if concept not in username_dict[username]["concepts"]:
 		username_dict[username]["concepts"][concept] = {}
 		username_dict[username]["concepts"][concept]["tree_view_json"] = {}
-		username_dict[username]["concepts"][concept]["all_cluster_words"] = {}
+		# username_dict[username]["concepts"][concept]["all_cluster_words"] = {}
 		username_dict[username]["concepts"][concept]["img_list"] = []
 		username_dict[username]["concepts"][concept]["img_dict"] = {}
 	
 		tree_view_json, all_cluster_words = get_cluster_json_for_root(concept)
 		username_dict[username]["concepts"][concept]["tree_view_json"] = json.dumps(tree_view_json)
-		username_dict[username]["concepts"][concept]["all_cluster_words"] = json.dumps(all_cluster_words)
+		# username_dict[username]["concepts"][concept]["all_cluster_words"] = json.dumps(all_cluster_words)
 
 	#write data 
 	# Maybe move into if-statement because we only set doc if concept is not already saved
@@ -276,7 +276,7 @@ def finder_for_concept(username,concept):
 
 	# Retrieve tree_view_json and all_cluster_words, and convert them from string to dict
 	tree_view_json = json.loads(username_dict[username]["concepts"][concept]["tree_view_json"])
-	all_cluster_words = json.loads(username_dict[username]["concepts"][concept]["all_cluster_words"])
+	# all_cluster_words = json.loads(username_dict[username]["concepts"][concept]["all_cluster_words"])
 	# print('Heres tree_view_json!!!\n\n\n')
 	# print(json.dumps(tree_view_json, indent=4))
 
