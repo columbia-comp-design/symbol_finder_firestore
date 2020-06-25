@@ -101,7 +101,13 @@
     var tree_view_json = {{ tree_view_json|tojson }} ;
     tree_view_json = JSON.parse(tree_view_json);
 
+    var swow_data_for_tree_view = {{ swow_data_for_tree_view|tojson }} ;
+    swow_data_for_tree_view = JSON.parse(swow_data_for_tree_view);
+
     concept_dict = swow_dict;
+
+    console.log("here is swow_data_for_tree_view: ", swow_data_for_tree_view)
+    
 
     // fill_treeview_sidebar(concept,tree_view_json);
     // fill_cluster_image_grids(tree_view_json);

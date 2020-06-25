@@ -291,7 +291,7 @@ def finder_for_concept(username,concept):
 	# print("done with /<username>/finder/<concept> called.")
 	# return render_template("finder.html",concept=concept, username=username, tree_view_json=json.dumps(tree_view_json), swow_dict=json.dumps({}), all_cluster_words = all_cluster_words)
 	# swow_data_for_tree_view
-	return render_template("finder.html",concept=concept, username=username, tree_view_json=json.dumps(tree_view_json), swow_dict=json.dumps(swow_dict))
+	return render_template("finder.html",concept=concept, username=username, tree_view_json=json.dumps(tree_view_json), swow_dict=json.dumps(swow_dict), swow_data_for_tree_view=json.dumps(swow_data_for_tree_view))
 
 @app.route('/', methods=['POST','GET'])
 def start():
