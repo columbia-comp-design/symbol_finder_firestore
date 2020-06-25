@@ -1037,6 +1037,21 @@ fill_cluster_image_grids = function(clusters){
     padding_div.appendChild(term_image_grid);
     image_grids_div.appendChild(padding_div);*/
   }
+  // console.log("phase 1 tree_view_json: ", tree_view_json)
+
+  console.log("phase 1")
+  //change yes button to green if selected 
+  for(var i = 0; i < tree_view_json.length; i++){
+    console.log("outside if at yesbutton ", i )
+    if(tree_view_json[i].selected){
+      // console.log("inside yesbutton", i )
+       console.log("id: yes_" , tree_view_json[i].title ) 
+      let yesButtonEl = document.getElementById("yes_ " +tree_view_json[i].title)
+      yesButtonEl.classList.add("yes_active");
+      // console.log("yesButtonEl, " ,yesButtonEl)       
+    }
+  }
+
 
   var explore_button = document.createElement("button");
   explore_button.setAttribute("id","explore_button");
