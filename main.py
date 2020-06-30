@@ -57,18 +57,19 @@ def save_symbols(username):
 	username_dict = json_data
 
 	img_list = username_dict[username]["concepts"][concept]['img_list']
-	img_dict = username_dict[username]["concepts"][concept]['img_dict']
+	# img_dict = username_dict[username]["concepts"][concept]['img_dict']
 	if to_remove:
 		for img in img_list:
 			if img['url'] == url:
 				img_list.remove(img)
 				break
 		username_dict[username]["concepts"][concept]['img_list'] = img_list
-		del username_dict[username]["concepts"][concept]['img_dict'][url]
+		# del username_dict[username]["concepts"][concept]['img_dict'][url]
 	else:
-		if url not in img_dict:
-			username_dict[username]["concepts"][concept]['img_dict'][url] = True
-			username_dict[username]["concepts"][concept]['img_list'].append(new_symbol)
+		username_dict[username]["concepts"][concept]['img_list'].append(new_symbol)
+		# if url not in img_dict:
+			# username_dict[username]["concepts"][concept]['img_dict'][url] = True
+			
 
 	#write data 
 	doc_ref.set(username_dict)
@@ -163,7 +164,7 @@ def save_concept():
 		username_dict[username]["concepts"][concept]["tree_view_json"] = {}
 		# username_dict[username]["concepts"][concept]["all_cluster_words"] = {}
 		username_dict[username]["concepts"][concept]["img_list"] = []
-		username_dict[username]["concepts"][concept]["img_dict"] = {}
+		# username_dict[username]["concepts"][concept]["img_dict"] = {}
 	
 		tree_view_json, all_cluster_words = get_cluster_json_for_root(concept)
 		username_dict[username]["concepts"][concept]["tree_view_json"] = json.dumps(tree_view_json)
