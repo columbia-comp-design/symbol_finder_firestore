@@ -583,6 +583,26 @@ function confirm_image2(concept,term,url,image_id){
     selected_symbols[url]["google_search_term"] = term;
     selected_symbols[url]["concept"] = concept;
     selected_symbols[url]["confirm_time"] = confirm_time - start_time;
+
+    //ajax send selected_symbols
+    $.ajax({ 
+      type: "POST", 
+      url: "/add_to_selected_symbols",
+      dataType : "json",
+      contentType: "application/json; charset=utf-8",
+      data : JSON.stringify({"selected_symbols":selected_symbols, "username":username}),
+      success: function(result){
+          console.log("Ajax worked for /add_to_selected_symbols.");
+      },
+      error: function(request, status, error){
+          console.log("Error");
+          console.log(request)
+          console.log(status)
+          console.log(error)
+      }
+  }); 
+
+
     updateProgress();
     // updateNodes();
   }
@@ -1479,13 +1499,20 @@ function show_found_symbols(){
 }*/
 
 function create_selected_symbol_table(){
+  console.log("create_selected_symbol_table() called")
   var cst_div = document.getElementById("chosen_symbol_table_div");
   cst_div.innerHTML = "";
   var symbol_entries = Object.entries(selected_symbols);
   concept_to_url_dict = {};
 
+
+  console.log("selected_symbols: ", selected_symbols)
+  console.log("symbol_entries: ", symbol_entries)
+
   for(var i = 0; i < symbol_entries.length; i++){
+    console.log("symbol_entry[i] " , symbol_entries[i]);
     var symbol_entry = symbol_entries[i];
+
     var url = symbol_entry[0];
     var concept = symbol_entry[1]["concept"];
     if(concept in concept_to_url_dict){
