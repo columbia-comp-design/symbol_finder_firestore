@@ -76,77 +76,39 @@ def save_symbols(username):
 	return 'ok'
 
 #done
-@app.route('/modified_selected_symbols',  methods=['POST','GET'])
+@app.route('/update_selected_symbols',  methods=['POST','GET'])
 def modified_selected_symbols():
 	json_data = request.get_json() 
 	selected_symbols = json_data['selected_symbols']
 	username = json_data['username']
 	concept = json_data['concept']
 
-	print("\n\n here is username")
-	print(username)
+	# print("\n\n here is username")
+	# print(username)
 
-	print("\n\n here is concept len")
-	print(len(concept))
+	# print("\n\n here is concept len")
+	# print(len(concept))
 
-	print("\n\n here is selected_symbols")
-	print(selected_symbols)
+	# print("\n\n here is selected_symbols")
+	# print(selected_symbols)
 	
-	# url = json_data['url']
-	# search_term = json_data['term']
-	# to_remove = json_data['to_remove']
-	# concept = json_data['concept']
-	# confirm_time = json_data['confirm_time']
-	# on_step_one = json_data['step_one']
-	# new_symbol = {"url":url,"search_term":search_term,"on_step_one":on_step_one,"confirm_time":confirm_time}
-
-	# if to_remove:
-	# 	print("DELETING SYMBOL:")
-	# else:
-	# 	print("SAVING SYMBOL:")
-	# #print(json_data)
-	# print()
-	# data = 0
-	# concept_symbols = []
-
-	#read
-	# with open('username_symbols.json') as symbol_file:
-	# 	username_dict = json.load(symbol_file)
-
-	#get data from firestore
-	# doc = doc_ref.get()
-	# json_data = doc.to_dict()
-	# username_dict = json_data
-
-	# img_list = username_dict[username]["concepts"][concept]['img_list']
-	# # img_dict = username_dict[username]["concepts"][concept]['img_dict']
-	# if to_remove:
-	# 	for img in img_list:
-	# 		if img['url'] == url:
-	# 			img_list.remove(img)
-	# 			break
-	# 	username_dict[username]["concepts"][concept]['img_list'] = img_list
-	# 	# del username_dict[username]["concepts"][concept]['img_dict'][url]
-	# else:
-	# 	username_dict[username]["concepts"][concept]['img_list'].append(new_symbol)
-		# if url not in img_dict:
-			# username_dict[username]["concepts"][concept]['img_dict'][url] = True
-			
-	#write data 
 	dicPath =  username +'.concepts.' + concept + '.selected_symbols'
 	doc_ref.update({u''+dicPath:selected_symbols})
-
-	# #write data 
-	# doc_ref.update({
-	# 	username: {
-	# 		'concepts':{
-	# 			concept:{
-	# 				'selected_symbols':selected_symbols	
-	# 			}
-	# 		}
-	# 	}
-	# })
 	return 'saved'
+
+	#done
+@app.route('/get_selected_symbols', methods=['POST'])
+def get_selected_symbols():
+	json_data = request.get_json() 
+	username = json_data['username']
+	concept = json_data['concept']
+
+	doc = doc_ref.get()
+	username_dict = doc.to_dict()
+	selected_symbols = username_dict[username]['concepts'][concept]['selected_symbols']
+	return jsonify(selected_symbols)
+
+
 
 #done
 @app.route('/<username>/symbols/get_symbols_for_username', methods=['POST'])

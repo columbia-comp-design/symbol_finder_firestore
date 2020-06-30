@@ -592,7 +592,7 @@ function confirm_image2(tree_view_node_term, term, url, image_id) {
     //ajax send selected_symbols
     $.ajax({
       type: "POST",
-      url: "/modified_selected_symbols",
+      url: "/update_selected_symbols",
       dataType: "json",
       contentType: "application/json; charset=utf-8",
       data: JSON.stringify({ "selected_symbols": selected_symbols, "username": username, "concept": concept }),
@@ -1499,70 +1499,91 @@ function show_found_symbols(){
 }*/
 
 function create_selected_symbol_table() {
-  console.log("create_selected_symbol_table() called")
+  concept = window.location.href.substring(window.location.href.lastIndexOf('/') + 1);
+  console.log("create_selected_symbol_table() called and the concept is ", concept)
+  // console.log("href: " , window.location.href.substring(window.location.href.lastIndexOf('/') + 1));
   var cst_div = document.getElementById("chosen_symbol_table_div");
   cst_div.innerHTML = "";
-  var symbol_entries = Object.entries(selected_symbols);
-  concept_to_url_dict = {};
 
 
-  console.log("selected_symbols: ", selected_symbols)
-  console.log("symbol_entries: ", symbol_entries)
+  $.ajax({
+    type: "POST",
+    url: "/get_selected_symbols",
+    dataType: "json",
+    contentType: "application/json; charset=utf-8",
+    data: JSON.stringify({ "username": username, "concept": concept }),
+    success: function (data) {
+      // console.log("data: ", data)
+      console.log("Ajax-call worked for /get_selected_symbols.");
+      selected_symbols = data;
+      var symbol_entries = Object.entries(selected_symbols);
+      concept_to_url_dict = {};
 
-  for (var i = 0; i < symbol_entries.length; i++) {
-    console.log("symbol_entry[i] ", symbol_entries[i]);
-    var symbol_entry = symbol_entries[i];
+      console.log("selected_symbols: ", selected_symbols)
+      console.log("symbol_entries: ", symbol_entries)
 
-    var url = symbol_entry[0];
-    var concept = symbol_entry[1]["concept"];
-    if (concept in concept_to_url_dict) {
-      var url_list = concept_to_url_dict[concept]
-      console.log(url_list);
-      url_list.push(url);
-      concept_to_url_dict[concept] = url_list;
+      for (var i = 0; i < symbol_entries.length; i++) {
+        console.log("symbol_entry[i] ", symbol_entries[i]);
+        var symbol_entry = symbol_entries[i];
+
+        var url = symbol_entry[0];
+        var concept = symbol_entry[1]["concept"];
+        if (concept in concept_to_url_dict) {
+          var url_list = concept_to_url_dict[concept]
+          console.log(url_list);
+          url_list.push(url);
+          concept_to_url_dict[concept] = url_list;
+        }
+        else {
+          concept_to_url_dict[concept] = [url];
+        }
+      }
+
+      image_table = document.createElement('table');
+      row_num = 0;
+      col_num = 5;
+      var row = image_table.insertRow(row_num);
+      row.style.display = "block";
+      cell_num = 0;
+      var concept_to_url_entries = Object.entries(concept_to_url_dict);
+      console.log("CONCEPT TO URL ENTRIES")
+      console.log(concept_to_url_entries)
+      for (var i = 0; i < concept_to_url_entries.length; i++) {
+        var concept_to_url_entry = concept_to_url_entries[i];
+        var concept = concept_to_url_entry[0];
+        var urls = concept_to_url_entry[1];
+        console.log("concept: " + String(concept));
+        console.log("urls: " + String(urls));
+
+        var cell = row.insertCell(-1);
+        cell.innerHTML = concept;
+
+        for (var j = 0; j < urls.length; j++) {
+          var url = urls[j];
+          image_and_button_div = document.createElement("div");
+          cell = row.insertCell(-1);
+          image = document.createElement('img');
+          image.setAttribute('src', url);
+          cell_id = concept + '_' + String(j)
+          image.setAttribute('id', cell_id)
+          image.setAttribute('class', 'img_in_table');
+          cell.appendChild(image);
+        }
+
+        row_num++;
+        row = image_table.insertRow(row_num);
+        row.style.display = "block";
+      }
+      console.log("done.")
+      cst_div.appendChild(image_table);
+    },
+    error: function (request, status, error) {
+      console.log("Error");
+      console.log(request)
+      console.log(status)
+      console.log(error)
     }
-    else {
-      concept_to_url_dict[concept] = [url];
-    }
-  }
-
-  image_table = document.createElement('table');
-  row_num = 0;
-  col_num = 5;
-  var row = image_table.insertRow(row_num);
-  row.style.display = "block";
-  cell_num = 0;
-  var concept_to_url_entries = Object.entries(concept_to_url_dict);
-  console.log("CONCEPT TO URL ENTRIES")
-  console.log(concept_to_url_entries)
-  for (var i = 0; i < concept_to_url_entries.length; i++) {
-    var concept_to_url_entry = concept_to_url_entries[i];
-    var concept = concept_to_url_entry[0];
-    var urls = concept_to_url_entry[1];
-    console.log("concept: " + String(concept));
-    console.log("urls: " + String(urls));
-
-    var cell = row.insertCell(-1);
-    cell.innerHTML = concept;
-
-    for (var j = 0; j < urls.length; j++) {
-      var url = urls[j];
-      image_and_button_div = document.createElement("div");
-      cell = row.insertCell(-1);
-      image = document.createElement('img');
-      image.setAttribute('src', url);
-      cell_id = concept + '_' + String(j)
-      image.setAttribute('id', cell_id)
-      image.setAttribute('class', 'img_in_table');
-      cell.appendChild(image);
-    }
-
-    row_num++;
-    row = image_table.insertRow(row_num);
-    row.style.display = "block";
-  }
-  console.log("done.")
-  cst_div.appendChild(image_table);
+  });
 }
 
 
