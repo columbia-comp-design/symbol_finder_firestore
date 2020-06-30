@@ -76,14 +76,18 @@ def save_symbols(username):
 	return 'ok'
 
 #done
-@app.route('/add_to_selected_symbols',  methods=['POST','GET'])
-def add_to_selected_symbols():
+@app.route('/modified_selected_symbols',  methods=['POST','GET'])
+def modified_selected_symbols():
 	json_data = request.get_json() 
 	selected_symbols = json_data['selected_symbols']
 	username = json_data['username']
+	concept = json_data['concept']
 
 	print("\n\n here is username")
 	print(username)
+
+	print("\n\n here is concept len")
+	print(len(concept))
 
 	print("\n\n here is selected_symbols")
 	print(selected_symbols)
@@ -128,10 +132,21 @@ def add_to_selected_symbols():
 		# if url not in img_dict:
 			# username_dict[username]["concepts"][concept]['img_dict'][url] = True
 			
-
 	#write data 
-	# doc_ref.set(username_dict)
-	return 'ok'
+	dicPath =  username +'.concepts.' + concept + '.selected_symbols'
+	doc_ref.update({u''+dicPath:selected_symbols})
+
+	# #write data 
+	# doc_ref.update({
+	# 	username: {
+	# 		'concepts':{
+	# 			concept:{
+	# 				'selected_symbols':selected_symbols	
+	# 			}
+	# 		}
+	# 	}
+	# })
+	return 'saved'
 
 #done
 @app.route('/<username>/symbols/get_symbols_for_username', methods=['POST'])
@@ -220,9 +235,8 @@ def save_concept():
 	if concept not in username_dict[username]["concepts"]:
 		username_dict[username]["concepts"][concept] = {}
 		username_dict[username]["concepts"][concept]["tree_view_json"] = {}
-		# username_dict[username]["concepts"][concept]["all_cluster_words"] = {}
+		username_dict[username]["concepts"][concept]["selected_symbols"] = {}
 		username_dict[username]["concepts"][concept]["img_list"] = []
-		# username_dict[username]["concepts"][concept]["img_dict"] = {}
 	
 		tree_view_json, all_cluster_words = get_cluster_json_for_root(concept)
 		username_dict[username]["concepts"][concept]["tree_view_json"] = json.dumps(tree_view_json)
