@@ -90,7 +90,9 @@ function expandEvent (params) { // Expand a node (with event handler)
     last_clicked_node = node_name;
     if(node_name in concept_dict){
       var sb = document.getElementById('sidebar')
-      create_image_sidebar2(concept_dict[node_name].urls,node_name)
+      //using 1% of swow_dict
+      // create_image_sidebar2(concept_dict[node_name].urls,node_name)
+      create_image_sidebar2(swow_data_for_tree_view[node_name].urls,node_name)
       update_delete_node_button(node_name);
     }
   }
@@ -110,10 +112,16 @@ function set_node_image(concept){
   // var urls_and_labels = concept_dict[concept].urls; 
   // var first_url = urls_and_labels[0][0];
 
-  var search_terms = Object.keys(concept_dict[concept].urls);
+  //using 1% of swow_dict
+  // var search_terms = Object.keys(concept_dict[concept].urls);
+  var search_terms = Object.keys(swow_data_for_tree_view[concept].urls);
+
   var search_term = search_terms[0]; 
   console.log("SEARCH_TERM: " + search_term);
-  var first_url = concept_dict[concept].urls[search_term][0];
+
+    //using 1% of swow_dict
+    // var first_url = concept_dict[concept].urls[search_term][0];
+  var first_url = swow_data_for_tree_view[concept].urls[search_term][0];
   // nodes.update({id:node,label:node,shape:"circularImage",image:first_url, font:{color: 'black'}});
   
 
