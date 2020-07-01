@@ -1702,23 +1702,44 @@ function updateProgress() {
   console.log()
   p = document.getElementById('progress_summary');
   empty_dom(p)
-  num_of_symbols = Object.keys(selected_symbols).length;
-  // var title_div = document.createElement('div');
-  // title_div.innerHTML = concept_searched;
-  // p.appendChild(title_div);
-  var div3 = document.createElement('div');
-  div3.setAttribute("class", "progress_concept_info");
-  var concept_counts_dict = getConceptCounts();
-  var number_of_concepts = Object.keys(concept_counts_dict).length;
-  var concept_string = '';
-  var concept_count_list = get_sorted_object_count(concept_counts_dict);
-  var target_number = 20;
-  /*for(var i = 0; i < concept_count_list.length; i++){
-    var concept_obj = concept_count_list[i];
-    concept_string = concept_string + " <b>" + String(concept_obj.concept) + "</b> (" + String(concept_obj.count) + "),";
-  }*/
-  // div3.innerHTML = String(String(num_of_symbols) + " symbols found from " + String(number_of_concepts) + " concepts:" + concept_string + " <hr>");
-  div3.innerHTML = String(number_of_concepts) + " / " + String(target_number) + "  unique symbols found for: <b>" + concept_searched + "</b>";
 
-  p.appendChild(div3);
+
+  $.ajax({
+    type: "POST",
+    url: "/get_selected_symbols",
+    dataType: "json",
+    contentType: "application/json; charset=utf-8",
+    data: JSON.stringify({ "username": username, "concept": concept }),
+    success: function (data) {
+
+      selected_symbols = data;
+      num_of_symbols = Object.keys(selected_symbols).length;
+      // var title_div = document.createElement('div');
+      // title_div.innerHTML = concept_searched;
+      // p.appendChild(title_div);
+      var div3 = document.createElement('div');
+      div3.setAttribute("class", "progress_concept_info");
+      var concept_counts_dict = getConceptCounts();
+      var number_of_concepts = Object.keys(concept_counts_dict).length;
+      var concept_string = '';
+      var concept_count_list = get_sorted_object_count(concept_counts_dict);
+      var target_number = 20;
+      /*for(var i = 0; i < concept_count_list.length; i++){
+        var concept_obj = concept_count_list[i];
+        concept_string = concept_string + " <b>" + String(concept_obj.concept) + "</b> (" + String(concept_obj.count) + "),";
+      }*/
+      // div3.innerHTML = String(String(num_of_symbols) + " symbols found from " + String(number_of_concepts) + " concepts:" + concept_string + " <hr>");
+      div3.innerHTML = String(number_of_concepts) + " / " + String(target_number) + "  unique symbols found for: <b>" + concept_searched + "</b>";
+
+      p.appendChild(div3);
+
+
+    },
+    error: function (request, status, error) {
+      console.log("Error");
+      console.log(request)
+      console.log(status)
+      console.log(error)
+    }
+  });
 }
