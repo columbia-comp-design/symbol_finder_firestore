@@ -572,6 +572,26 @@ function confirm_image2(tree_view_node_term, term, url, image_id) {
     // delete_elem_from_table(url,term,image_id);
     to_remove = true;
     delete selected_symbols[url];
+    
+    //ajax send selected_symbols
+    $.ajax({
+      type: "POST",
+      url: "/update_selected_symbols",
+      dataType: "json",
+      contentType: "application/json; charset=utf-8",
+      data: JSON.stringify({ "selected_symbols": selected_symbols, "username": username, "concept": concept }),
+      success: function (data) {
+        selected_symbols = data;
+        console.log("Ajax worked for /modified_selected_symbols.");
+      },
+      error: function (request, status, error) {
+        console.log("Error");
+        console.log(request)
+        console.log(status)
+        console.log(error)
+      }
+    });
+
     updateProgress();
     // updateNodes();
   }
@@ -654,6 +674,7 @@ function confirm_image2(tree_view_node_term, term, url, image_id) {
 }*/
 
 create_cluster_image_grid = function (term, urls, url_to_gs_dict) {
+  console.log("create_cluster_image_grid() called")
   console.log(term)
   // var urls = ["https://images-na.ssl-images-amazon.com/images/I/61YL-c2pZOL._AC_SX355_.jpg", "https://images-na.ssl-images-amazon.com/images/I/61YL-c2pZOL._AC_SX355_.jpg", "https://images-na.ssl-images-amazon.com/images/I/61YL-c2pZOL._AC_SX355_.jpg", "https://images-na.ssl-images-amazon.com/images/I/61YL-c2pZOL._AC_SX355_.jpg", "https://images-na.ssl-images-amazon.com/images/I/61YL-c2pZOL._AC_SX355_.jpg", "https://images-na.ssl-images-amazon.com/images/I/61YL-c2pZOL._AC_SX355_.jpg", "https://images-na.ssl-images-amazon.com/images/I/61YL-c2pZOL._AC_SX355_.jpg", "https://images-na.ssl-images-amazon.com/images/I/61YL-c2pZOL._AC_SX355_.jpg", "https://images-na.ssl-images-amazon.com/images/I/61YL-c2pZOL._AC_SX355_.jpg"]
   image_table = document.createElement('table');
@@ -689,7 +710,7 @@ create_cluster_image_grid = function (term, urls, url_to_gs_dict) {
 }
 
 create_image_grid2 = function (term, urls, concept) {
-  console.log(term)
+  console.log('create_image_grid2 called()')
   // var urls = ["https://images-na.ssl-images-amazon.com/images/I/61YL-c2pZOL._AC_SX355_.jpg", "https://images-na.ssl-images-amazon.com/images/I/61YL-c2pZOL._AC_SX355_.jpg", "https://images-na.ssl-images-amazon.com/images/I/61YL-c2pZOL._AC_SX355_.jpg", "https://images-na.ssl-images-amazon.com/images/I/61YL-c2pZOL._AC_SX355_.jpg", "https://images-na.ssl-images-amazon.com/images/I/61YL-c2pZOL._AC_SX355_.jpg", "https://images-na.ssl-images-amazon.com/images/I/61YL-c2pZOL._AC_SX355_.jpg", "https://images-na.ssl-images-amazon.com/images/I/61YL-c2pZOL._AC_SX355_.jpg", "https://images-na.ssl-images-amazon.com/images/I/61YL-c2pZOL._AC_SX355_.jpg", "https://images-na.ssl-images-amazon.com/images/I/61YL-c2pZOL._AC_SX355_.jpg"]
   image_table = document.createElement('table');
   row_num = 0;
@@ -858,6 +879,7 @@ toggle_show_second_row = function (row_id, but) {
 }
 
 fill_grids_for_concept = function (url_obj, concept) {
+  console.log("fill_grids_for_concept called")
   var image_grids_div = document.getElementById("image_grids");
   image_grids_div.innerHTML = "";
 
@@ -1724,7 +1746,7 @@ function updateProgress() {
       var concept_string = '';
       var concept_count_list = get_sorted_object_count(concept_counts_dict);
       var target_number = 20;
-      /*for(var i = 0; i < concept_count_list.length; i++){
+      /*for(var i = 0; i < concept_countgit_list.length; i++){
         var concept_obj = concept_count_list[i];
         concept_string = concept_string + " <b>" + String(concept_obj.concept) + "</b> (" + String(concept_obj.count) + "),";
       }*/

@@ -78,6 +78,7 @@ def save_symbols(username):
 #done
 @app.route('/update_selected_symbols',  methods=['POST','GET'])
 def modified_selected_symbols():
+	print("/update_selected_symbols")
 	json_data = request.get_json() 
 	selected_symbols = json_data['selected_symbols']
 	username = json_data['username']
@@ -94,7 +95,7 @@ def modified_selected_symbols():
 	
 	dicPath =  username +'.concepts.' + concept + '.selected_symbols'
 	doc_ref.update({u''+dicPath:selected_symbols})
-	return 'saved'
+	return jsonify(selected_symbols)
 
 	#done
 @app.route('/get_selected_symbols', methods=['POST'])
