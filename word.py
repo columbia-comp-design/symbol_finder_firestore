@@ -530,6 +530,9 @@ def generate_treeview_json(sorted_cluster_list):
 			m_list_words = [i[0] for i in m_list]
 			child_node["regular_swow"] = m_list_words
 			parent_node["children"].append(child_node)
+
+			#add image fields 
+			child_node['img_urls'] = {}
 		treeview_json.append(parent_node)
 	return treeview_json, all_cluster_words
 

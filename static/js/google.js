@@ -37,7 +37,7 @@ goog = function(t){
                   }),
             jsonp: "$callback",
             success: function( e, data ) {  
-              console.log("google search success for "+ t +"!");
+              // console.log("google search success for "+ t +"!");
             } 
         }); 
 }
@@ -65,7 +65,7 @@ cluster_google_search = function(cluster_title){
               }),
         jsonp: "$callback",
         success: function( e, data ) {  
-          console.log(i)
+          // console.log(i)
           responses.push(e);
         } 
     }));
@@ -85,7 +85,7 @@ cluster_google_search = function(cluster_title){
               }),
         jsonp: "$callback",
         success: function( e, data ) {  
-          console.log(i)
+          // console.log(i)
           responses.push(e);
         } 
     }));
@@ -123,6 +123,7 @@ cluster_google_search = function(cluster_title){
 
 multi_google_search = function(term,parent_term,tree_title_click,tree_node_key){
   console.log("calling multi_google_search!!")
+  console.log("parent_term", parent_term)
   
   var parent_child_search = parent_term + " " + term;
   var icon_search = term + " icon";
@@ -158,7 +159,7 @@ multi_google_search = function(term,parent_term,tree_title_click,tree_node_key){
       swow_data_for_tree_view[term].urls = url_obj;
     }
 
-    fill_grids_for_concept(url_obj,term);
+    fill_grids_for_concept(url_obj,term, parent_term);
     
     // create_image_sidebar2(url_obj,term,tree_node_key);
     
@@ -225,7 +226,7 @@ google_all_clusters = function(clusters){
   var cluster_dict = {};
   var cdict = {};
   for(var i = 0; i < clusters.length; i++){
-    console.log(clusters[i])
+    // console.log(clusters[i])
 
     var cluster_title = clusters[i];
     cdict[cluster_title] = {};
@@ -258,7 +259,7 @@ google_all_clusters = function(clusters){
                   }),
             jsonp: "$callback",
             success: function( e, data ) {  
-              console.log(i)
+              // console.log(i)
               responses.push(e);
             } 
         }));
@@ -296,8 +297,8 @@ $.when.apply(null,async_request).done(function(){
         final_url_dict[cword_urls[1]] = cluster_word;
       }
 
-      console.log("final_urls")
-      console.log(final_urls)
+      // console.log("final_urls")
+      // console.log(final_urls)
       var url_obj = {};
       url_obj[cluster_title] = final_urls;
       
