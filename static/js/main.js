@@ -215,7 +215,7 @@ update_delete_node_button = function (selected_node) {
 }
 
 update_saved_symbols = function (url, term, to_remove) {
-console.log("update_saved_symbols = function (url, term, to_remove) {...} called  ")
+  console.log("update_saved_symbols = function (url, term, to_remove) {...} called  ")
 
   var confirm_time = -1;
   if (to_remove == false) {
@@ -519,10 +519,10 @@ function add_custom_node(node) {
       console.log("node.title", node.title)
 
       let cluster_title_words;
-      if(data.node.parent.parent.title == "root"){
+      if (data.node.parent.parent.title == "root") {
         cluster_title_words = data.node.parent.title;
       }
-      else{
+      else {
         cluster_title_words = data.node.parent.parent.title
       }
       multi_google_search(val, cluster_title_words, true, new_node.key);
@@ -563,165 +563,9 @@ function confirm_image(term,url,image_id){
   update_saved_symbols(url,term,to_remove);
 }*/
 
-function confirm_image3(tree_view_cluster,tree_view_node_term, term, url, image_id) {
+//term is search term 
+function confirm_image3(tree_view_cluster, tree_view_node_term, term, url, image_id) {
   console.log(" confirm_image3(tree_view_cluster,tree_view_node_term, term, url, image_id) called")
-  
-    confirm_time = performance.now();
-  
-    // console.log('confirm image')
-    // console.log(term);
-    // console.log(url);
-    var to_remove = false;
-  
-  
-    // console.log("SELECTED_SYMBOLS:")
-    // console.log(selected_symbols)
-  
-    var img = document.getElementById(image_id);
-    // toggle confirmed state of image
-    if (img.classList.contains("confirmed")) {
-      img.classList.remove("confirmed");
-    } else { img.classList.add("confirmed"); }
-  
-    if (url in selected_symbols) {
-      // delete_elem_from_table(url,term,image_id);
-      to_remove = true;
-      delete selected_symbols[url];
-      
-      //ajax send selected_symbols
-      $.ajax({
-        type: "POST",
-        url: "/update_selected_symbols",
-        dataType: "json",
-        contentType: "application/json; charset=utf-8",
-        data: JSON.stringify({ "selected_symbols": selected_symbols, "username": username, "concept": concept }),
-        success: function (data) {
-          selected_symbols = data;
-          // console.log("Ajax worked for /modified_selected_symbols.");
-        },
-        error: function (request, status, error) {
-          console.log("Error");
-          console.log(request)
-          console.log(status)
-          console.log(error)
-        }
-      });
-
-       //delete image frpm tree view json 
-       for (var i = 0; i < tree_view_json.length; i++) {
-        //find title
-        console.log("Here's tree_view_json[i]: ", tree_view_json[i]);
-        if (tree_view_json[i].title == tree_view_cluster) {
-          //find children 
-          for(let j=0; j<tree_view_json[i].children.length;j++){
-            if(tree_view_json[i].children[j].title == tree_view_node_term){
-              console.log("found child: " , tree_view_node_term)
-
-              delete tree_view_json[i].children[j].img_urls[url];
-              $.ajax({
-                type: "POST",
-                url: "/update_tree_view_json",
-                dataType: "json",
-                contentType: "application/json; charset=utf-8",
-                data: JSON.stringify({ "username": username, "concept": concept, "tree_view_json": tree_view_json }),
-                success: function (result) {
-                  console.log("Ajax worked for update_tree_view_json().");
-                  console.log("added img tree_view_node term:", result)
-                },
-                error: function (request, status, error) {
-                  console.log("Error");
-                  console.log(request)
-                  console.log(status)
-                  console.log(error)
-                }
-              });
-            }
-          }
-        }
-      }
-  
-      updateProgress();
-      // updateNodes();
-    }
-    // else add it
-    else {
-      selected_symbols[url] = {};
-      selected_symbols[url]["google_search_term"] = term;
-      selected_symbols[url]["concept"] = tree_view_node_term;
-      selected_symbols[url]["confirm_time"] = confirm_time - start_time;
-  
-      // console.log("tree_view_node_term: ", tree_view_node_term)
-      // console.log("concept: ", concept)
-      //ajax send selected_symbols
-      $.ajax({
-        type: "POST",
-        url: "/update_selected_symbols",
-        dataType: "json",
-        contentType: "application/json; charset=utf-8",
-        data: JSON.stringify({ "selected_symbols": selected_symbols, "username": username, "concept": concept }),
-        success: function () {
-          // console.log("Ajax worked for /modified_selected_symbols.");
-        },
-        error: function (request, status, error) {
-          console.log("Error");
-          console.log(request)
-          console.log(status)
-          console.log(error)
-        }
-      });
-
-      //save image to tree view json 
-      for (var i = 0; i < tree_view_json.length; i++) {
-        //find title
-        console.log("Here's tree_view_json[i]: ", tree_view_json[i]);
-        if (tree_view_json[i].title == tree_view_cluster) {
-          //find children 
-          for(let j=0; j<tree_view_json[i].children.length;j++){
-            if(tree_view_json[i].children[j].title == tree_view_node_term){
-              console.log("found child: " , tree_view_node_term)
-
-              tree_view_json[i].children[j].img_urls[url] = {};
-              tree_view_json[i].children[j].img_urls[url]["google_search_term"] = term;
-              tree_view_json[i].children[j].img_urls[url]["tree_view_cluster"] = tree_view_cluster;
-              tree_view_json[i].children[j].img_urls[url]["tree_view_node_term"] = tree_view_node_term;
-              tree_view_json[i].children[j].img_urls[url]["url"] = url;
-
-              $.ajax({
-                type: "POST",
-                url: "/update_tree_view_json",
-                dataType: "json",
-                contentType: "application/json; charset=utf-8",
-                data: JSON.stringify({ "username": username, "concept": concept, "tree_view_json": tree_view_json }),
-                success: function (result) {
-                  console.log("Ajax worked for update_tree_view_json().");
-                  console.log("added img tree_view_node term:", result)
-                },
-                error: function (request, status, error) {
-                  console.log("Error");
-                  console.log(request)
-                  console.log(status)
-                  console.log(error)
-                }
-              });
-            }
-          }
-        }
-      }
-  
-  
-      updateProgress();
-      // updateNodes();
-    }
-  
-    if (showing_selected_symbols) {
-      create_selected_symbol_table();
-    }
-    // update_progress_info();
-    update_saved_symbols(url, term, to_remove);
-  }
-
-function confirm_image2(tree_view_node_term, term, url, image_id) {
-console.log(" confirm_image2(tree_view_node_term, term, url, image_id) called")
 
   confirm_time = performance.now();
 
@@ -744,7 +588,209 @@ console.log(" confirm_image2(tree_view_node_term, term, url, image_id) called")
     // delete_elem_from_table(url,term,image_id);
     to_remove = true;
     delete selected_symbols[url];
-    
+
+    //ajax send selected_symbols
+    $.ajax({
+      type: "POST",
+      url: "/update_selected_symbols",
+      dataType: "json",
+      contentType: "application/json; charset=utf-8",
+      data: JSON.stringify({ "selected_symbols": selected_symbols, "username": username, "concept": concept }),
+      success: function (data) {
+        selected_symbols = data;
+        // console.log("Ajax worked for /modified_selected_symbols.");
+      },
+      error: function (request, status, error) {
+        console.log("Error");
+        console.log(request)
+        console.log(status)
+        console.log(error)
+      }
+    });
+
+    //delete image frpm tree view json 
+    for (var i = 0; i < tree_view_json.length; i++) {
+      //find title
+      console.log("Here's tree_view_json[i]: ", tree_view_json[i]);
+      if (tree_view_json[i].title == tree_view_cluster) {
+        //find children 
+        for (let j = 0; j < tree_view_json[i].children.length; j++) {
+          if (tree_view_json[i].children[j].title == tree_view_node_term) {
+            console.log("found child: ", tree_view_node_term)
+
+            delete tree_view_json[i].children[j].img_urls[url];
+            $.ajax({
+              type: "POST",
+              url: "/update_tree_view_json",
+              dataType: "json",
+              contentType: "application/json; charset=utf-8",
+              data: JSON.stringify({ "username": username, "concept": concept, "tree_view_json": tree_view_json }),
+              success: function (result) {
+                console.log("Ajax worked for update_tree_view_json().");
+                console.log("added img tree_view_node term:", result)
+              },
+              error: function (request, status, error) {
+                console.log("Error");
+                console.log(request)
+                console.log(status)
+                console.log(error)
+              }
+            });
+          }
+        }
+      }
+    }
+
+    updateProgress();
+    // updateNodes();
+  }
+  // else add it
+  else {
+    selected_symbols[url] = {};
+    selected_symbols[url]["google_search_term"] = term;
+    selected_symbols[url]["concept"] = tree_view_node_term;
+    selected_symbols[url]["confirm_time"] = confirm_time - start_time;
+
+    // console.log("tree_view_node_term: ", tree_view_node_term)
+    // console.log("concept: ", concept)
+    //ajax send selected_symbols
+    $.ajax({
+      type: "POST",
+      url: "/update_selected_symbols",
+      dataType: "json",
+      contentType: "application/json; charset=utf-8",
+      data: JSON.stringify({ "selected_symbols": selected_symbols, "username": username, "concept": concept }),
+      success: function () {
+        // console.log("Ajax worked for /modified_selected_symbols.");
+      },
+      error: function (request, status, error) {
+        console.log("Error");
+        console.log(request)
+        console.log(status)
+        console.log(error)
+      }
+    });
+
+    var foundChild = false;
+    var cluster_index = -1;
+    //save image under tree view json 
+    for (var i = 0; i < tree_view_json.length; i++) {
+      //find title
+      console.log("Here's tree_view_json[i]: ", tree_view_json[i]);
+      if (tree_view_json[i].title == tree_view_cluster) {
+        cluster_index = i;
+        //find children 
+        for (let j = 0; j < tree_view_json[i].children.length; j++) {
+          if (tree_view_json[i].children[j].title == tree_view_node_term) {
+            console.log("found child: ", tree_view_node_term)
+            foundChild = true;
+
+            tree_view_json[i].children[j].img_urls[url] = {};
+            tree_view_json[i].children[j].img_urls[url]["google_search_term"] = term;
+            tree_view_json[i].children[j].img_urls[url]["tree_view_cluster"] = tree_view_cluster;
+            tree_view_json[i].children[j].img_urls[url]["tree_view_node_term"] = tree_view_node_term;
+            tree_view_json[i].children[j].img_urls[url]["url"] = url;
+
+            $.ajax({
+              type: "POST",
+              url: "/update_tree_view_json",
+              dataType: "json",
+              contentType: "application/json; charset=utf-8",
+              data: JSON.stringify({ "username": username, "concept": concept, "tree_view_json": tree_view_json }),
+              success: function (result) {
+                console.log("Ajax worked for update_tree_view_json().");
+                console.log("added img tree_view_node term:", result)
+              },
+              error: function (request, status, error) {
+                console.log("Error");
+                console.log(request)
+                console.log(status)
+                console.log(error)
+              }
+            });
+          }
+        }
+        //add a new children since the child was not found 
+        if (foundChild == false) {
+          console.log("child is not in the tree")
+          childIndex = tree_view_json[cluster_index].children.length;
+
+          tree_view_json[cluster_index].children[childIndex] = {
+            title: tree_view_node_term,
+            icon: false,
+            checkbox: false,
+            is_cluster: false,
+            expanded_once: false,
+            img_urls: {},
+            regular_swow: concept_dict[tree_view_node_term]["comb_words"]
+          }
+
+          //append image
+          tree_view_json[cluster_index].children[childIndex].img_urls[url] = {};
+              tree_view_json[cluster_index].children[childIndex].img_urls[url]["google_search_term"] = term;
+              tree_view_json[cluster_index].children[childIndex].img_urls[url]["tree_view_cluster"] = tree_view_cluster;
+              tree_view_json[cluster_index].children[childIndex].img_urls[url]["tree_view_node_term"] = tree_view_node_term;
+              tree_view_json[cluster_index].children[childIndex].img_urls[url]["url"] = url;
+
+          //update
+          $.ajax({
+            type: "POST",
+            url: "/update_tree_view_json",
+            dataType: "json",
+            contentType: "application/json; charset=utf-8",
+            data: JSON.stringify({ "username": username, "concept": concept, "tree_view_json": tree_view_json }),
+            success: function (result) {
+              console.log("Ajax worked for update_tree_view_json().");
+              console.log("added img and new child to tree_view_node term:", result)
+            },
+            error: function (request, status, error) {
+              console.log("Error");
+              console.log(request)
+              console.log(status)
+              console.log(error)
+            }
+          });
+        }
+      }
+    }
+
+
+    updateProgress();
+    // updateNodes();
+  }
+
+  if (showing_selected_symbols) {
+    create_selected_symbol_table();
+  }
+  // update_progress_info();
+  update_saved_symbols(url, term, to_remove);
+}
+
+function confirm_image2(tree_view_node_term, term, url, image_id) {
+  console.log(" confirm_image2(tree_view_node_term, term, url, image_id) called")
+
+  confirm_time = performance.now();
+
+  // console.log('confirm image')
+  // console.log(term);
+  // console.log(url);
+  var to_remove = false;
+
+
+  // console.log("SELECTED_SYMBOLS:")
+  // console.log(selected_symbols)
+
+  var img = document.getElementById(image_id);
+  // toggle confirmed state of image
+  if (img.classList.contains("confirmed")) {
+    img.classList.remove("confirmed");
+  } else { img.classList.add("confirmed"); }
+
+  if (url in selected_symbols) {
+    // delete_elem_from_table(url,term,image_id);
+    to_remove = true;
+    delete selected_symbols[url];
+
     //ajax send selected_symbols
     $.ajax({
       type: "POST",
@@ -917,8 +963,8 @@ create_image_grid2 = function (term, urls, concept) {
 }
 
 create_image_grid3 = function (term, urls, concept, cluster_title) {
-  console.log("cluster_title" , cluster_title)
-  console.log("concept" , concept)
+  console.log("cluster_title", cluster_title)
+  console.log("concept", concept)
   console.log('create_image_grid3 called()')
   // var urls = ["https://images-na.ssl-images-amazon.com/images/I/61YL-c2pZOL._AC_SX355_.jpg", "https://images-na.ssl-images-amazon.com/images/I/61YL-c2pZOL._AC_SX355_.jpg", "https://images-na.ssl-images-amazon.com/images/I/61YL-c2pZOL._AC_SX355_.jpg", "https://images-na.ssl-images-amazon.com/images/I/61YL-c2pZOL._AC_SX355_.jpg", "https://images-na.ssl-images-amazon.com/images/I/61YL-c2pZOL._AC_SX355_.jpg", "https://images-na.ssl-images-amazon.com/images/I/61YL-c2pZOL._AC_SX355_.jpg", "https://images-na.ssl-images-amazon.com/images/I/61YL-c2pZOL._AC_SX355_.jpg", "https://images-na.ssl-images-amazon.com/images/I/61YL-c2pZOL._AC_SX355_.jpg", "https://images-na.ssl-images-amazon.com/images/I/61YL-c2pZOL._AC_SX355_.jpg"]
   image_table = document.createElement('table');
@@ -1115,7 +1161,7 @@ fill_grids_for_concept = function (url_obj, concept, cluster_titles) {
     padding_div.setAttribute("class", "padding_div");
 
     //new
-    image_table = create_image_grid3(search_term, urls, concept, cluster_titles );
+    image_table = create_image_grid3(search_term, urls, concept, cluster_titles);
 
     //old
     // image_table = create_image_grid2(search_term, urls, concept );
@@ -1404,6 +1450,8 @@ function fill_treeview_sidebar(node_name, tree_view_json) {
     }
   }
 
+  
+
   // tree_view_json = new_tree_view_json;
 
 
@@ -1434,6 +1482,11 @@ function fill_treeview_sidebar(node_name, tree_view_json) {
     glyph: glyph_opts,
     source: selected_tree_view_json,
     expand: function (event, data) {
+      console.log("expand called")
+      
+      console.log("\n\n LOOK HERE treeM" , treeM);
+      console.log("\n\n LOOK HERE d" , d);
+
       console.log("expand: fancyTree's data: ", data)
       var node = data.node;
       var children_list = node.children;
@@ -1453,7 +1506,8 @@ function fill_treeview_sidebar(node_name, tree_view_json) {
         var path = data["node"].getPath()
         var path_split = path.split("/")
 
-        if (path_split.length < 2) {
+        //depth of the tree
+        if (path_split.length < 5) {
 
           for (var i = 0; i < children_list.length; i++) {
             var child_node = children_list[i];
@@ -1490,7 +1544,6 @@ function fill_treeview_sidebar(node_name, tree_view_json) {
           }
         }*/
 
-        //using 1% of swow_dict
         var swow_words_for_node = concept_dict[node.title]["comb_words"];
         // var swow_words_for_node = swow_data_for_tree_view[node.title]["comb_words"];
 
@@ -1504,13 +1557,34 @@ function fill_treeview_sidebar(node_name, tree_view_json) {
 
         node.data.expanded_once = true;
       }
+
+      //save fancyTreeView
+      var treeM = $("#tree").fancytree("getTree");
+      var d = treeM.toDict(true);
+      console.log("save Fancy tree Dict: ", d)
+      $.ajax({
+        type: "POST",
+        url: "/fancy_tree_view_json",
+        dataType: "json",
+        contentType: "application/json; charset=utf-8",
+        data: JSON.stringify({ "username": username, "concept": concept, "fancy_tree_view_json": d }),
+        success: function (result) {
+          console.log("Ajax worked for update_tree_view_json().");
+          console.log("added img tree_view_node term:", result)
+        },
+        error: function (request, status, error) {
+          console.log("Error");
+          console.log(request)
+          console.log(status)
+          console.log(error)
+        }
+      });
+
+
     },
     click: function (event, data) {
-      console.log("clock: fancyTree's data: ", data)
+      console.log("click: fancyTree's data: ", data)
 
-      
-      // console.log(event)
-      // console.log(data)
       var node = data.node;
       var node_title = data["node"]["title"];
       var node_data = data.node.data
@@ -1544,10 +1618,10 @@ function fill_treeview_sidebar(node_name, tree_view_json) {
             console.log("fancy tree, click: event calling multi_google_search, and  data.node.parent.title: ", data.node.parent.title)
 
             let cluster_title_words;
-            if(data.node.parent.parent.title == "root"){
+            if (data.node.parent.parent.title == "root") {
               cluster_title_words = data.node.parent.title;
             }
-            else{
+            else {
               cluster_title_words = data.node.parent.parent.title
             }
 
@@ -1590,10 +1664,10 @@ function fill_treeview_sidebar(node_name, tree_view_json) {
           console.log("fancy tree, click: event calling multi_google_search, if target is not equal to title, and  data.node.parent.parent title: ", data.node.parent.parent.title)
 
           let cluster_title_words;
-          if(data.node.parent.parent.title == "root"){
+          if (data.node.parent.parent.title == "root") {
             cluster_title_words = data.node.parent.title;
           }
-          else{
+          else {
             cluster_title_words = data.node.parent.parent.title
           }
           multi_google_search(this_node_title, cluster_title_words, true, data.node.key);
@@ -1624,7 +1698,6 @@ function fill_treeview_sidebar(node_name, tree_view_json) {
 
           var node = data.node;
           var children_list = parent.children;
-          //using 1% of swow_dict
           var regular_swow_words = concept_dict[parent.title]["comb_words"];
           // var regular_swow_words = swow_data_for_tree_view[parent.title]["comb_words"];
 
@@ -1645,7 +1718,6 @@ function fill_treeview_sidebar(node_name, tree_view_json) {
               nodes_added++;
               // make grand children
               var j = 0;
-              //using 1% of swow_dict
               var gc_swow_words = concept_dict[swow_word]["comb_words"];
               // var gc_swow_words = swow_data_for_tree_view[swow_word]["comb_words"];
 
@@ -1694,10 +1766,10 @@ function fill_treeview_sidebar(node_name, tree_view_json) {
               var title_path = data["node"].getPath();
 
               let cluster_title_words;
-              if(data.node.parent.parent.title == "root"){
+              if (data.node.parent.parent.title == "root") {
                 cluster_title_words = data.node.parent.title;
               }
-              else{
+              else {
                 cluster_title_words = data.node.parent.parent.title
               }
 

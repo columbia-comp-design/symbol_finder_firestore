@@ -200,6 +200,7 @@ def save_concept():
 		username_dict[username]["concepts"][concept]["tree_view_json"] = {}
 		username_dict[username]["concepts"][concept]["selected_symbols"] = {}
 		username_dict[username]["concepts"][concept]["img_list"] = []
+		username_dict[username]["concepts"][concept]["fancy_tree_view_json"] = {}
 	
 		tree_view_json, all_cluster_words = get_cluster_json_for_root(concept)
 		username_dict[username]["concepts"][concept]["tree_view_json"] = json.dumps(tree_view_json)
@@ -314,6 +315,22 @@ def update_tree_view_json():
 	doc_ref.update({u''+dicPath:json.dumps(retrieved_tree_view_json)})
 
 	return jsonify(retrieved_tree_view_json)
+
+# update fancy_tree_view_json 
+@app.route('/fancy_tree_view_json', methods=['POST'])
+def fancy_tree_view_json():
+	print("fancy_tree_view_json() called")
+	json_data = request.get_json()
+	retrieved_username = json_data["username"]
+	retrieved_concept = json_data["concept"]
+	retrieved_fancy_tree_view_json = json_data["fancy_tree_view_json"]
+	print ("\n\n\n Here's the retrieved_username ", retrieved_username)
+	print ("Here's the retrieved_concept: ", retrieved_concept)
+
+	dicPath =  retrieved_username +'.concepts.' + retrieved_concept + '.fancy_tree_view_json'
+	doc_ref.update({u''+dicPath:json.dumps(retrieved_fancy_tree_view_json)})
+	return jsonify(retrieved_fancy_tree_view_json)
+
 
 '''
 @app.route('/symbols/<concept>', methods=['POST','GET'])
