@@ -97,6 +97,32 @@ def modified_selected_symbols():
 	doc_ref.update({u''+dicPath:selected_symbols})
 	return jsonify(selected_symbols)
 
+
+
+@app.route('/update_tree_view_json', methods=['POST'])
+def update_tree_view_json():
+    print("update_tree_view_json() called")
+    json_data = request.get_json()
+    retrieved_username = json_data["username"]
+    retrieved_concept = json_data["concept"]
+    retrieved_tree_view_json = json_data["tree_view_json"]
+    print ("\n\n\n Here's the retrieved_username ", retrieved_username)
+    print ("Here's the retrieved_concept: ", retrieved_concept)
+    # print(json.dumps(retrieved_tree_view_json, indent=4))
+    # #get data from firestore
+    # doc = doc_ref.get()
+    # json_data = doc.to_dict()
+    # username_dict = json_data
+    # username_dict[retrieved_username]["concepts"][retrieved_concept]["tree_view_json"] = json.dumps(retrieved_tree_view_json)
+    # doc_ref.set(username_dict)
+    dicPath =  retrieved_username +'.concepts.' + retrieved_concept + '.tree_view_json'
+    doc_ref.update({u''+dicPath:json.dumps(retrieved_tree_view_json)})
+    return jsonify(retrieved_tree_view_json)
+
+
+
+
+
 	#done
 @app.route('/get_selected_symbols', methods=['POST'])
 def get_selected_symbols():

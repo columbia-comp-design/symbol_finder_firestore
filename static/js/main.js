@@ -1180,15 +1180,16 @@ function fill_treeview_sidebar(node_name, tree_view_json) {
   console.log(tree_view_json)
   // if (tree_view_json[0].selected == true) 
 
-  selected_tree_view_json = [];
-  for (var i = 0; i < tree_view_json.length; i++) {
-    console.log("outside selected_tree_view_json ", i)
-    // var cluster_title = tree_view_json[i].title;
-    if (tree_view_json[i].selected) {
-      console.log("inside selected_tree_view_json ", i)
-      selected_tree_view_json.push(tree_view_json[i]);
-    }
-  }
+  // selected_tree_view_json = [];
+  // for (var i = 0; i < tree_view_json.length; i++) {
+  //   console.log("outside selected_tree_view_json ", i)
+  //   // var cluster_title = tree_view_json[i].title;
+  //   if (tree_view_json[i].selected) {
+  //     console.log("inside selected_tree_view_json ", i)
+  //     selected_tree_view_json.push(tree_view_json[i]);
+  //   }
+  // }
+
 
   // tree_view_json = new_tree_view_json;
 
@@ -1218,7 +1219,7 @@ function fill_treeview_sidebar(node_name, tree_view_json) {
     selectMode: 2,
     generateIds: true,
     glyph: glyph_opts,
-    source: selected_tree_view_json,
+    source: tree_view_json, // Source is parameter that is used to generate the nested tree structure on sidebar
     expand: function (event, data) {
 
       console.log('expand event!')
@@ -1494,6 +1495,30 @@ function fill_treeview_sidebar(node_name, tree_view_json) {
 
         }
       }
+
+      // Convert the whole tree into an dictionary
+      var modified_tree = $("#tree").fancytree("getTree");
+      console.log("Here is modified_tree", modified_tree); 
+      var updated_tree_view_json = modified_tree.toDict(true);
+      console.log("This is modified_tree converted to a dict", d);
+
+      $.ajax({
+              type: "POST",
+              url: "/update_tree_view_json",
+              dataType: "json",
+              contentType: "application/json; charset=utf-8",
+              data: JSON.stringify({ "username": username, "concept": concept, "tree_view_json": updated_tree_view_json }),
+              success: function (result) {
+                console.log("Ajax worked for update_tree_view_json().");
+                // console.log("added img tree_view_node term:", result)
+              },
+              error: function (request, status, error) {
+                console.log("Error");
+                console.log(request)
+                console.log(status)
+                console.log(error)
+              }
+        });
 
     }
   });
