@@ -493,8 +493,6 @@ function add_custom_node(node) {
           var swow_word = regular_swow_words[j];
           var n_node = { "title": swow_word, "icon": false, "is_cluster": false, "expanded_once": false, "checkbox": false };
           var c_new_node = new_node.addNode(n_node);
-          // var children_swow_words = concept_dict[swow_word]["comb_words"];
-          //using 1% of swow_dict
           var children_swow_words = swow_data_for_tree_view[swow_word]["comb_words"];
           var max_g_nodes = 5;
           var g_nodes_added = 0;
@@ -1327,6 +1325,32 @@ function fill_treeview_sidebar(node_name, tree_view_json) {
 
         node.data.expanded_once = true;
       }
+
+      // Convert the whole tree into an dictionary
+      var modified_tree = $("#tree").fancytree("getTree");
+      console.log("Here is modified_tree", modified_tree); 
+      var updated_tree_view_json = modified_tree.toDict(true);
+      console.log("This is modified_tree converted to a dict", updated_tree_view_json);
+
+      $.ajax({
+              type: "POST",
+              url: "/update_tree_view_json",
+              dataType: "json",
+              contentType: "application/json; charset=utf-8",
+              data: JSON.stringify({ "username": username, "concept": concept, "tree_view_json": updated_tree_view_json }),
+              success: function (result) {
+                console.log("Ajax worked for update_tree_view_json().");
+                // console.log("added img tree_view_node term:", result)
+              },
+              error: function (request, status, error) {
+                console.log("Error");
+                console.log(request)
+                console.log(status)
+                console.log(error)
+              }
+        });
+
+
     },
     click: function (event, data) {
       console.log(event)
@@ -1442,7 +1466,6 @@ function fill_treeview_sidebar(node_name, tree_view_json) {
               nodes_added++;
               // make grand children
               var j = 0;
-              //using 1% of swow_dict
               var gc_swow_words = concept_dict[swow_word]["comb_words"];
               // var gc_swow_words = swow_data_for_tree_view[swow_word]["comb_words"];
 
@@ -1500,7 +1523,7 @@ function fill_treeview_sidebar(node_name, tree_view_json) {
       var modified_tree = $("#tree").fancytree("getTree");
       console.log("Here is modified_tree", modified_tree); 
       var updated_tree_view_json = modified_tree.toDict(true);
-      console.log("This is modified_tree converted to a dict", d);
+      console.log("This is modified_tree converted to a dict", updated_tree_view_json);
 
       $.ajax({
               type: "POST",
