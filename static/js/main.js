@@ -1117,6 +1117,7 @@ function see_more_tree() {
 
 }
 
+//node_name is a concept 
 function fill_treeview_sidebar(node_name, tree_view_json) {
 
   var sb = document.getElementById('sidebar');
@@ -1221,6 +1222,7 @@ function fill_treeview_sidebar(node_name, tree_view_json) {
     expand: function (event, data) {
 
       console.log('expand event!')
+      console.log("expand callback's data:", data)
       var node = data.node;
       var children_list = node.children;
       console.log(node)
@@ -1328,7 +1330,7 @@ function fill_treeview_sidebar(node_name, tree_view_json) {
 
       // Convert the whole tree into an dictionary
       var modified_tree = $("#tree").fancytree("getTree");
-      console.log("Here is modified_tree", modified_tree); 
+      console.log("Here is modified_tree ", modified_tree); 
       var updated_tree_view_json = modified_tree.toDict(true);
       console.log("This is modified_tree converted to a dict", updated_tree_view_json);
 
