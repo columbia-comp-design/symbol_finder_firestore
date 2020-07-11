@@ -753,10 +753,21 @@ add_cluster = function (cluster_title, yes_btn) {
   if (yes_btn.classList.contains("yes_active")) {
     // console.log("removing cluster!");
     // delete chosen_clusters.cluster_title;
-    for (var i = 0; i < tree_view_json.length; i++) {
-      if (tree_view_json[i].title == cluster_title) {
-        tree_view_json[i].selected = false
-        console.log("Here's the new value of selected after removing cluser: " + tree_view_json[i].selected);
+    if (tree_view_json.hasOwnProperty("children")) {
+      for (var i = 0; i < tree_view_json.children.length; i++) {
+        if (tree_view_json.children[i].title == cluster_title) {
+          tree_view_json.children[i].selected = false
+        }
+      }
+    }
+    else{
+      for (var i = 0; i < tree_view_json.length; i++) {
+        if (tree_view_json[i].title == cluster_title) {
+          tree_view_json[i].selected = false
+        }
+      }
+    }
+
         $.ajax({
           type: "POST",
           url: "/deselected_cluster",
@@ -775,21 +786,24 @@ add_cluster = function (cluster_title, yes_btn) {
           }
         });
 
+  }
+  else {
+
+    if (tree_view_json.hasOwnProperty("children")) {
+      for (var i = 0; i < tree_view_json.children.length; i++) {
+        if (tree_view_json.children[i].title == cluster_title) {
+          tree_view_json.children[i].selected = true
+        }
+      }
+    }
+    else{
+      for (var i = 0; i < tree_view_json.length; i++) {
+        if (tree_view_json[i].title == cluster_title) {
+          tree_view_json[i].selected = true
+        }
       }
     }
 
-  }
-  else {
-    // console.log("adding cluster!");
-    // chosen_clusters[cluster_title] = true;
-    // Iterate over tree_view_json, find the cluster_title, 
-    // and set its 'selected' field to true
-    for (var i = 0; i < tree_view_json.length; i++) {
-      console.log("Here's tree_view_json[i]: ", tree_view_json[i]);
-
-      if (tree_view_json[i].title == cluster_title) {
-        tree_view_json[i].selected = true
-        console.log("Here's the new value of selected after adding cluster: " + tree_view_json[i].selected);
         console.log("Here's username: ", username);
         console.log("Here's concept: ", concept);
         $.ajax({
@@ -809,8 +823,6 @@ add_cluster = function (cluster_title, yes_btn) {
             console.log(error)
           }
         });
-      }
-    }
   }
 
   console.log("Here's the updated tree_view_json: ", tree_view_json);
@@ -1086,17 +1098,27 @@ fill_cluster_image_grids = function (clusters) {
   // console.log("phase 1 tree_view_json: ", tree_view_json)
 
   console.log("phase 1")
-  //change yes button to green if selected 
-  for (var i = 0; i < tree_view_json.length; i++) {
-    console.log("outside if at yesbutton ", i)
-    if (tree_view_json[i].selected) {
-      // console.log("inside yesbutton", i )
-      console.log("id: yes_", tree_view_json[i].title)
-      let yesButtonEl = document.getElementById("yes_ " + tree_view_json[i].title)
-      yesButtonEl.classList.add("yes_active");
-      // console.log("yesButtonEl, " ,yesButtonEl)       
+
+  if (tree_view_json.hasOwnProperty("children")) {
+    for (var i = 0; i < tree_view_json.children.length; i++) {
+      if (tree_view_json.children[i].selected) {
+        console.log("id: yes_", tree_view_json.children[i].title)
+        let yesButtonEl = document.getElementById("yes_ " + tree_view_json.children[i].title)
+        yesButtonEl.classList.add("yes_active");
+      }
     }
   }
+  else{
+    for (var i = 0; i < tree_view_json.length; i++) {
+      if (tree_view_json[i].selected) {
+        console.log("id: yes_", tree_view_json[i].title)
+        let yesButtonEl = document.getElementById("yes_ " + tree_view_json[i].title)
+        yesButtonEl.classList.add("yes_active");
+      }
+    }
+  }
+
+  //change yes button to green if selected 
 
 
   var explore_button = document.createElement("button");
@@ -1113,8 +1135,6 @@ fill_cluster_image_grids = function (clusters) {
 
 function see_more_tree() {
   console.log("see more!")
-
-
 }
 
 //node_name is a concept 
@@ -1124,8 +1144,6 @@ function fill_treeview_sidebar(node_name, tree_view_json) {
   sb.innerHTML = '';
   $("#sidebar").animate({ scrollTop: 0 }, 2000);
   var cluster_num = tree_view_json.length;
-
-
   // ========================OVERVIEW SECTION of sidebar ===========================
 
   var overview_div = document.createElement("div");
@@ -1545,7 +1563,23 @@ function fill_treeview_sidebar(node_name, tree_view_json) {
               }
         });
 
-    }
+    },
+    init: function(event, data){
+      console.log("init called");
+      var tree_clusters =   data.tree.rootNode.children;
+      console.log("tree_clusters", data);
+      console.log("tree_clusters = data.tree.rootNode.children ", data.tree.rootNode.children);
+
+      for (var i = 0; i < tree_clusters.length; i++) {
+        // var cluster_title = tree_view_json[i].title;
+        if (!tree_clusters[i].selected) {
+          console.log("inside tree_clusters ", i)
+          $("#ft_"+tree_clusters[i].key).hide();
+        }
+      }
+
+      
+    },
   });
 
 }
