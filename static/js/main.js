@@ -462,6 +462,63 @@ function update_progress_info() {
 
 }
 
+function update_tree_view_json_to_server(updated_tree_view_json){
+
+    $.ajax({
+      type: "POST",
+      url: "/update_tree_view_json",
+      dataType: "json",
+      contentType: "application/json; charset=utf-8",
+      data: JSON.stringify({ "username": username, "concept": concept, "tree_view_json": updated_tree_view_json }),
+      success: function (result) {
+        console.log("Ajax worked for update_tree_view_json().");
+        console.log("update_tree_view_json:", result)
+      },
+      error: function (request, status, error) {
+        console.log("Error");
+        console.log(request)
+        console.log(status)
+        console.log(error)
+      }
+    });
+
+}
+
+function add_image_to_node(node_key, google_search_term, url){
+    console.log(" called add_image_to_node(", node_key + ")")
+
+  var tree = $("#tree").fancytree("getTree");
+  var node = tree.getNodeByKey(node_key);
+
+    node.data.saved_img[url] = {};
+    node.data.saved_img[url]["google_search_term"] = google_search_term;
+    node.data.saved_img[url]["tree_path_ids"] = node.getPath(true, "key","/");
+    node.data.saved_img[url]["url"] = url;
+
+    
+    // console.log("Here is modified_tree ", modified_tree); 
+    var updated_tree_view_json = tree.toDict(true);
+    update_tree_view_json_to_server(updated_tree_view_json);
+    console.log("add_image_to_node, -> modified_tree converted to a dict", updated_tree_view_json);
+
+    delete selected_symbols[url];
+
+}
+
+function delete_image_from_node(node_key, url){
+  console.log(" called add_image_to_node(", node_key + ")")
+
+var tree = $("#tree").fancytree("getTree");
+var node = tree.getNodeByKey(node_key);
+
+  delete node.data.saved_img[url];
+
+  // console.log("Here is modified_tree ", modified_tree); 
+  var updated_tree_view_json = tree.toDict(true);
+  update_tree_view_json_to_server(updated_tree_view_json);
+  console.log("delete_image_from_node, -> modified_tree converted to a dict: ", updated_tree_view_json);
+}
+
 function add_custom_node(node) {
   if (event.key === 'Enter') {
     var node_key = node.getAttribute("nkey");
@@ -545,6 +602,106 @@ function confirm_image(term,url,image_id){
   // update_progress_info();
   update_saved_symbols(url,term,to_remove);
 }*/
+
+//term is search term 
+function confirm_image3(tree_view_node_term, term, url, image_id, tree_node_key) {
+  console.log("confirm_image3 : key: ", tree_node_key) 
+
+  confirm_time = performance.now();
+  var to_remove = false;
+
+
+  // console.log("SELECTED_SYMBOLS:")
+  // console.log(selected_symbols)
+
+  var img = document.getElementById(image_id);
+  // toggle confirmed state of image
+  if (img.classList.contains("confirmed")) {
+    img.classList.remove("confirmed");
+  } else { img.classList.add("confirmed"); }
+
+  if (url in selected_symbols) {
+    // delete_elem_from_table(url,term,image_id);
+    to_remove = true;
+    delete selected_symbols[url];
+
+    //ajax send selected_symbols
+    $.ajax({
+      type: "POST",
+      url: "/update_selected_symbols",
+      dataType: "json",
+      contentType: "application/json; charset=utf-8",
+      data: JSON.stringify({ "selected_symbols": selected_symbols, "username": username, "concept": concept }),
+      success: function (data) {
+        selected_symbols = data;
+        // console.log("Ajax worked for /modified_selected_symbols.");
+      },
+      error: function (request, status, error) {
+        console.log("Error");
+        console.log(request)
+        console.log(status)
+        console.log(error)
+      }
+    });
+
+    delete_image_from_node(tree_node_key, url);
+
+    updateProgress();
+    // updateNodes();
+  }
+  else {
+    selected_symbols[url] = {};
+    selected_symbols[url]["google_search_term"] = term;
+    selected_symbols[url]["concept"] = tree_view_node_term;
+    selected_symbols[url]["confirm_time"] = confirm_time - start_time;
+
+    // console.log("tree_view_node_term: ", tree_view_node_term)
+    // console.log("concept: ", concept)
+    //ajax send selected_symbols
+    $.ajax({
+      type: "POST",
+      url: "/update_selected_symbols",
+      dataType: "json",
+      contentType: "application/json; charset=utf-8",
+      data: JSON.stringify({ "selected_symbols": selected_symbols, "username": username, "concept": concept }),
+      success: function () {
+        // console.log("Ajax worked for /modified_selected_symbols.");
+      },
+      error: function (request, status, error) {
+        console.log("Error");
+        console.log(request)
+        console.log(status)
+        console.log(error)
+      }
+    });
+
+    var foundChild = false;
+    var cluster_index = -1;
+//--------------------------------------------------------------------//
+// NEW VERSION OF SAVIGN IMAGES //
+
+    //save image under tree view json 
+
+    
+    // tree_view_json[i].children[j].img_urls[url] = {};
+    // tree_view_json[i].children[j].img_urls[url]["google_search_term"] = term;
+    // tree_view_json[i].children[j].img_urls[url]["tree_view_cluster"] = tree_view_cluster;
+    // tree_view_json[i].children[j].img_urls[url]["tree_view_node_term"] = tree_view_node_term;
+    // tree_view_json[i].children[j].img_urls[url]["url"] = url;
+
+    // acess node in the tree 
+
+    // add a new url to the data fields 
+
+    //add image to fancy tree
+    add_image_to_node(tree_node_key, term, url);
+
+    }
+
+
+    updateProgress();
+    // updateNodes();
+  }
 
 function confirm_image2(tree_view_node_term, term, url, image_id) {
 
@@ -706,6 +863,49 @@ create_cluster_image_grid = function (term, urls, url_to_gs_dict) {
   }
   return image_table;
 }
+
+
+create_image_grid3 = function (term, urls, concept, tree_node_key ) {
+  console.log('create_image_grid3 called(), term: ', term, "urls: ", urls, " concept: ", concept, " key: " ,tree_node_key  )
+  // var urls = ["https://images-na.ssl-images-amazon.com/images/I/61YL-c2pZOL._AC_SX355_.jpg", "https://images-na.ssl-images-amazon.com/images/I/61YL-c2pZOL._AC_SX355_.jpg", "https://images-na.ssl-images-amazon.com/images/I/61YL-c2pZOL._AC_SX355_.jpg", "https://images-na.ssl-images-amazon.com/images/I/61YL-c2pZOL._AC_SX355_.jpg", "https://images-na.ssl-images-amazon.com/images/I/61YL-c2pZOL._AC_SX355_.jpg", "https://images-na.ssl-images-amazon.com/images/I/61YL-c2pZOL._AC_SX355_.jpg", "https://images-na.ssl-images-amazon.com/images/I/61YL-c2pZOL._AC_SX355_.jpg", "https://images-na.ssl-images-amazon.com/images/I/61YL-c2pZOL._AC_SX355_.jpg", "https://images-na.ssl-images-amazon.com/images/I/61YL-c2pZOL._AC_SX355_.jpg"]
+  image_table = document.createElement('table');
+  row_num = 0;
+  col_num = 5;
+  var row = image_table.insertRow(row_num)
+  row.style.display = "block";
+  cell_num = 0;
+  for (var i = 0; i < urls.length; i++) {
+    var url = urls[i];
+    image_and_button_div = document.createElement("div");
+    cell = row.insertCell(-1);
+    image = document.createElement('img');
+    image.setAttribute('src', url);
+    cell_id = term + '_' + String(i)
+    image.setAttribute('id', cell_id)
+    image.setAttribute('class', 'img_in_table');
+    image.setAttribute('onclick', 'confirm_image3(\"' + concept + '\",\"' + term + '\",\"' + url + '\",\"' + cell_id + '\",\"' + tree_node_key + '\")');
+
+    if (url in selected_symbols) {
+      image.classList.add('confirmed');
+    }
+
+
+    image_and_button_div.appendChild(image);
+    cell.appendChild(image_and_button_div);
+
+    if ((i + 1) % col_num == 0 && row_num < 2) {
+      row_num++;
+      row = image_table.insertRow(row_num);
+      row.setAttribute("id", String(term) + "_row_2");
+      row.style.display = "none";
+      // console.log("ROW")
+      // console.log(row)
+    }
+  }
+  return image_table;
+}
+
+
 
 create_image_grid2 = function (term, urls, concept) {
   console.log('create_image_grid2 called()')
@@ -888,8 +1088,9 @@ toggle_show_second_row = function (row_id, but) {
 
 }
 
-fill_grids_for_concept = function (url_obj, concept) {
-  console.log("fill_grids_for_concept called")
+fill_grids_for_concept = function (url_obj, concept, tree_node_key) {
+  console.log("called fill_grids_for_concept!!, url_obj: " , url_obj, " , concept: ", concept, ", tree_node_key:  ", tree_node_key);
+
   var image_grids_div = document.getElementById("image_grids");
   image_grids_div.innerHTML = "";
 
@@ -914,8 +1115,9 @@ fill_grids_for_concept = function (url_obj, concept) {
 
     var padding_div = document.createElement("div");
     padding_div.setAttribute("class", "padding_div");
-
-    image_table = create_image_grid2(search_term, urls, concept);
+    
+    // image_table = create_image_grid2(search_term, urls, concept);
+    image_table = create_image_grid3(search_term, urls, concept, tree_node_key);
 
     var show_second_row_button = document.createElement("button");
     show_second_row_button.setAttribute("onclick", "toggle_show_second_row(\"" + search_term + "_row_2\",this)");
@@ -1348,7 +1550,7 @@ function fill_treeview_sidebar(node_name, tree_view_json) {
 
       // Convert the whole tree into an dictionary
       var modified_tree = $("#tree").fancytree("getTree");
-      console.log("Here is modified_tree ", modified_tree); 
+      // console.log("Here is modified_tree ", modified_tree); 
       var updated_tree_view_json = modified_tree.toDict(true);
       console.log("This is modified_tree converted to a dict", updated_tree_view_json);
 
@@ -1384,6 +1586,7 @@ function fill_treeview_sidebar(node_name, tree_view_json) {
       if (target == "expander") {
         if (data.node.isExpanded() == false) {
           if (data.node.data.is_cluster) {
+            console.log("fancyTree callback click: data.node.data.is_cluster == true")
             cluster_google_search(node_title);
             var other_clusters = node.getParent().children;
             for (var i = 0; i < other_clusters.length; i++) {
@@ -1396,6 +1599,7 @@ function fill_treeview_sidebar(node_name, tree_view_json) {
             }
           }
           else {
+            console.log("fancyTree callback click: data.node.data.is_cluster == false")
             var this_node_title = data.node.title;
             var parent_title = data.node.parent.title;
             // check if parent is cluster:
@@ -1409,7 +1613,7 @@ function fill_treeview_sidebar(node_name, tree_view_json) {
         }
       }
       if (target == "title") {
-
+        console.log("fancyTree callback click: target == title")
         if (data.node.data.is_cluster) {
           cluster_google_search(node_title);
           if (data.node.isExpanded() == false) {
@@ -1425,6 +1629,7 @@ function fill_treeview_sidebar(node_name, tree_view_json) {
           }
         }
         else {
+          console.log("fancyTree callback click: target != title")
 
           var this_node_title = data.node.title;
           var parent_title = data.node.parent.title;
@@ -1505,8 +1710,8 @@ function fill_treeview_sidebar(node_name, tree_view_json) {
         // ==================================================================================================================
         // ==================================================================================================================
 
-
         if (data.node.data.is_add_your_own != true) {
+          console.log("fancyTree callback click: data.node.data.is_add_your_own != true")
 
           if (data.node.isExpanded()) {
             data.node.setExpanded(false);

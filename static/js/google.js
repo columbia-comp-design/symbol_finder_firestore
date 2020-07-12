@@ -122,7 +122,7 @@ cluster_google_search = function(cluster_title){
 
 
 multi_google_search = function(term,parent_term,tree_title_click,tree_node_key){
-  console.log("calling multi_google_search!!")
+  console.log("calling multi_google_search!!, term: " , term, " ,tree_title_click: ", tree_title_click , "tree_node_key: ",  tree_node_key);
   
   var parent_child_search = parent_term + " " + term;
   var icon_search = term + " icon";
@@ -158,7 +158,7 @@ multi_google_search = function(term,parent_term,tree_title_click,tree_node_key){
       swow_data_for_tree_view[term].urls = url_obj;
     }
 
-    fill_grids_for_concept(url_obj,term);
+    fill_grids_for_concept(url_obj,term, tree_node_key);
     
     // create_image_sidebar2(url_obj,term,tree_node_key);
     
