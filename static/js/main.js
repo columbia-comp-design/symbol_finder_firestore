@@ -571,37 +571,6 @@ function add_custom_node(node) {
   }
 }
 
-/*
-function confirm_image(term,url,image_id){
-  console.log('confirm image')
-  console.log(term);
-  console.log(url);
-  var to_remove = false;
-
-  var img = document.getElementById(image_id);
-  // toggle confirmed state of image
-  if (img.classList.contains("confirmed")) {
-    img.classList.remove("confirmed");
-  } else { img.classList.add("confirmed"); } 
-
-  if(url in selected_symbols){
-    // delete_elem_from_table(url,term,image_id);
-    to_remove = true;
-    delete selected_symbols[url]
-    updateProgress();
-    // updateNodes();
-  }
-  // else add it
-  else{
-    // add_elem_to_symbol_table(url,term,image_id);
-    selected_symbols[url] = term
-    updateProgress();
-    // updateNodes();
-  }
-  //random
-  // update_progress_info();
-  update_saved_symbols(url,term,to_remove);
-}*/
 
 //term is search term 
 function confirm_image3(tree_view_node_term, term, url, image_id, tree_node_key) {
@@ -610,17 +579,16 @@ function confirm_image3(tree_view_node_term, term, url, image_id, tree_node_key)
   confirm_time = performance.now();
   var to_remove = false;
 
-
-  // console.log("SELECTED_SYMBOLS:")
-  // console.log(selected_symbols)
-
   var img = document.getElementById(image_id);
   // toggle confirmed state of image
   if (img.classList.contains("confirmed")) {
     img.classList.remove("confirmed");
   } else { img.classList.add("confirmed"); }
 
-  if (url in selected_symbols) {
+  var tree = $("#tree").fancytree("getTree");
+  var node = tree.getNodeByKey(tree_node_key);
+
+  if (url in node.data.saved_img ) {
     // delete_elem_from_table(url,term,image_id);
     to_remove = true;
     delete selected_symbols[url];
@@ -680,20 +648,6 @@ function confirm_image3(tree_view_node_term, term, url, image_id, tree_node_key)
 //--------------------------------------------------------------------//
 // NEW VERSION OF SAVIGN IMAGES //
 
-    //save image under tree view json 
-
-    
-    // tree_view_json[i].children[j].img_urls[url] = {};
-    // tree_view_json[i].children[j].img_urls[url]["google_search_term"] = term;
-    // tree_view_json[i].children[j].img_urls[url]["tree_view_cluster"] = tree_view_cluster;
-    // tree_view_json[i].children[j].img_urls[url]["tree_view_node_term"] = tree_view_node_term;
-    // tree_view_json[i].children[j].img_urls[url]["url"] = url;
-
-    // acess node in the tree 
-
-    // add a new url to the data fields 
-
-    //add image to fancy tree
     add_image_to_node(tree_node_key, term, url);
 
     }
@@ -874,6 +828,10 @@ create_image_grid3 = function (term, urls, concept, tree_node_key ) {
   var row = image_table.insertRow(row_num)
   row.style.display = "block";
   cell_num = 0;
+
+  var tree = $("#tree").fancytree("getTree");
+  var node = tree.getNodeByKey(tree_node_key);
+
   for (var i = 0; i < urls.length; i++) {
     var url = urls[i];
     image_and_button_div = document.createElement("div");
@@ -885,7 +843,7 @@ create_image_grid3 = function (term, urls, concept, tree_node_key ) {
     image.setAttribute('class', 'img_in_table');
     image.setAttribute('onclick', 'confirm_image3(\"' + concept + '\",\"' + term + '\",\"' + url + '\",\"' + cell_id + '\",\"' + tree_node_key + '\")');
 
-    if (url in selected_symbols) {
+    if (url in node.data.saved_img) {
       image.classList.add('confirmed');
     }
 
@@ -1474,7 +1432,7 @@ function fill_treeview_sidebar(node_name, tree_view_json) {
                 break;
               }
               var swow_word = regular_swow_words[j];
-              var new_node = { title: swow_word, icon: false, is_cluster: false, expanded_once: false };
+              var new_node = { title: swow_word, icon: false, is_cluster: false, expanded_once: false, google_image_urls: {}, saved_img:{} };
               child_node.addNode(new_node);
             }
           }
@@ -1685,7 +1643,7 @@ function fill_treeview_sidebar(node_name, tree_view_json) {
               console.log("nodes_added: " + String(nodes_added))
               console.log("new_node_num: " + String(new_node_num))
               var swow_word = regular_swow_words[i];
-              var new_node = { title: swow_word, icon: false, is_cluster: false, expanded_once: false };
+              var new_node ={ title: swow_word, icon: false, is_cluster: false, expanded_once: false, google_image_urls: {}, saved_img:{} };
               new_child = node.addNode(new_node, "before");
               i++;
               nodes_added++;

@@ -513,6 +513,9 @@ def generate_treeview_json(sorted_cluster_list):
 		parent_node["children"] = []
 		parent_node["is_cluster"] = True
 		parent_node["expanded_once"] = False
+		parent_node["saved_img"] = {}
+		parent_node["google_image_urls"] = {}
+
 		# Field for tracking selected clusters 
 		parent_node["selected"] = False
 		for conc_word in sorted_eigen_list_just_words[:5]:
@@ -531,7 +534,9 @@ def generate_treeview_json(sorted_cluster_list):
 			child_node["regular_swow"] = m_list_words
 			#images 
 			child_node["saved_img"] = {}
-			child_node["google_image_urls"]= []
+			child_node["google_image_urls"] = {}
+	
+		
 			parent_node["children"].append(child_node)
 		treeview_json.append(parent_node)
 	return treeview_json, all_cluster_words
