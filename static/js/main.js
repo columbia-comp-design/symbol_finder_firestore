@@ -501,7 +501,8 @@ function add_image_to_node(node_key, google_search_term, url) {
   update_tree_view_json_to_server(updated_tree_view_json);
   console.log("add_image_to_node, -> modified_tree converted to a dict", updated_tree_view_json);
 
-  delete selected_symbols[url];
+
+  // delete selected_symbols[url];
 
 }
 
@@ -681,6 +682,7 @@ function confirm_image2(tree_view_node_term, term, url, image_id) {
 
   let node_key;
 
+  //find key
   for (var i = 0; i < tree_view_json.children.length; i++) {
     if (tree_view_json.children[i].title == term) {
         node_key = tree_view_json.children[i].key;

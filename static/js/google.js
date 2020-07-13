@@ -108,6 +108,20 @@ cluster_google_search = function (cluster_title) {
     // order.push(concept_searched + " " + cluster_word);
   }
 
+  //find key 
+  var node_key;
+  for (var i = 0; i < tree_view_json.children.length; i++) {
+    if (tree_view_json.children[i].title == cluster_title) {
+        node_key = tree_view_json.children[i].key;
+        console.log("matched cluster");
+    }
+  }
+
+  var tree = $("#tree").fancytree("getTree");
+  var node = tree.getNodeByKey(node_key);
+
+  if (isObjEmpty(node.data.google_image_urls)) {
+
   $.when.apply(null, async_request).done(function () {
     console.log("all requests complete.")
     console.log(responses);
@@ -121,6 +135,14 @@ cluster_google_search = function (cluster_title) {
     console.log("before fill_grids_for_cluster_concept", cluster_title);
     fill_grids_for_cluster_concept(url_obj, cluster_title, order);
   });
+
+  }
+  else{
+    console.log(" Reusing Search from from the server ")
+    url_obj = node.data.google_image_urls;
+    fill_grids_for_cluster_concept(url_obj, cluster_title, order);
+
+  }
 
 }
 
