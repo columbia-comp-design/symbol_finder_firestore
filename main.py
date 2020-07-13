@@ -215,61 +215,50 @@ def save_concept():
 	concept = concept_dict["concept"]
 	username = concept_dict["username"]
 
-	print("concept: ", concept)
-	#get data from firestore
+	print("save_concept: ", concept)
+
+	#get json from firestore
 	doc = doc_ref.get()
 	json_data = doc.to_dict()
-
-	# with open('username_symbols.json') as json_file:
-	# username_dict = json.load(json_file)
 	username_dict = json_data
 
 	if concept not in username_dict[username]["concepts"]:
-		username_dict[username]["concepts"][concept] = {}
-		username_dict[username]["concepts"][concept]["tree_view_json"] = {}
-		username_dict[username]["concepts"][concept]["selected_symbols"] = {}
-		# username_dict[username]["concepts"][concept]["img_list"] = []
+		#concept fields
+		concept_data = {}
+		concept_data["tree_view_json"] = {}
+		concept_data["selected_symbols"] = {}
 	
+		#generate tree view json 
 		tree_view_json, all_cluster_words = get_cluster_json_for_root(concept)
-		username_dict[username]["concepts"][concept]["tree_view_json"] = json.dumps(tree_view_json)
-		# username_dict[username]["concepts"][concept]["all_cluster_words"] = json.dumps(all_cluster_words)
+		concept_data["tree_view_json"] = json.dumps(tree_view_json)
 
-	#write data 
-	# Maybe move into if-statement because we only set doc if concept is not already saved
-	doc_ref.set(username_dict)
+		#add new concept to user 
+		path =  username +'.concepts.' + concept
+		doc_ref.update({u''+path:concept_data})
 
 	doc = doc_ref.get()
 	username_dict = doc.to_dict()
 	return jsonify(username_dict)
-	#return 'ok'
 
 #done
 @app.route('/save_username', methods=['POST'])
 def save_username():
-	# concept_dict_with_new_concept = request.get_json()
 	username = request.get_json()
 
-	# print(username)
+	print("save_username ", username)
     
 	#get data from firestore
 	doc = doc_ref.get()
 	json_data = doc.to_dict()
-	# create username
-	# with open('username_symbols.json') as json_file:
-	#print("/save_username ->  ", json_data)
 	username_dict = json_data
 
-	#print(username_dict)
-
 	if username not in username_dict:
-		username_dict[username] = {"concepts": {}}
-		 # create new user 
-	# 		with open('new_username_symbols.json','w') as outfile:
-	# 			json.dump(username_dict, outfile)
-	# 			os.remove("./username_symbols.json")
-	# 			os.rename("./new_username_symbols.json","./username_symbols.json")
-	# print(username_dict)
-	doc_ref.set(username_dict)
+		username_data = {"concepts": {}}
+
+		#add new user to JSON 
+		path =  username 
+		doc_ref.update({u''+path:username_data})
+
 	doc = doc_ref.get()
 	username_dict = doc.to_dict()
 	return jsonify(username_dict)
