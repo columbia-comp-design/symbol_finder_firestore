@@ -87,14 +87,6 @@ def modified_selected_symbols():
 	username = json_data['username']
 	concept = json_data['concept']
 
-	# print("\n\n here is username")
-	# print(username)
-
-	# print("\n\n here is concept len")
-	# print(len(concept))
-
-	# print("\n\n here is selected_symbols")
-	# print(selected_symbols)
 	
 	dicPath =  username +'.concepts.' + concept + '.selected_symbols'
 	doc_ref.update({u''+dicPath:selected_symbols})
@@ -109,8 +101,10 @@ def update_tree_view_json():
     retrieved_username = json_data["username"]
     retrieved_concept = json_data["concept"]
     retrieved_tree_view_json = json_data["tree_view_json"]
+
     print ("\n\n\n Here's the retrieved_username ", retrieved_username)
     print ("Here's the retrieved_concept: ", retrieved_concept)
+
     dicPath =  retrieved_username +'.concepts.' + retrieved_concept + '.tree_view_json'
     doc_ref.update({u''+dicPath:json.dumps(retrieved_tree_view_json)})
     return jsonify(retrieved_tree_view_json)
@@ -172,12 +166,6 @@ def get_concepts():
 #done
 @app.route('/get_usernames_and_concepts', methods=['POST'])
 def get_usernames_and_concepts():
-		# check if symbols.json exists
-	# if not os.path.exists('./username_symbols.json'): 
-	# 	concept_dict = {}; 
-	# 	# if not, make it
-	# 	with open('username_symbols.json','w') as outfile:
-	# 		json.dump(concept_dict, outfile)
 	doc = doc_ref.get()
 
 	if doc.exists:
@@ -263,50 +251,6 @@ def save_username():
 	username_dict = doc.to_dict()
 	return jsonify(username_dict)
 
-
-# New route for lazy deletion
-# User selects a cluster
-@app.route('/selected_cluster', methods=['POST'])
-def selected_cluster():
-	json_data = request.get_json()
-	retrieved_username = json_data["username"]
-	retrieved_concept = json_data["concept"]
-	retrieved_tree_view_json = json_data["tree_view_json"]
-	print ("Here's the retrieved_username for selected_cluster: \n\n\n", retrieved_username)
-	print ("Here's the retrieved_concept for selected_cluster: \n\n\n", retrieved_concept)
-	print ("Here's the retrieved_tree_view_json for selected_cluster: \n\n\n")
-	# print(json.dumps(retrieved_tree_view_json, indent=4))
-
-	#get data from firestore
-	doc = doc_ref.get()
-	json_data = doc.to_dict()
-	username_dict = json_data
-	username_dict[retrieved_username]["concepts"][retrieved_concept]["tree_view_json"] = json.dumps(retrieved_tree_view_json)
-	doc_ref.set(username_dict)
-
-	return jsonify(retrieved_tree_view_json)
-
-
-# User deselects a cluster
-@app.route('/deselected_cluster', methods=['POST'])
-def deselected_cluster():
-	json_data = request.get_json()
-	retrieved_username = json_data["username"]
-	retrieved_concept = json_data["concept"]
-	retrieved_tree_view_json = json_data["tree_view_json"]
-	print ("Here's the retrieved_username for deselected_cluster: \n\n\n", retrieved_username)
-	print ("Here's the retrieved_concept for deselected_cluster: \n\n\n", retrieved_concept)
-	print ("Here's the retrieved_tree_view_json for deselected_cluster: \n\n\n")
-	# print(json.dumps(retrieved_tree_view_json, indent=4))
-
-	#get data from firestore
-	doc = doc_ref.get()
-	json_data = doc.to_dict()
-	username_dict = json_data
-	username_dict[retrieved_username]["concepts"][retrieved_concept]["tree_view_json"] = json.dumps(retrieved_tree_view_json)
-	doc_ref.set(username_dict)
-
-	return jsonify(retrieved_tree_view_json)
 
 '''
 @app.route('/symbols/<concept>', methods=['POST','GET'])

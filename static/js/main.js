@@ -965,7 +965,7 @@ add_cluster = function (cluster_title, yes_btn) {
 
     $.ajax({
       type: "POST",
-      url: "/deselected_cluster",
+      url: "/update_tree_view_json",
       dataType: "json",
       contentType: "application/json; charset=utf-8",
       data: JSON.stringify({ "username": username, "concept": concept, "tree_view_json": tree_view_json }),
@@ -1003,7 +1003,7 @@ add_cluster = function (cluster_title, yes_btn) {
     console.log("Here's concept: ", concept);
     $.ajax({
       type: "POST",
-      url: "/selected_cluster",
+      url: "/update_tree_view_json",
       dataType: "json",
       contentType: "application/json; charset=utf-8",
       data: JSON.stringify({ "username": username, "concept": concept, "tree_view_json": tree_view_json }),
