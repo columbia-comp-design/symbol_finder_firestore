@@ -214,35 +214,35 @@ update_delete_node_button = function (selected_node) {
   }
 }
 
-update_saved_symbols = function (url, term, to_remove) {
+// update_saved_symbols = function (url, term, to_remove) {
 
 
-  var confirm_time = -1;
-  if (to_remove == false) {
-    // confirm_time = selected_symbols[url]["confirm_time"];
-  }
-  // graph
-  console.log("UPDATE SAVE SYMBOLS")
-  console.log(data)
-  console.log('hi')
-  $.ajax({
-    type: "POST",
-    url: "save_symbols",
-    contentType: "application/json; charset=utf-8",
-    data: JSON.stringify({ "username": username, "concept": concept, "url": url, "term": term, "to_remove": to_remove, "step_one": on_step_one, "confirm_time": confirm_time }),
-    success: function (data, text) {
-      console.log('success')
-      // add_concept_button(entered_concept);
-    },
-    error: function (request, status, error) {
-      console.log("Error");
-      console.log(request)
-      console.log(status)
-      console.log(error)
-    }
-  });
+//   var confirm_time = -1;
+//   if (to_remove == false) {
+//     // confirm_time = selected_symbols[url]["confirm_time"];
+//   }
+//   // graph
+//   console.log("UPDATE SAVE SYMBOLS")
+//   console.log(data)
+//   console.log('hi')
+//   $.ajax({
+//     type: "POST",
+//     url: "save_symbols",
+//     contentType: "application/json; charset=utf-8",
+//     data: JSON.stringify({ "username": username, "concept": concept, "url": url, "term": term, "to_remove": to_remove, "step_one": on_step_one, "confirm_time": confirm_time }),
+//     success: function (data, text) {
+//       console.log('success')
+//       // add_concept_button(entered_concept);
+//     },
+//     error: function (request, status, error) {
+//       console.log("Error");
+//       console.log(request)
+//       console.log(status)
+//       console.log(error)
+//     }
+//   });
 
-}
+// }
 
 
 function post(path, params, method = 'post') {

@@ -25,55 +25,55 @@ doc_ref = db.collection(u'jsonByDate').document(u'testing6')
 tmpl_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'templates')
 app = Flask(__name__, template_folder=tmpl_dir)
 
-#done
-@app.route('/<username>/finder/save_symbols',  methods=['POST','GET'])
-def save_symbols(username):
-	json_data = request.get_json() 
-	username = json_data['username']
-	url = json_data['url']
-	search_term = json_data['term']
-	to_remove = json_data['to_remove']
-	concept = json_data['concept']
-	confirm_time = json_data['confirm_time']
-	on_step_one = json_data['step_one']
-	new_symbol = {"url":url,"search_term":search_term,"on_step_one":on_step_one,"confirm_time":confirm_time}
+# #done
+# @app.route('/<username>/finder/save_symbols',  methods=['POST','GET'])
+# def save_symbols(username):
+# 	json_data = request.get_json() 
+# 	username = json_data['username']
+# 	url = json_data['url']
+# 	search_term = json_data['term']
+# 	to_remove = json_data['to_remove']
+# 	concept = json_data['concept']
+# 	confirm_time = json_data['confirm_time']
+# 	on_step_one = json_data['step_one']
+# 	new_symbol = {"url":url,"search_term":search_term,"on_step_one":on_step_one,"confirm_time":confirm_time}
 
-	if to_remove:
-		print("DELETING SYMBOL:")
-	else:
-		print("SAVING SYMBOL:")
-	#print(json_data)
-	print()
-	data = 0
-	concept_symbols = []
+# 	if to_remove:
+# 		print("DELETING SYMBOL:")
+# 	else:
+# 		print("SAVING SYMBOL:")
+# 	#print(json_data)
+# 	print()
+# 	data = 0
+# 	concept_symbols = []
 
-	#read
-	# with open('username_symbols.json') as symbol_file:
-	# 	username_dict = json.load(symbol_file)
+# 	#read
+# 	# with open('username_symbols.json') as symbol_file:
+# 	# 	username_dict = json.load(symbol_file)
 
-	#get data from firestore
-	doc = doc_ref.get()
-	json_data = doc.to_dict()
-	username_dict = json_data
+# 	#get data from firestore
+# 	doc = doc_ref.get()
+# 	json_data = doc.to_dict()
+# 	username_dict = json_data
 
-	img_list = username_dict[username]["concepts"][concept]['img_list']
-	# img_dict = username_dict[username]["concepts"][concept]['img_dict']
-	if to_remove:
-		for img in img_list:
-			if img['url'] == url:
-				img_list.remove(img)
-				break
-		username_dict[username]["concepts"][concept]['img_list'] = img_list
-		# del username_dict[username]["concepts"][concept]['img_dict'][url]
-	else:
-		username_dict[username]["concepts"][concept]['img_list'].append(new_symbol)
-		# if url not in img_dict:
-			# username_dict[username]["concepts"][concept]['img_dict'][url] = True
+# 	img_list = username_dict[username]["concepts"][concept]['img_list']
+# 	# img_dict = username_dict[username]["concepts"][concept]['img_dict']
+# 	if to_remove:
+# 		for img in img_list:
+# 			if img['url'] == url:
+# 				img_list.remove(img)
+# 				break
+# 		username_dict[username]["concepts"][concept]['img_list'] = img_list
+# 		# del username_dict[username]["concepts"][concept]['img_dict'][url]
+# 	else:
+# 		username_dict[username]["concepts"][concept]['img_list'].append(new_symbol)
+# 		# if url not in img_dict:
+# 			# username_dict[username]["concepts"][concept]['img_dict'][url] = True
 			
 
-	#write data 
-	doc_ref.set(username_dict)
-	return 'ok'
+# 	#write data 
+# 	doc_ref.set(username_dict)
+# 	return 'ok'
 
 
 
@@ -140,20 +140,20 @@ def get_tree_view_json():
 	return jsonify(tree_view_json)
 
 
-#done
-@app.route('/<username>/symbols/get_symbols_for_username', methods=['POST'])
-def get_symbols_for_username(username):
-	request_dict = request.get_json()
-	username = request_dict["username"]
-	print("USERNAME: " + username)
-	concept = request_dict["concept"]
+# #done
+# @app.route('/<username>/symbols/get_symbols_for_username', methods=['POST'])
+# def get_symbols_for_username(username):
+# 	request_dict = request.get_json()
+# 	username = request_dict["username"]
+# 	print("USERNAME: " + username)
+# 	concept = request_dict["concept"]
 
-	doc = doc_ref.get()
-	json_data = doc.to_dict()
+# 	doc = doc_ref.get()
+# 	json_data = doc.to_dict()
 
-	# with open('username_symbols.json') as json_file:
-	username_dict = json_data
-	return jsonify(username_dict[username]["concepts"][concept]["img_list"])
+# 	# with open('username_symbols.json') as json_file:
+# 	username_dict = json_data
+# 	return jsonify(username_dict[username]["concepts"][concept]["img_list"])
 
 '''
 @app.route('/get_concepts', methods=['POST'])
@@ -228,7 +228,7 @@ def save_concept():
 		username_dict[username]["concepts"][concept] = {}
 		username_dict[username]["concepts"][concept]["tree_view_json"] = {}
 		username_dict[username]["concepts"][concept]["selected_symbols"] = {}
-		username_dict[username]["concepts"][concept]["img_list"] = []
+		# username_dict[username]["concepts"][concept]["img_list"] = []
 	
 		tree_view_json, all_cluster_words = get_cluster_json_for_root(concept)
 		username_dict[username]["concepts"][concept]["tree_view_json"] = json.dumps(tree_view_json)
