@@ -118,6 +118,7 @@ cluster_google_search = function (cluster_title) {
       var urls = extract_links(response);
       url_obj[search_term] = urls;
     }
+    console.log("before fill_grids_for_cluster_concept", cluster_title);
     fill_grids_for_cluster_concept(url_obj, cluster_title, order);
   });
 

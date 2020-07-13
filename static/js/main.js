@@ -219,7 +219,7 @@ update_saved_symbols = function (url, term, to_remove) {
 
   var confirm_time = -1;
   if (to_remove == false) {
-    confirm_time = selected_symbols[url]["confirm_time"];
+    // confirm_time = selected_symbols[url]["confirm_time"];
   }
   // graph
   console.log("UPDATE SAVE SYMBOLS")
@@ -528,7 +528,7 @@ function add_custom_node(node) {
     if (val) {
       var tree = $("#tree").fancytree("getTree");
       var node = tree.getNodeByKey(node_key);
-      var new_child_node = { "title": val, "icon": false, "checkbox": false, "is_add_your_own": false, "expanded_once": false, "is_cluster": false }
+      var new_child_node = { "title": val, "icon": false, "checkbox": false, "is_add_your_own": false, "expanded_once": false, "is_cluster": false, google_image_urls: {}, saved_img: {} }
 
       var children = node.getChildren();
       var second_child = children[1];
@@ -548,7 +548,7 @@ function add_custom_node(node) {
             break;
           }
           var swow_word = regular_swow_words[j];
-          var n_node = { "title": swow_word, "icon": false, "is_cluster": false, "expanded_once": false, "checkbox": false };
+          var n_node = { "title": swow_word, "icon": false, "is_cluster": false, "expanded_once": false, "checkbox": false , google_image_urls: {}, saved_img: {}};
           var c_new_node = new_node.addNode(n_node);
           var children_swow_words = swow_data_for_tree_view[swow_word]["comb_words"];
           var max_g_nodes = 5;
@@ -556,7 +556,7 @@ function add_custom_node(node) {
           for (var i = 0; i < children_swow_words.length; i++) {
             if (max_g_nodes == g_nodes_added) { break; }
             var c_swow_word = children_swow_words[i];
-            var g_c_n_node = { "title": c_swow_word, "icon": false, "is_cluster": false, "expanded_once": false, "checkbox": false };
+            var g_c_n_node = { "title": c_swow_word, "icon": false, "is_cluster": false, "expanded_once": false, "checkbox": false, google_image_urls: {}, saved_img: {} };
             c_new_node.addNode(g_c_n_node);
             g_nodes_added++;
           }
@@ -657,7 +657,9 @@ function confirm_image3(tree_view_node_term, term, url, image_id, tree_node_key)
   // updateNodes();
 }
 
+//for phase 1 in finder.html
 function confirm_image2(tree_view_node_term, term, url, image_id) {
+  console.log("confirm_image2 : term: ", term);
 
 
   confirm_time = performance.now();
@@ -677,11 +679,26 @@ function confirm_image2(tree_view_node_term, term, url, image_id) {
     img.classList.remove("confirmed");
   } else { img.classList.add("confirmed"); }
 
-  if (url in selected_symbols) {
+  let node_key;
+
+  for (var i = 0; i < tree_view_json.children.length; i++) {
+    if (tree_view_json.children[i].title == term) {
+        node_key = tree_view_json.children[i].key;
+        console.log("matched cluster in confirm_image2");
+    }
+  }
+
+  var tree = $("#tree").fancytree("getTree");
+  var node = tree.getNodeByKey(node_key);
+
+  if (url in node.data.saved_img) {
     // delete_elem_from_table(url,term,image_id);
     to_remove = true;
     delete selected_symbols[url];
 
+    delete_image_from_node(node_key,url)
+    
+    
     //ajax send selected_symbols
     $.ajax({
       type: "POST",
@@ -704,7 +721,6 @@ function confirm_image2(tree_view_node_term, term, url, image_id) {
     updateProgress();
     // updateNodes();
   }
-  // else add it
   else {
     // add_elem_to_symbol_table(url,term,image_id);
     // selected_symbols[url] = term
@@ -716,6 +732,10 @@ function confirm_image2(tree_view_node_term, term, url, image_id) {
     console.log("tree_view_node_term: ", tree_view_node_term)
 
     console.log("concept: ", concept)
+
+
+    add_image_to_node(node_key,term, url);
+     
 
 
     //ajax send selected_symbols
@@ -745,7 +765,7 @@ function confirm_image2(tree_view_node_term, term, url, image_id) {
     create_selected_symbol_table();
   }
   // update_progress_info();
-  update_saved_symbols(url, term, to_remove);
+  // update_saved_symbols(url, term, to_remove);
 }
 
 /*create_image_grid = function(term,urls){
@@ -783,8 +803,19 @@ function confirm_image2(tree_view_node_term, term, url, image_id) {
 }*/
 
 create_cluster_image_grid = function (term, urls, url_to_gs_dict) {
+
+
   console.log("create_cluster_image_grid() called")
-  console.log(term)
+  let node_key;
+  for (var i = 0; i < tree_view_json.children.length; i++) {
+    if (tree_view_json.children[i].title == term) {
+        node_key = tree_view_json.children[i].key;
+    }
+  }
+
+  var tree = $("#tree").fancytree("getTree");
+  var node = tree.getNodeByKey(node_key);
+  // console.log(term)
   // var urls = ["https://images-na.ssl-images-amazon.com/images/I/61YL-c2pZOL._AC_SX355_.jpg", "https://images-na.ssl-images-amazon.com/images/I/61YL-c2pZOL._AC_SX355_.jpg", "https://images-na.ssl-images-amazon.com/images/I/61YL-c2pZOL._AC_SX355_.jpg", "https://images-na.ssl-images-amazon.com/images/I/61YL-c2pZOL._AC_SX355_.jpg", "https://images-na.ssl-images-amazon.com/images/I/61YL-c2pZOL._AC_SX355_.jpg", "https://images-na.ssl-images-amazon.com/images/I/61YL-c2pZOL._AC_SX355_.jpg", "https://images-na.ssl-images-amazon.com/images/I/61YL-c2pZOL._AC_SX355_.jpg", "https://images-na.ssl-images-amazon.com/images/I/61YL-c2pZOL._AC_SX355_.jpg", "https://images-na.ssl-images-amazon.com/images/I/61YL-c2pZOL._AC_SX355_.jpg"]
   image_table = document.createElement('table');
   row_num = 0;
@@ -803,7 +834,11 @@ create_cluster_image_grid = function (term, urls, url_to_gs_dict) {
     image.setAttribute('class', 'img_in_table');
     var concept = url_to_gs_dict[url];
     image.setAttribute('onclick', 'confirm_image2(\"' + concept + '\",\"' + term + '\",\"' + url + '\",\"' + cell_id + '\")');
+    if (url in node.data.saved_img) {
+      image.classList.add('confirmed');
+    }
     image_and_button_div.appendChild(image);
+   
     cell.appendChild(image_and_button_div);
 
     if ((i + 1) % col_num == 0 && row_num < 2) {
@@ -1126,10 +1161,22 @@ fill_grids_for_concept = function (url_obj, concept, tree_node_key) {
 }
 
 fill_grids_for_cluster_concept = function (url_obj, concept, order) {
-  console.log(concept)
+  console.log(concept) //cluster_title
   console.log(url_obj)
   var image_grids_div = document.getElementById("image_grids");
   image_grids_div.innerHTML = "";
+
+  //find key 
+  let node_key;
+
+  for (var i = 0; i < tree_view_json.children.length; i++) {
+    if (tree_view_json.children[i].title == concept) {
+        node_key = tree_view_json.children[i].key;
+        console.log("fill_grids_for_cluster_concept found key");
+    }
+  }
+
+
 
   for (var i = 0; i < order.length; i++) {
     // for(search_term in url_obj){
@@ -1156,8 +1203,7 @@ fill_grids_for_cluster_concept = function (url_obj, concept, order) {
 
     var padding_div = document.createElement("div");
     padding_div.setAttribute("class", "padding_div");
-
-    image_table = create_image_grid2(search_term, urls, concept);
+    image_table = create_image_grid3(search_term, urls, concept, node_key);
     var show_second_row_button = document.createElement("button");
     show_second_row_button.setAttribute("onclick", "toggle_show_second_row(\"" + search_term + "_row_2\",this)");
     show_second_row_button.setAttribute("class", "show_second_row_button");
@@ -1492,7 +1538,7 @@ function fill_treeview_sidebar(node_name, tree_view_json) {
 
 
         var text_area = '<input type=\"text\" placeholder=\"write your own!\" class=\"inp\" nkey=\"' + String(node.key) + '\"onkeydown=\"add_custom_node(this)\">'
-        var write_your_own_node = { "title": text_area, "icon": "glyphicon glyphicon-pencil", "checkbox": false, "is_add_your_own": true, "unselectable": true, google_image_urls: {}, saved_img: {} }
+        var write_your_own_node = { "title": text_area, "icon": "glyphicon glyphicon-pencil", "checkbox": false, "is_add_your_own": true, "unselectable": true}
         node.addNode(write_your_own_node, "firstChild");
 
 
@@ -1742,6 +1788,10 @@ function fill_treeview_sidebar(node_name, tree_view_json) {
         }
       }
 
+
+      tree_view_json = data.tree.toDict(true);
+      update_tree_view_json_to_server(tree_view_json);
+      console.log("init called end tree_view_json ", tree_view_json);
 
     },
   });
