@@ -462,54 +462,54 @@ function update_progress_info() {
 
 }
 
-function update_tree_view_json_to_server(updated_tree_view_json){
+function update_tree_view_json_to_server(updated_tree_view_json) {
 
-    $.ajax({
-      type: "POST",
-      url: "/update_tree_view_json",
-      dataType: "json",
-      contentType: "application/json; charset=utf-8",
-      data: JSON.stringify({ "username": username, "concept": concept, "tree_view_json": updated_tree_view_json }),
-      success: function (result) {
-        console.log("Ajax worked for update_tree_view_json().");
-        console.log("update_tree_view_json:", result)
-      },
-      error: function (request, status, error) {
-        console.log("Error");
-        console.log(request)
-        console.log(status)
-        console.log(error)
-      }
-    });
-
+  $.ajax({
+    type: "POST",
+    url: "/update_tree_view_json",
+    dataType: "json",
+    contentType: "application/json; charset=utf-8",
+    data: JSON.stringify({ "username": username, "concept": concept, "tree_view_json": updated_tree_view_json }),
+    success: function (result) {
+      console.log("Ajax worked for update_tree_view_json().");
+      console.log("update_tree_view_json:", result)
+      tree_view_json = result;
+    },
+    error: function (request, status, error) {
+      console.log("Error");
+      console.log(request)
+      console.log(status)
+      console.log(error)
+    }
+  });
 }
 
-function add_image_to_node(node_key, google_search_term, url){
-    console.log(" called add_image_to_node(", node_key + ")")
+function add_image_to_node(node_key, google_search_term, url) {
+  console.log(" called add_image_to_node(", node_key + ")")
 
   var tree = $("#tree").fancytree("getTree");
   var node = tree.getNodeByKey(node_key);
 
-    node.data.saved_img[url] = {};
-    node.data.saved_img[url]["google_search_term"] = google_search_term;
-    node.data.saved_img[url]["tree_path_ids"] = node.getPath(true, "key","/");
-    node.data.saved_img[url]["url"] = url;
+  node.data.saved_img[url] = {};
+  node.data.saved_img[url]["google_search_term"] = google_search_term;
+  node.data.saved_img[url]["tree_path_ids"] = node.getPath(true, "key", "/");
+  node.data.saved_img[url]["url"] = url;
 
-    
-    // console.log("Here is modified_tree ", modified_tree); 
-    var updated_tree_view_json = tree.toDict(true);
-    update_tree_view_json_to_server(updated_tree_view_json);
-    console.log("add_image_to_node, -> modified_tree converted to a dict", updated_tree_view_json);
 
-    delete selected_symbols[url];
+  // console.log("Here is modified_tree ", modified_tree); 
+  var updated_tree_view_json = tree.toDict(true);
+  update_tree_view_json_to_server(updated_tree_view_json);
+  console.log("add_image_to_node, -> modified_tree converted to a dict", updated_tree_view_json);
+
+  delete selected_symbols[url];
 
 }
 
-function delete_image_from_node(node_key, url){
+function delete_image_from_node(node_key, url) {
   console.log(" called add_image_to_node(", node_key + ")")
 
-var tree = $("#tree").fancytree("getTree");
-var node = tree.getNodeByKey(node_key);
+  var tree = $("#tree").fancytree("getTree");
+  var node = tree.getNodeByKey(node_key);
 
   delete node.data.saved_img[url];
 
@@ -574,7 +574,7 @@ function add_custom_node(node) {
 
 //term is search term 
 function confirm_image3(tree_view_node_term, term, url, image_id, tree_node_key) {
-  console.log("confirm_image3 : key: ", tree_node_key) 
+  console.log("confirm_image3 : key: ", tree_node_key)
 
   confirm_time = performance.now();
   var to_remove = false;
@@ -588,7 +588,7 @@ function confirm_image3(tree_view_node_term, term, url, image_id, tree_node_key)
   var tree = $("#tree").fancytree("getTree");
   var node = tree.getNodeByKey(tree_node_key);
 
-  if (url in node.data.saved_img ) {
+  if (url in node.data.saved_img) {
     // delete_elem_from_table(url,term,image_id);
     to_remove = true;
     delete selected_symbols[url];
@@ -645,17 +645,17 @@ function confirm_image3(tree_view_node_term, term, url, image_id, tree_node_key)
 
     var foundChild = false;
     var cluster_index = -1;
-//--------------------------------------------------------------------//
-// NEW VERSION OF SAVIGN IMAGES //
+    //--------------------------------------------------------------------//
+    // NEW VERSION OF SAVIGN IMAGES //
 
     add_image_to_node(tree_node_key, term, url);
 
-    }
-
-
-    updateProgress();
-    // updateNodes();
   }
+
+
+  updateProgress();
+  // updateNodes();
+}
 
 function confirm_image2(tree_view_node_term, term, url, image_id) {
 
@@ -681,7 +681,7 @@ function confirm_image2(tree_view_node_term, term, url, image_id) {
     // delete_elem_from_table(url,term,image_id);
     to_remove = true;
     delete selected_symbols[url];
-    
+
     //ajax send selected_symbols
     $.ajax({
       type: "POST",
@@ -819,8 +819,8 @@ create_cluster_image_grid = function (term, urls, url_to_gs_dict) {
 }
 
 
-create_image_grid3 = function (term, urls, concept, tree_node_key ) {
-  console.log('create_image_grid3 called(), term: ', term, "urls: ", urls, " concept: ", concept, " key: " ,tree_node_key  )
+create_image_grid3 = function (term, urls, concept, tree_node_key) {
+  console.log('create_image_grid3 called(), term: ', term, "urls: ", urls, " concept: ", concept, " key: ", tree_node_key)
   // var urls = ["https://images-na.ssl-images-amazon.com/images/I/61YL-c2pZOL._AC_SX355_.jpg", "https://images-na.ssl-images-amazon.com/images/I/61YL-c2pZOL._AC_SX355_.jpg", "https://images-na.ssl-images-amazon.com/images/I/61YL-c2pZOL._AC_SX355_.jpg", "https://images-na.ssl-images-amazon.com/images/I/61YL-c2pZOL._AC_SX355_.jpg", "https://images-na.ssl-images-amazon.com/images/I/61YL-c2pZOL._AC_SX355_.jpg", "https://images-na.ssl-images-amazon.com/images/I/61YL-c2pZOL._AC_SX355_.jpg", "https://images-na.ssl-images-amazon.com/images/I/61YL-c2pZOL._AC_SX355_.jpg", "https://images-na.ssl-images-amazon.com/images/I/61YL-c2pZOL._AC_SX355_.jpg", "https://images-na.ssl-images-amazon.com/images/I/61YL-c2pZOL._AC_SX355_.jpg"]
   image_table = document.createElement('table');
   row_num = 0;
@@ -918,7 +918,7 @@ add_cluster = function (cluster_title, yes_btn) {
         }
       }
     }
-    else{
+    else {
       for (var i = 0; i < tree_view_json.length; i++) {
         if (tree_view_json[i].title == cluster_title) {
           tree_view_json[i].selected = false
@@ -926,23 +926,24 @@ add_cluster = function (cluster_title, yes_btn) {
       }
     }
 
-        $.ajax({
-          type: "POST",
-          url: "/deselected_cluster",
-          dataType: "json",
-          contentType: "application/json; charset=utf-8",
-          data: JSON.stringify({ "username": username, "concept": concept, "tree_view_json": tree_view_json }),
-          success: function (result) {
-            yes_btn.classList.remove("yes_active");
-            console.log("Ajax worked for deselect_cluster().");
-          },
-          error: function (request, status, error) {
-            console.log("Error");
-            console.log(request)
-            console.log(status)
-            console.log(error)
-          }
-        });
+    $.ajax({
+      type: "POST",
+      url: "/deselected_cluster",
+      dataType: "json",
+      contentType: "application/json; charset=utf-8",
+      data: JSON.stringify({ "username": username, "concept": concept, "tree_view_json": tree_view_json }),
+      success: function (result) {
+        yes_btn.classList.remove("yes_active");
+        console.log("Ajax worked for deselect_cluster().");
+        tree_view_json = result;
+      },
+      error: function (request, status, error) {
+        console.log("Error");
+        console.log(request)
+        console.log(status)
+        console.log(error)
+      }
+    });
 
   }
   else {
@@ -954,33 +955,33 @@ add_cluster = function (cluster_title, yes_btn) {
         }
       }
     }
-    else{
+    else {
       for (var i = 0; i < tree_view_json.length; i++) {
         if (tree_view_json[i].title == cluster_title) {
           tree_view_json[i].selected = true
         }
       }
     }
-
-        console.log("Here's username: ", username);
-        console.log("Here's concept: ", concept);
-        $.ajax({
-          type: "POST",
-          url: "/selected_cluster",
-          dataType: "json",
-          contentType: "application/json; charset=utf-8",
-          data: JSON.stringify({ "username": username, "concept": concept, "tree_view_json": tree_view_json }),
-          success: function (result) {
-            yes_btn.classList.add("yes_active");
-            console.log("Ajax worked for add_cluster().");
-          },
-          error: function (request, status, error) {
-            console.log("Error");
-            console.log(request)
-            console.log(status)
-            console.log(error)
-          }
-        });
+    console.log("Here's username: ", username);
+    console.log("Here's concept: ", concept);
+    $.ajax({
+      type: "POST",
+      url: "/selected_cluster",
+      dataType: "json",
+      contentType: "application/json; charset=utf-8",
+      data: JSON.stringify({ "username": username, "concept": concept, "tree_view_json": tree_view_json }),
+      success: function (result) {
+        tree_view_json = result;
+        yes_btn.classList.add("yes_active");
+        console.log("Ajax worked for add_cluster().");
+      },
+      error: function (request, status, error) {
+        console.log("Error");
+        console.log(request)
+        console.log(status)
+        console.log(error)
+      }
+    });
   }
 
   console.log("Here's the updated tree_view_json: ", tree_view_json);
@@ -1026,7 +1027,39 @@ function topFunction() {
 explore = function () {
   var symbol_bank = document.getElementById("symbol_bank")
   symbol_bank.style.display = "block";
-  fill_treeview_sidebar(concept, tree_view_json); // 1
+  // fill_treeview_sidebar(concept, tree_view_json); // 1
+ 
+  $.ajax({
+    type: "POST",
+    url: "/get_tree_view_json",
+    dataType: "json",
+    contentType: "application/json; charset=utf-8",
+    data: JSON.stringify({ "username": username, "concept": concept}),
+    success: function (result) {
+      $('#sidebar').empty();
+      fill_treeview_sidebar(concept, tree_view_json); // 1
+      var tree = $("#tree").fancytree("getTree");
+      var tree_clusters = tree.rootNode.children;
+      console.log("explore tree", tree)
+      console.log("tree_clusters tree", tree_clusters)
+
+      for (var i = 0; i < tree_clusters.length; i++) {
+        // var cluster_title = tree_view_json[i].title;
+        if (tree_clusters[i].selected) {
+          console.log("inside tree_clusters ", i)
+          $("#ft_" + tree_clusters[i].key).show();
+        }
+      }
+      tree_view_json = result;
+    },
+    error: function (request, status, error) {
+      console.log("Error");
+      console.log(request)
+      console.log(status)
+      console.log(error)
+    }
+  });
+
   topFunction();
   populate_second_step_instructions();
   var image_grids_div = document.getElementById("image_grids");
@@ -1047,7 +1080,7 @@ toggle_show_second_row = function (row_id, but) {
 }
 
 fill_grids_for_concept = function (url_obj, concept, tree_node_key) {
-  console.log("called fill_grids_for_concept!!, url_obj: " , url_obj, " , concept: ", concept, ", tree_node_key:  ", tree_node_key);
+  console.log("called fill_grids_for_concept!!, url_obj: ", url_obj, " , concept: ", concept, ", tree_node_key:  ", tree_node_key);
 
   var image_grids_div = document.getElementById("image_grids");
   image_grids_div.innerHTML = "";
@@ -1073,7 +1106,7 @@ fill_grids_for_concept = function (url_obj, concept, tree_node_key) {
 
     var padding_div = document.createElement("div");
     padding_div.setAttribute("class", "padding_div");
-    
+
     // image_table = create_image_grid2(search_term, urls, concept);
     image_table = create_image_grid3(search_term, urls, concept, tree_node_key);
 
@@ -1268,7 +1301,7 @@ fill_cluster_image_grids = function (clusters) {
       }
     }
   }
-  else{
+  else {
     for (var i = 0; i < tree_view_json.length; i++) {
       if (tree_view_json[i].selected) {
         console.log("id: yes_", tree_view_json[i].title)
@@ -1299,6 +1332,7 @@ function see_more_tree() {
 
 //node_name is a concept 
 function fill_treeview_sidebar(node_name, tree_view_json) {
+  console.log(" called fill_treeview_sidebar() node_name: " + node_name, "tree_view_json: ", tree_view_json);
 
   var sb = document.getElementById('sidebar');
   sb.innerHTML = '';
@@ -1353,32 +1387,16 @@ function fill_treeview_sidebar(node_name, tree_view_json) {
   overview_div.appendChild(overview_panel_div);
   sb.appendChild(overview_div);
 
-  console.log("TREE VIEW JSON")
-  console.log(tree_view_json)
   // if (tree_view_json[0].selected == true) 
-
-  // selected_tree_view_json = [];
-  // for (var i = 0; i < tree_view_json.length; i++) {
-  //   console.log("outside selected_tree_view_json ", i)
-  //   // var cluster_title = tree_view_json[i].title;
-  //   if (tree_view_json[i].selected) {
-  //     console.log("inside selected_tree_view_json ", i)
-  //     selected_tree_view_json.push(tree_view_json[i]);
-  //   }
-  // }
-
-
-  // tree_view_json = new_tree_view_json;
-
 
 
   // ===============================================================================
 
-  console.log("tree_view_json")
   // console.log(tree_view_json)
 
   var treeview = document.createElement("div");
   treeview.setAttribute("id", "tree");
+
   treeview.setAttribute("class", "panel-body fancytree-colorize-hover fancytree-fade-expander");
 
   var glyph_opts = {
@@ -1387,7 +1405,6 @@ function fill_treeview_sidebar(node_name, tree_view_json) {
   };
 
   sb.appendChild(treeview);
-
 
   $("#tree").fancytree({
     extensions: ["glyph"],
@@ -1432,7 +1449,7 @@ function fill_treeview_sidebar(node_name, tree_view_json) {
                 break;
               }
               var swow_word = regular_swow_words[j];
-              var new_node = { title: swow_word, icon: false, is_cluster: false, expanded_once: false, google_image_urls: {}, saved_img:{} };
+              var new_node = { title: swow_word, icon: false, is_cluster: false, expanded_once: false, google_image_urls: {}, saved_img: {} };
               child_node.addNode(new_node);
             }
           }
@@ -1475,7 +1492,7 @@ function fill_treeview_sidebar(node_name, tree_view_json) {
 
 
         var text_area = '<input type=\"text\" placeholder=\"write your own!\" class=\"inp\" nkey=\"' + String(node.key) + '\"onkeydown=\"add_custom_node(this)\">'
-        var write_your_own_node = { "title": text_area, "icon": "glyphicon glyphicon-pencil", "checkbox": false, "is_add_your_own": true, "unselectable": true }
+        var write_your_own_node = { "title": text_area, "icon": "glyphicon glyphicon-pencil", "checkbox": false, "is_add_your_own": true, "unselectable": true, google_image_urls: {}, saved_img: {} }
         node.addNode(write_your_own_node, "firstChild");
 
 
@@ -1512,23 +1529,7 @@ function fill_treeview_sidebar(node_name, tree_view_json) {
       var updated_tree_view_json = modified_tree.toDict(true);
       console.log("This is modified_tree converted to a dict", updated_tree_view_json);
 
-      $.ajax({
-              type: "POST",
-              url: "/update_tree_view_json",
-              dataType: "json",
-              contentType: "application/json; charset=utf-8",
-              data: JSON.stringify({ "username": username, "concept": concept, "tree_view_json": updated_tree_view_json }),
-              success: function (result) {
-                console.log("Ajax worked for update_tree_view_json().");
-                // console.log("added img tree_view_node term:", result)
-              },
-              error: function (request, status, error) {
-                console.log("Error");
-                console.log(request)
-                console.log(status)
-                console.log(error)
-              }
-        });
+      update_tree_view_json_to_server(updated_tree_view_json);
 
 
     },
@@ -1643,7 +1644,7 @@ function fill_treeview_sidebar(node_name, tree_view_json) {
               console.log("nodes_added: " + String(nodes_added))
               console.log("new_node_num: " + String(new_node_num))
               var swow_word = regular_swow_words[i];
-              var new_node ={ title: swow_word, icon: false, is_cluster: false, expanded_once: false, google_image_urls: {}, saved_img:{} };
+              var new_node = { title: swow_word, icon: false, is_cluster: false, expanded_once: false, google_image_urls: {}, saved_img: {} };
               new_child = node.addNode(new_node, "before");
               i++;
               nodes_added++;
@@ -1704,32 +1705,32 @@ function fill_treeview_sidebar(node_name, tree_view_json) {
 
       // Convert the whole tree into an dictionary
       var modified_tree = $("#tree").fancytree("getTree");
-      console.log("Here is modified_tree", modified_tree); 
+      console.log("Here is modified_tree", modified_tree);
       var updated_tree_view_json = modified_tree.toDict(true);
       console.log("This is modified_tree converted to a dict", updated_tree_view_json);
 
       $.ajax({
-              type: "POST",
-              url: "/update_tree_view_json",
-              dataType: "json",
-              contentType: "application/json; charset=utf-8",
-              data: JSON.stringify({ "username": username, "concept": concept, "tree_view_json": updated_tree_view_json }),
-              success: function (result) {
-                console.log("Ajax worked for update_tree_view_json().");
-                // console.log("added img tree_view_node term:", result)
-              },
-              error: function (request, status, error) {
-                console.log("Error");
-                console.log(request)
-                console.log(status)
-                console.log(error)
-              }
-        });
+        type: "POST",
+        url: "/update_tree_view_json",
+        dataType: "json",
+        contentType: "application/json; charset=utf-8",
+        data: JSON.stringify({ "username": username, "concept": concept, "tree_view_json": updated_tree_view_json }),
+        success: function (result) {
+          console.log("Ajax worked for update_tree_view_json().");
+          // console.log("added img tree_view_node term:", result)
+        },
+        error: function (request, status, error) {
+          console.log("Error");
+          console.log(request)
+          console.log(status)
+          console.log(error)
+        }
+      });
 
     },
-    init: function(event, data){
+    init: function (event, data) {
       console.log("init called");
-      var tree_clusters =   data.tree.rootNode.children;
+      var tree_clusters = data.tree.rootNode.children;
       console.log("tree_clusters", data);
       console.log("tree_clusters = data.tree.rootNode.children ", data.tree.rootNode.children);
 
@@ -1737,11 +1738,11 @@ function fill_treeview_sidebar(node_name, tree_view_json) {
         // var cluster_title = tree_view_json[i].title;
         if (!tree_clusters[i].selected) {
           console.log("inside tree_clusters ", i)
-          $("#ft_"+tree_clusters[i].key).hide();
+          $("#ft_" + tree_clusters[i].key).hide();
         }
       }
 
-      
+
     },
   });
 

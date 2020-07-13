@@ -75,6 +75,9 @@ def save_symbols(username):
 	doc_ref.set(username_dict)
 	return 'ok'
 
+
+
+
 #done
 @app.route('/update_selected_symbols',  methods=['POST','GET'])
 def modified_selected_symbols():
@@ -108,22 +111,12 @@ def update_tree_view_json():
     retrieved_tree_view_json = json_data["tree_view_json"]
     print ("\n\n\n Here's the retrieved_username ", retrieved_username)
     print ("Here's the retrieved_concept: ", retrieved_concept)
-    # print(json.dumps(retrieved_tree_view_json, indent=4))
-    # #get data from firestore
-    # doc = doc_ref.get()
-    # json_data = doc.to_dict()
-    # username_dict = json_data
-    # username_dict[retrieved_username]["concepts"][retrieved_concept]["tree_view_json"] = json.dumps(retrieved_tree_view_json)
-    # doc_ref.set(username_dict)
     dicPath =  retrieved_username +'.concepts.' + retrieved_concept + '.tree_view_json'
     doc_ref.update({u''+dicPath:json.dumps(retrieved_tree_view_json)})
     return jsonify(retrieved_tree_view_json)
 
 
 
-
-
-	#done
 @app.route('/get_selected_symbols', methods=['POST'])
 def get_selected_symbols():
 	json_data = request.get_json() 
@@ -135,6 +128,16 @@ def get_selected_symbols():
 	selected_symbols = username_dict[username]['concepts'][concept]['selected_symbols']
 	return jsonify(selected_symbols)
 
+@app.route('/get_tree_view_json', methods=['POST'])
+def get_tree_view_json():
+	json_data = request.get_json() 
+	username = json_data['username']
+	concept = json_data['concept']
+
+	doc = doc_ref.get()
+	username_dict = doc.to_dict()
+	tree_view_json = username_dict[username]['concepts'][concept]['tree_view_json']
+	return jsonify(tree_view_json)
 
 
 #done
