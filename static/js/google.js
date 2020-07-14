@@ -6,7 +6,7 @@
 */
 
 
-var api_key = "AIzaSyCkJApxDUXRDGcufuskDjxSFGK7XDkpsKk"
+var api_key = "AIzaSyCkJApxaUXRDGcufuskDjxSFGK7XDkpsKk"
 
 // Extracts the actual urls from the Google API results
 extract_links = function (search_results) {
