@@ -219,7 +219,7 @@ update_delete_node_button = function (selected_node) {
 
 // update_saved_symbols = function (url, term, to_remove) {
 
-
+//
 //   var confirm_time = -1;
 //   if (to_remove == false) {
 //     // confirm_time = selected_symbols[url]["confirm_time"];
