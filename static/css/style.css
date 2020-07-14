@@ -282,7 +282,7 @@ a:hover {
   color: red;
 }
 
-#concept_alert{
+#concept_alert, #concept_not_in_swow_dict{
   color: red;
 }
 

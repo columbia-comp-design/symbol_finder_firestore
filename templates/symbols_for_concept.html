@@ -2,163 +2,163 @@
 
 {% block content %}
 
-  <title> Symbols </title>
-  <!-- <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+<title> Symbols </title>
+<!-- <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script> -->
-  <!-- <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.8/angular.min.js"></script> -->
-  <link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='css/style.css') }}">
-  <link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='css/overviewPage.css') }}">
+<!-- <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.8/angular.min.js"></script> -->
+<link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='css/style.css') }}">
+<link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='css/overviewPage.css') }}">
 
 
-  <link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='css/loader.css') }}">
+<link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='css/loader.css') }}">
 
 </head>
 
 <body>
 
 
-<div align="center">
-<br>
-<h2> Symbols for: <b> {{ concept }} </b> </h2>
-<br>
-<button id="find_symbol_btn" class="symbol_button" onclick="go_to_finder()"> Find more symbols! </button>
-<br>
-<hr>
-<div style="display:block" id="loader" class="loader"></div>
-  <div id="symbol_grid"></div>
-</div>
+  <div align="center">
+    <br>
+    <h2> Symbols for: <b> {{ concept }} </b> </h2>
+    <br>
+    <button id="find_symbol_btn" class="symbol_button" onclick="go_to_finder()"> Find more symbols! </button>
+    <br>
+    <hr>
+    <div style="display:block" id="loader" class="loader"></div>
+    <div id="symbol_grid"></div>
+  </div>
 
-<script>
-var concept = '{{ concept }}'
-var username = '{{ username }}'
-function go_to_finder() {
-  $('#loader').attr("style","display:block")
-	window.location.href = '/' + username + '/finder/' + concept; 
-  // window.location.href = '/finder/' + concept; 
-}
-
-var concept_dict = null;
-var save_img_dict_ex;
-
-window.onload = function() {
-  // load past concepts
-
-  $.ajax({
-    type: "POST",
-    url: "/get_tree_view_json",
-    dataType: "json",
-    contentType: "application/json; charset=utf-8",
-    data: JSON.stringify({ "username": username, "concept": concept}),
-    success: function (result) {
-      // var tree = $("#tree").fancytree("getTree");
-      // var tree_clusters = tree.rootNode.children;
-      $('#loader').attr("style","display:none")	    	
-      let tree_view_json =  JSON.parse(result);
-      
-      console.log("get_tree_view_json, tree_view_json:  " , tree_view_json);
-
-      if(tree_view_json.hasOwnProperty("children")){
-        let tree_view_json_children =  tree_view_json.children;
-        console.log("get_tree_view_json, tree_view_json.children:  " , tree_view_json_children);
-        populate_clusters_images(tree_view_json_children);
-      }
-      
-      
-    },
-    error: function (request, status, error) {
-      console.log("Error");
-      console.log(request)
-      console.log(status)
-      console.log(error)
+  <script>
+    var concept = '{{ concept }}'
+    var username = '{{ username }}'
+    function go_to_finder() {
+      $('#loader').attr("style", "display:block")
+      window.location.href = '/' + username + '/finder/' + concept;
+      // window.location.href = '/finder/' + concept; 
     }
-  });
 
-  populate_clusters_images = function(tree_view_json){
+    var concept_dict = null;
+    var save_img_dict_ex;
+
+    window.onload = function () {
+      // load past concepts
+
+      $.ajax({
+        type: "POST",
+        url: "/get_tree_view_json",
+        dataType: "json",
+        contentType: "application/json; charset=utf-8",
+        data: JSON.stringify({ "username": username, "concept": concept }),
+        success: function (result) {
+          // var tree = $("#tree").fancytree("getTree");
+          // var tree_clusters = tree.rootNode.children;
+          $('#loader').attr("style", "display:none")
+          let tree_view_json = JSON.parse(result);
+
+          console.log("get_tree_view_json, tree_view_json:  ", tree_view_json);
+
+          if (tree_view_json.hasOwnProperty("children")) {
+            let tree_view_json_children = tree_view_json.children;
+            console.log("get_tree_view_json, tree_view_json.children:  ", tree_view_json_children);
+            populate_clusters_images(tree_view_json_children);
+          }
+
+
+        },
+        error: function (request, status, error) {
+          console.log("Error");
+          console.log(request)
+          console.log(status)
+          console.log(error)
+        }
+      });
+
+      populate_clusters_images = function (tree_view_json) {
         // var symbol_grid  = document.getElementById('symbol_grid');
         $('#symbol_grid');
         //symbol_grid.appendChild(image_table);
-    //print all clusters
-    for(let i=0;i<tree_view_json.length;i++){
-      console.log("\n\n cluster title: ",  tree_view_json[i].title);
-      $('#symbol_grid')
-      .append($('<div>' +'<h3>' +tree_view_json[i].title + '</h3>' + '</div>')
-      .attr({"id":tree_view_json[i].key , "class":"clusterDiv"})
-      );
+        //print all clusters
+        for (let i = 0; i < tree_view_json.length; i++) {
+          console.log("\n\n cluster title: ", tree_view_json[i].title);
+          $('#symbol_grid')
+            .append($('<div>' + '<h3>' + tree_view_json[i].title + '</h3>' + '</div>')
+              .attr({ "id": tree_view_json[i].key, "class": "clusterDiv" })
+            );
 
-      // $('#'+tree_view_json[i].title).html('<h3>' +tree_view_json[i].title + '</h3>');
-      append_children_image_to_cluster(tree_view_json[i].children, tree_view_json[i].key );
-    
-      //while children has children 
-    }
-  }
+          // $('#'+tree_view_json[i].title).html('<h3>' +tree_view_json[i].title + '</h3>');
+          append_children_image_to_cluster(tree_view_json[i].children, tree_view_json[i].key);
 
-  append_children_image_to_cluster = function(children, cluster_key){
- 
-    for(let i=0;i<children.length;i++){
-      if(children[i].data.hasOwnProperty("saved_img")){
-        if(!isObjEmpty(children[i].data.saved_img)){
-          // console.log("children[i].data.saved_img i ",  children[i].title);
-          // console.log( children[i].title + ": , children[i].data.saved_img i ",  children[i].data.saved_img);
-          append_term_to_cluster(children[i], cluster_key)
-          //append images to term 
-          
+          //while children has children 
         }
       }
 
-      if(children.hasOwnProperty("children")){
-      console.log(children[i].title ,  " has children")
-        append_children_image_to_cluster(children.children, cluster_key);
+      append_children_image_to_cluster = function (children, cluster_key) {
+
+        for (let i = 0; i < children.length; i++) {
+          if (children[i].data.hasOwnProperty("saved_img")) {
+            if (!isObjEmpty(children[i].data.saved_img)) {
+              // console.log("children[i].data.saved_img i ",  children[i].title);
+              // console.log( children[i].title + ": , children[i].data.saved_img i ",  children[i].data.saved_img);
+              append_term_to_cluster(children[i], cluster_key)
+              //append images to term 
+
+            }
+          }
+
+          if (children.hasOwnProperty("children")) {
+            console.log(children[i].title, " has children")
+            append_children_image_to_cluster(children.children, cluster_key);
+          }
+        }
       }
-    }
-  }
 
-  append_term_to_cluster = function(child, cluster_key){
-    $('#'+cluster_key).append($('<div id='+ child.key+'> <h4 class=cluster_child_term >' + child.title + '</h4> </div>'))
-    // .attr({"id":child.key , "class":"cluster_child_term"});
-    append_images_to_term(child);
-  }
+      append_term_to_cluster = function (child, cluster_key) {
+        $('#' + cluster_key).append($('<div id=' + child.key + '> <h4 class=cluster_child_term >' + child.title + '</h4> </div>'))
+        // .attr({"id":child.key , "class":"cluster_child_term"});
+        append_images_to_term(child);
+      }
 
-  append_images_to_term = function(child){
-    console.log( child.title + ": , child.data.saved_img i ",  child.data.saved_img);
-    // save_img_dict_ex = child.data.saved_img;
-    for(k in  child.data.saved_img){
-      $('#'+child.key).append($('<img height="300px" class="node_img" src='+k + '/>'))
-      console.log(k)
-    }
-    // child.data.saved_img.forEach((url, url) => console.log(`Key is ${url} and value is ${url.url}`));
-  }
+      append_images_to_term = function (child) {
+        console.log(child.title + ": , child.data.saved_img i ", child.data.saved_img);
+        // save_img_dict_ex = child.data.saved_img;
+        for (k in child.data.saved_img) {
+          $('#' + child.key).append($('<img alt="" class="node_img" src=' + k + '/>'))
+          // console.log(k)
+        }
+        // child.data.saved_img.forEach((url, url) => console.log(`Key is ${url} and value is ${url.url}`));
+      }
 
-  function isObjEmpty(obj) {
-  for (var key in obj) {
-    if (obj.hasOwnProperty(key))
-      return false;
-  }
-  return true;
-}
+      function isObjEmpty(obj) {
+        for (var key in obj) {
+          if (obj.hasOwnProperty(key))
+            return false;
+        }
+        return true;
+      }
 
 
 
-  // $.ajax({
-	//     type: "POST",
-	//     url: "get_symbols_for_username",                
-	//     contentType: "application/json; charset=utf-8",
-  //     data : JSON.stringify({"concept":concept,"username":username}),
-	//     success: function(data, text){
-  //       $('#loader').attr("style","display:none")
-	//     	console.log('success')
-	//     	console.log(data)
-	//     	// populate_symbols(data)
-	//     },
-	//     error: function(request, status, error){
-	//     	console.log("Error");
-	//         console.log(request)
-	//         console.log(status)
-	//         console.log(error)
-	//     }
-  // });
+      // $.ajax({
+      //     type: "POST",
+      //     url: "get_symbols_for_username",                
+      //     contentType: "application/json; charset=utf-8",
+      //     data : JSON.stringify({"concept":concept,"username":username}),
+      //     success: function(data, text){
+      //       $('#loader').attr("style","display:none")
+      //     	console.log('success')
+      //     	console.log(data)
+      //     	// populate_symbols(data)
+      //     },
+      //     error: function(request, status, error){
+      //     	console.log("Error");
+      //         console.log(request)
+      //         console.log(status)
+      //         console.log(error)
+      //     }
+      // });
 
-};
+    };
 
 
 
@@ -219,6 +219,6 @@ window.onload = function() {
 //   symbol_grid.appendChild(image_table);
 // }
 
-</script>
+  </script>
 
-{% endblock %}
+  {% endblock %}

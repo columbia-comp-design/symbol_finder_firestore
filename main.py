@@ -122,6 +122,24 @@ def get_selected_symbols():
 	selected_symbols = username_dict[username]['concepts'][concept]['selected_symbols']
 	return jsonify(selected_symbols)
 
+@app.route('/get_project_json', methods=['POST'])
+def get_project_json():
+	doc = doc_ref.get()
+	username_dict = doc.to_dict()
+	return jsonify(username_dict)
+
+@app.route('/is_concept_in_swow_dict', methods=['POST'])
+def is_concept_in_swow_dict():
+	json_data = request.get_json() 
+	concept = json_data['concept']
+
+	if concept in swow_dict:
+		isConceptInSwowDict = True
+	else:
+		isConceptInSwowDict = False
+
+	return jsonify({"isConceptInSwowDict": isConceptInSwowDict})
+
 @app.route('/get_tree_view_json', methods=['POST'])
 def get_tree_view_json():
 	json_data = request.get_json() 

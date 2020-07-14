@@ -1,11 +1,11 @@
 {% extends "layout.html" %}
 
 {% block content %}
-  <link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='css/style.css') }}">
-  <link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='css/sidebar.css') }}">
-  <link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='css/loader.css') }}">
+<link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='css/style.css') }}">
+<link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='css/sidebar.css') }}">
+<link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='css/loader.css') }}">
 
-  <title> Symbol Dictionary </title>
+<title> Symbol Dictionary </title>
 <!--   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script> -->
@@ -19,296 +19,347 @@
 	<br>
 
 	<!-- <h2> Select a username:  </h2> -->
-	<div id = "username_btns"> </div>
+	<div id="username_btns"> </div>
 	<div style="display:none" id="usernameLoader" class="loader"></div>
-	<div id = "username_alert"></div>
+	<div id="username_alert"></div>
 
 	<div style="display:block" id="startLoader" class="loader"></div>
-	<div id = "username_enter">
+	<div id="username_enter">
 
-	<label for="inp" class="inp" id = "username_input">
-	  <input type="text" id="username_text" placeholder="New User or New Group">
-	  <!-- <span class="border"></span> -->
-	</label>
+		<label for="inp" class="inp" id="username_input">
+			<input type="text" id="username_text" placeholder="New User or New Group">
+			<!-- <span class="border"></span> -->
+		</label>
 	</div>
 
 	<hr>
 
-	<div id = "concepts_div" style="display:none">
-	<div id = "symbol_enter">
+	<div id="concepts_div" style="display:none">
+		<div id="symbol_enter">
 
-	
-	<label for="inp" class="inp" id = "concept_input">
-	 <h5>New concept:</h5>
-	 <div id = "concept_alert" style="display: none;">concept already exists</div>
-	  <input type="text" id="concept_text" placeholder="Enter a new concept to symbolize">
-	  <!-- <span class="label">Concept</span>
+
+			<label for="inp" class="inp" id="concept_input">
+				<h5>New concept:</h5>
+				<div id="concept_alert" style="display: none;">concept already exists</div>
+				<div id="concept_not_in_swow_dict" style="display: none;">We do not have this concept in our dictionary
+				</div>
+
+				<input type="text" id="concept_text" placeholder="Enter a new concept to symbolize">
+				<!-- <span class="label">Concept</span>
 	  <span class="border"></span> -->
-	</label>
-	</div>
+			</label>
+		</div>
 
-	<br>
-	<hr>
-	<br>
-	<!-- <h5> Saved Concept(s):  </h5> -->
+		<br>
+		<hr>
+		<br>
+		<!-- <h5> Saved Concept(s):  </h5> -->
 
-	<div id = "concept_btns"> </div>
+		<div id="concept_btns"> </div>
 	</div>
 
 </div>
 
 <script>
 
-var concept_dict = null;
-var username_dict = null;
-var selected_username = null;
-var new_users = [];
-var prev_concept ="";
+	var concept_dict = null;
+	var username_dict = null;
+	var selected_username = null;
+	var new_users = [];
+	var prev_concept = "";
 
 
 
-window.onload = function() {
-  // load past concepts
-  /*$.ajax({
-	    type: "POST",
-	    url: "get_concepts",                
-	    contentType: "application/json; charset=utf-8",
-	    success: function(data, text){
-	    	console.log('success')
-	    	console.log(data)
-	    	concept_dict = data;
-	    	populate_symbol_btns();
-	    },
-	    error: function(request, status, error){
-	    	console.log("Error");
-	        console.log(request)
-	        console.log(status)
-	        console.log(error)
-	    }
-  });*/
+	window.onload = function () {
+		// load past concepts
+		/*$.ajax({
+			  type: "POST",
+			  url: "get_concepts",                
+			  contentType: "application/json; charset=utf-8",
+			  success: function(data, text){
+				  console.log('success')
+				  console.log(data)
+				  concept_dict = data;
+				  populate_symbol_btns();
+			  },
+			  error: function(request, status, error){
+				  console.log("Error");
+				  console.log(request)
+				  console.log(status)
+				  console.log(error)
+			  }
+		});*/
 
-  $.ajax({
-  	type: "POST",
-	    url: "get_usernames_and_concepts",                
-	    contentType: "application/json; charset=utf-8",
-		async: false,
-	    success: function(data, text){
-	    	console.log('success')
-			$('#startLoader').attr("style","display:none")
-	    	console.log(data)
-	    	username_dict = data;
-	    	populate_username_btns();
-	    },
-	    error: function(request, status, error){
-	    	console.log("Error");
-	        console.log(request)
-	        console.log(status)
-	        console.log(error)
-	    }
+		$.ajax({
+			type: "POST",
+			url: "get_usernames_and_concepts",
+			contentType: "application/json; charset=utf-8",
+			async: false,
+			success: function (data, text) {
+				console.log('success')
+				$('#startLoader').attr("style", "display:none")
+				console.log(data)
+				username_dict = data;
+				populate_username_btns();
+			},
+			error: function (request, status, error) {
+				console.log("Error");
+				console.log(request)
+				console.log(status)
+				console.log(error)
+			}
 
-  });
+		});
 
-};
+	};
 
-var username_input = document.getElementById("username_input");
-username_input.addEventListener("keydown", function (e){
-	if(e.keyCode == 13){
-		var entered_username = document.getElementById("username_text").value;
-		//Trim username, 
-		entered_username = entered_username.trim().toLowerCase();
-		entered_username =  entered_username.charAt(0).toUpperCase() + entered_username.slice(1);
+	var username_input = document.getElementById("username_input");
+	username_input.addEventListener("keydown", function (e) {
+		if (e.keyCode == 13) {
+			var entered_username = document.getElementById("username_text").value;
+			//Trim username, 
+			entered_username = entered_username.trim().toLowerCase();
+			entered_username = entered_username.charAt(0).toUpperCase() + entered_username.slice(1);
 
-		console.log("username: ",  entered_username)
-		console.log(" user exist: ",  username_dict.hasOwnProperty(entered_username))
-		if(entered_username != "" && username_dict.hasOwnProperty(entered_username) == false){
-			// username_dict[entered_username] = {"concepts":{}}; 
-			$('#usernameLoader').attr("style","display:block")
+			console.log("username: ", entered_username)
+			console.log(" user exist: ", username_dict.hasOwnProperty(entered_username))
+			if (entered_username != "" && username_dict.hasOwnProperty(entered_username) == false) {
+				// username_dict[entered_username] = {"concepts":{}}; 
+				$('#usernameLoader').attr("style", "display:block")
 
-			    $.ajax({
-			    type: "POST",
-			    url: "save_username",
-			    contentType: "application/json; charset=utf-8",
-			    data : JSON.stringify(entered_username),
-			    success: function(data, text){
-					console.log('save_username route called')
-					username_dict = data;
-			    	new_users.push(entered_username);
-			    	add_username_button(entered_username);
-					select_username(entered_username);
-					populate_symbol_btns(entered_username); 
-					$('#usernameLoader').attr("style","display:none")
-					$('#username_alert').html("")
-					$('#username_enter').hide();
+				$.ajax({
+					type: "POST",
+					url: "save_username",
+					contentType: "application/json; charset=utf-8",
+					data: JSON.stringify(entered_username),
+					success: function (data, text) {
+						console.log('save_username route called')
+						username_dict = data;
+						new_users.push(entered_username);
+						add_username_button(entered_username);
+						select_username(entered_username);
+						populate_symbol_btns(entered_username);
+						$('#usernameLoader').attr("style", "display:none")
+						$('#username_alert').html("")
+						$('#username_enter').hide();
 
-			    },
-			    error: function(request, status, error){
-			    	console.log("Error");
-			        console.log(request)
-			        console.log(status)
-			        console.log(error)
-			    }
-			  });
+					},
+					error: function (request, status, error) {
+						console.log("Error");
+						console.log(request)
+						console.log(status)
+						console.log(error)
+					}
+				});
+			}
+			else { // username exist 
+				$('#username_alert').html("username or group already exists")
+			}
 		}
-		else{ // username exist 
-			$('#username_alert').html("username or group already exists")
+	});
+
+	var concept_input = document.getElementById("concept_input");
+	concept_input.addEventListener("keydown", function (e) {
+		if (e.keyCode === 13) {  //checks whether the pressed key is "Enter"
+			//get value
+			var entered_concept = document.getElementById("concept_text").value;
+
+			// string edge cases, and trim takes out white spaces 
+			entered_concept = entered_concept.toLowerCase().trim();
+
+			$.ajax({
+				type: "POST",
+				url: "is_concept_in_swow_dict",
+				contentType: "application/json; charset=utf-8",
+				data: JSON.stringify({ "concept": entered_concept }),
+				success: function (data) {
+					// console.log("isConceptInSwowDict : " ,data.isConceptInSwowDict);
+					if (data.isConceptInSwowDict) {
+
+						$.ajax({
+							type: "POST",
+							url: "get_project_json",
+							contentType: "application/json; charset=utf-8",
+							success: function (data) {
+								username_dict = data;
+								var username_concepts_dict = username_dict[selected_username]["concepts"];
+								let isNewConcept = username_dict[selected_username]["concepts"][entered_concept];
+
+								//console.log("is ", entered_concept, "a new concept: " , (isNewConcept == undefined) );
+								if (!username_dict[selected_username]["concepts"].hasOwnProperty(entered_concept)) {
+									save_concept_ajax(selected_username, entered_concept);
+								}
+								else {
+									$('#concept_alert').show();
+									$('#concept_not_in_swow_dict').hide();
+								}
+							},
+							error: function (request, status, error) {
+								console.log("Error");
+								console.log(request)
+								console.log(status)
+								console.log(error)
+							}
+						});
+
+					} else {
+						//concept does not exist in the dictionary 
+						$('#concept_alert').hide();
+						$('#concept_not_in_swow_dict').show();
+
+
+					}
+				},
+				error: function (request, status, error) {
+					console.log("Error");
+					console.log(request)
+					console.log(status)
+					console.log(error)
+				}
+			});
+
+			// get_project_json
+
+
+		}
+		else {
+			$('#concept_alert').hide();
+			$('#concept_not_in_swow_dict').hide();
+
+		}
+	});
+
+	function save_concept_ajax(username, concept) {
+		$.ajax({
+			type: "POST",
+			url: "save_concept",
+			contentType: "application/json; charset=utf-8",
+			data: JSON.stringify({ "concept": concept, "username": username }),
+			success: function (data, text) {
+				// console.log("data: " ,  data[select_username]["concepts"][entered_concept])
+				console.log('success: save_concept_ajax')
+				username_dict = data;
+				add_concept_button(concept);
+				$('#concept_alert').hide();
+			},
+			error: function (request, status, error) {
+				console.log("Error");
+				console.log(request)
+				console.log(status)
+				console.log(error)
+			}
+		});
+
+	}
+
+	function populate_symbol_btns(username) {
+		document.getElementById("concept_btns").innerHTML = "";
+		var concept_dict = username_dict[username]["concepts"];
+		for (var concept in concept_dict) {
+			if (Object.prototype.hasOwnProperty.call(concept_dict, concept)) {
+				add_concept_button(concept);
+			}
 		}
 	}
-});
 
-var concept_input = document.getElementById("concept_input");
-concept_input.addEventListener("keydown", function (e) {
-    if (e.keyCode === 13) {  //checks whether the pressed key is "Enter"
-		//get value
-		var entered_concept = document.getElementById("concept_text").value;
-
-		// string edge cases, and trim takes out white spaces 
-		entered_concept =  entered_concept.toLowerCase().trim();
-
-
-		var username_concepts = username_dict[selected_username];
-		let isNewConcept = username_dict[selected_username]["concepts"][entered_concept];
-		//console.log("is ", entered_concept, "a new concept: " , (isNewConcept == undefined) );
-    	if(entered_concept != "" && isNewConcept == undefined && prev_concept!=entered_concept){
-    		$.ajax({
-			    type: "POST",
-			    url: "save_concept",
-			    contentType: "application/json; charset=utf-8",
-			    data : JSON.stringify({"concept":entered_concept,"username":selected_username}),
-			    success: function(data, text){
-					prev_concept = entered_concept;
-					// console.log("data: " ,  data[select_username]["concepts"][entered_concept])
-			    	console.log('success')
-					username_dict = data;
-			    	add_concept_button(entered_concept);
-					$('#concept_alert').hide();
-
-			    },
-			    error: function(request, status, error){
-			    	console.log("Error");
-			        console.log(request)
-			        console.log(status)
-			        console.log(error)
-			    }
-			  });
-    	}
-		else{
-			$('#concept_alert').show();
-
-		}
-    }
-	else{
-		$('#concept_alert').hide();
-	}
-});
-
-function populate_symbol_btns(username){
-	document.getElementById("concept_btns").innerHTML = "";
-	var concept_dict = username_dict[username]["concepts"];
-	for (var concept in concept_dict) {
-	    if (Object.prototype.hasOwnProperty.call(concept_dict, concept)) {
-	    	add_concept_button(concept);
-	    }
-	}
-}
-
-function populate_username_btns(){
-	for (var username in username_dict) {
-		if (Object.prototype.hasOwnProperty.call(username_dict, username)) {
-			add_username_button(username);
+	function populate_username_btns() {
+		for (var username in username_dict) {
+			if (Object.prototype.hasOwnProperty.call(username_dict, username)) {
+				add_username_button(username);
+			}
 		}
 	}
-}
 
-function go_to_symbol_page(concept,username){
-	console.log(concept)
-	window.location.href = username + '/symbols/' + concept; 
-}
-
-function select_username(username){
-	$('#username_enter').hide();
-	$('#username_alert').hide();
-
-	selected_username = username;
-	var concepts_div = document.getElementById("concepts_div");
-	if (concepts_div.style.display === "none"){
-		concepts_div.style.display = "block";
-	}
-	if(new_users.includes(username) == false){
-		populate_symbol_btns(username);
+	function go_to_symbol_page(concept, username) {
+		console.log(concept)
+		window.location.href = username + '/symbols/' + concept;
 	}
 
-	var username_btns_div = document.getElementById("username_btns");
-	var child_elements = username_btns_div.childNodes;
-	for(var i = 0; i < child_elements.length; i++){
-		var child = child_elements[i];
-		if(child.className == "username_btn" || child.className == "username_btn username_active"){
-			if(child.innerHTML != selected_username){
-				child.classList.remove("username_active");
+	function select_username(username) {
+		$('#username_enter').hide();
+		$('#username_alert').hide();
+
+		selected_username = username;
+		var concepts_div = document.getElementById("concepts_div");
+		if (concepts_div.style.display === "none") {
+			concepts_div.style.display = "block";
+		}
+		if (new_users.includes(username) == false) {
+			populate_symbol_btns(username);
+		}
+
+		var username_btns_div = document.getElementById("username_btns");
+		var child_elements = username_btns_div.childNodes;
+		for (var i = 0; i < child_elements.length; i++) {
+			var child = child_elements[i];
+			if (child.className == "username_btn" || child.className == "username_btn username_active") {
+				if (child.innerHTML != selected_username) {
+					child.classList.remove("username_active");
+				}
+				else {
+					child.classList.add("username_active");
+				}
+			}
+		}
+	}
+
+	function add_username_button(username) {
+		console.log(username)
+		var username_btn = document.createElement("BUTTON");
+		username_btn.innerHTML = username;
+		username_btn.id = username + '_btn';
+		username_btn.className = "username_btn";
+		username_btn.setAttribute("onclick", "select_username(\"" + username + "\")");
+		document.getElementById("username_btns").appendChild(username_btn);
+	}
+
+	function add_concept_button(concept) {
+		console.log(concept)
+		var concept_btn = document.createElement("BUTTON");
+		concept_btn.innerHTML = concept;
+		concept_btn.id = concept + '_btn';
+		concept_btn.className = "symbol_button";
+		concept_btn.setAttribute("onclick", "go_to_symbol_page(\"" + concept + "\",\"" + selected_username + "\")");
+		document.getElementById("concept_btns").appendChild(concept_btn);
+
+	}
+
+	/* send_page_info = function(state){
+	
+		console.log('sending page info!')
+	
+		var version = null;
+		if(document.getElementById('version_1').checked) {
+			version = 1;
+		}else if(document.getElementById('version_2').checked) {
+			version = 2;
+		}
+	
+		var practice = true;
+		if(state == 1){
+			practice = false;
+		}
+	
+		if(practice){
+			if(version == 1){
+				window.location.href = '/finder/practice/1'
 			}
 			else{
-				child.classList.add("username_active");
+				window.location.href = '/finder/practice/2'
 			}
 		}
-	}
-}
-
-function add_username_button(username){
-	console.log(username)
-	var username_btn = document.createElement("BUTTON");
-	username_btn.innerHTML = username;
-	username_btn.id = username + '_btn';
-	username_btn.className = "username_btn";
-	username_btn.setAttribute("onclick", "select_username(\""+username+"\")");
-	document.getElementById("username_btns").appendChild(username_btn);
-}
-
-function add_concept_button(concept) {
-    console.log(concept)
-    var concept_btn = document.createElement("BUTTON");
-    concept_btn.innerHTML = concept;
-    concept_btn.id = concept + '_btn';
-    concept_btn.className = "symbol_button";
-    concept_btn.setAttribute("onclick", "go_to_symbol_page(\""+concept+"\",\""+selected_username+"\")");
-    document.getElementById("concept_btns").appendChild(concept_btn);
-    
-}
-	
-/* send_page_info = function(state){
-
-	console.log('sending page info!')
-
-	var version = null;
-	if(document.getElementById('version_1').checked) {
-		version = 1;
-	}else if(document.getElementById('version_2').checked) {
-		version = 2;
-	}
-
-	var practice = true;
-	if(state == 1){
-		practice = false;
-	}
-
-	if(practice){
-		if(version == 1){
-			window.location.href = '/finder/practice/1'
-		}
 		else{
-			window.location.href = '/finder/practice/2'
-		}
-	}
-	else{
-		if(version == 1){
-			window.location.href = '/finder/real/1'
-		}
-		else{
-			window.location.href = '/finder/real/2'
-		}
-	}*/
+			if(version == 1){
+				window.location.href = '/finder/real/1'
+			}
+			else{
+				window.location.href = '/finder/real/2'
+			}
+		}*/
 
 	/*$.ajax({
         type: "POST",
-        url: "send_page_info",                
+        url: "send_page_info",
         dataType : "json",
         contentType: "application/json; charset=utf-8",
         data : JSON.stringify({"version": version, "practice": practice}),
@@ -322,10 +373,10 @@ function add_concept_button(concept) {
 	        console.log(status)
 	        console.log(error)
 	    }
-    });*/	
-	
+    });*/
 
-</script> 
+
+</script>
 
 
 <!-- <script type=text/javascript src="{{ url_for('static', filename='js/start.js') }}"></script>-->

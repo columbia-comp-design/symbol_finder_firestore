@@ -1,0 +1,12 @@
+.cluster_children_term{
+  text-align: left;
+}
+
+.cluster_child_term{
+  text-align: left;
+  font-weight: normal;
+}
+
+.node_img{
+  height: 300px;
+}
