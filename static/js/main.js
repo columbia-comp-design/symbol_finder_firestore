@@ -3,6 +3,9 @@
  * Savvas Petridis
  * March 29, 2019
  *
+ * It also contains functions to save the state of the app using Firestore
+ * Hector Liang 
+ * July 13, 2020
 */
 
 // contains the words (from spacy) and urls (from google) associated with each concept
@@ -529,7 +532,7 @@ function add_custom_node(node) {
     if (val) {
       var tree = $("#tree").fancytree("getTree");
       var node = tree.getNodeByKey(node_key);
-      var new_child_node = { "title": val, "icon": false, "checkbox": false, "is_add_your_own": false, "expanded_once": false, "is_cluster": false, google_image_urls: {}, saved_img: {} }
+      var new_child_node = { "title": val, "icon": false, "checkbox": false, "is_add_your_own": false, "expanded_once": false, "is_cluster": false, "google_image_urls": {}, "saved_img": {} }
 
       var children = node.getChildren();
       var second_child = children[1];
@@ -549,7 +552,7 @@ function add_custom_node(node) {
             break;
           }
           var swow_word = regular_swow_words[j];
-          var n_node = { "title": swow_word, "icon": false, "is_cluster": false, "expanded_once": false, "checkbox": false, google_image_urls: {}, saved_img: {} };
+          var n_node = { "title": swow_word, "icon": false, "is_cluster": false, "expanded_once": false, "checkbox": false, "google_image_urls": {}, "saved_img": {} };
           var c_new_node = new_node.addNode(n_node);
           var children_swow_words = swow_data_for_tree_view[swow_word]["comb_words"];
           var max_g_nodes = 5;
@@ -567,6 +570,10 @@ function add_custom_node(node) {
       }
 
       multi_google_search(val, node.title, true, new_node.key);
+
+      tree_view_json = node.tree.toDict(true);
+      update_tree_view_json_to_server(tree_view_json);
+      console.log("init called end tree_view_json ", tree_view_json);
 
     }
   }
@@ -1569,17 +1576,16 @@ function fill_treeview_sidebar(node_name, tree_view_json) {
         }
 
         node.data.expanded_once = true;
+        // Convert the whole tree into an dictionary
+        tree_view_json = data.tree.toDict(true);
+        update_tree_view_json_to_server(tree_view_json);
+        console.log("init called end tree_view_json ", tree_view_json);
+        
       }
 
-      // Convert the whole tree into an dictionary
-      var modified_tree = $("#tree").fancytree("getTree");
-      // console.log("Here is modified_tree ", modified_tree); 
-      var updated_tree_view_json = modified_tree.toDict(true);
-      console.log("This is modified_tree converted to a dict", updated_tree_view_json);
-
-      update_tree_view_json_to_server(updated_tree_view_json);
-
-
+      tree_view_json = data.tree.toDict(true);
+      update_tree_view_json_to_server(tree_view_json);
+      console.log("init called end tree_view_json ", tree_view_json);
     },
     click: function (event, data) {
       console.log(event)
@@ -1753,14 +1759,9 @@ function fill_treeview_sidebar(node_name, tree_view_json) {
         }
       }
 
-      // Convert the whole tree into an dictionary
-      var modified_tree = $("#tree").fancytree("getTree");
-      // console.log("Here is modified_tree", modified_tree);
-      tree_view_json = modified_tree.toDict(true);
-      // console.log("This is modified_tree converted to a dict", );
-      // tree_view_json = data.tree.toDict(true);
+      tree_view_json = data.tree.toDict(true);
       update_tree_view_json_to_server(tree_view_json);
-      console.log("callback expand: tree_view_json ", tree_view_json);
+      console.log("init called end tree_view_json ", tree_view_json);
 
     },
     init: function (event, data) {
