@@ -91,6 +91,11 @@ def modified_selected_symbols():
 	username = json_data['username']
 	concept = json_data['concept']
 
+	doc_ref = db.collection(u'projects').document(u''+projecstDate)
+	doc = doc_ref.get()
+	username_dict = doc.to_dict()
+	username_dict[username]['concepts'][concept]['selected_symbols'] = selected_symbols
+
 	
 	dicPath =  username +'.concepts.' + concept + '.selected_symbols'
 	doc_ref.update({u''+dicPath:selected_symbols})
