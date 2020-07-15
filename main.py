@@ -6,11 +6,13 @@ import sys
 import urllib
 from datetime import datetime
 from word import *
-import time
+from time import gmtime, strftime
 
 import firebase_admin
 from firebase_admin import credentials, firestore
 import json 
+
+projecstDate = "summer2020"
 cred = credentials.Certificate("./symbolFinderSecret.json")
 firebase_admin.initialize_app(cred, {
     'projectId' : 'symbolfinder-visiblends'
@@ -20,6 +22,8 @@ firebase_admin.initialize_app(cred, {
 db = firestore.client()
 #document has the json data backup for each month 
 doc_ref = db.collection(u'jsonByDate').document(u'testing6')
+all_user_doc_ref = db.collection(u'projects').document(u'allUsers')
+
 
 
 tmpl_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'templates')
@@ -104,10 +108,25 @@ def update_tree_view_json():
 
     print ("\n\n\n Here's the retrieved_username ", retrieved_username)
     print ("Here's the retrieved_concept: ", retrieved_concept)
-
     dicPath =  retrieved_username +'.concepts.' + retrieved_concept + '.tree_view_json'
     doc_ref.update({u''+dicPath:json.dumps(retrieved_tree_view_json)})
     return jsonify(retrieved_tree_view_json)
+
+@app.route('/update_tree_view_json', methods=['POST'])
+def update_tree_view_json():
+    print("update_tree_view_json() called")
+    json_data = request.get_json()
+    retrieved_username = json_data["username"]
+    retrieved_concept = json_data["concept"]
+    retrieved_tree_view_json = json_data["tree_view_json"]
+
+    print ("\n\n\n Here's the retrieved_username ", retrieved_username)
+    print ("Here's the retrieved_concept: ", retrieved_concept)
+    dicPath =  retrieved_username +'.concepts.' + retrieved_concept + '.tree_view_json'
+    doc_ref.update({u''+dicPath:json.dumps(retrieved_tree_view_json)})
+    return jsonify(retrieved_tree_view_json)
+
+
 
 
 
@@ -117,6 +136,10 @@ def get_selected_symbols():
 	username = json_data['username']
 	concept = json_data['concept']
 
+	# doc = doc_ref.get()
+	# username_dict = doc.to_dict()
+
+	doc_ref = db.collection(u'projects').document(u''+projecstDate)
 	doc = doc_ref.get()
 	username_dict = doc.to_dict()
 	selected_symbols = username_dict[username]['concepts'][concept]['selected_symbols']
@@ -124,12 +147,15 @@ def get_selected_symbols():
 
 @app.route('/get_project_json', methods=['POST'])
 def get_project_json():
+	# doc_ref = db.collection(u'jsonByDate').document(u'testing6')
+	doc_ref = db.collection(u'projects').document(u''+projecstDate)
 	doc = doc_ref.get()
 	username_dict = doc.to_dict()
 	return jsonify(username_dict)
 
 @app.route('/is_concept_in_swow_dict', methods=['POST'])
 def is_concept_in_swow_dict():
+
 	json_data = request.get_json() 
 	concept = json_data['concept']
 
@@ -146,9 +172,10 @@ def get_tree_view_json():
 	username = json_data['username']
 	concept = json_data['concept']
 
-	doc = doc_ref.get()
-	username_dict = doc.to_dict()
-	tree_view_json = username_dict[username]['concepts'][concept]['tree_view_json']
+	user_concept_tree_ref = db.collection(u'projects').document(u''+projecstDate).collection(u''+username).document(concept)
+	user_concept_tree_doc = user_concept_tree_ref.get()
+	doc_json = user_concept_tree_doc.to_dict()
+	tree_view_json = doc_json['tree_view_json']
 	return jsonify(tree_view_json)
 
 
@@ -184,21 +211,30 @@ def get_concepts():
 #done
 @app.route('/get_usernames_and_concepts', methods=['POST'])
 def get_usernames_and_concepts():
-	doc = doc_ref.get()
+	# doc_ref = db.collection(u'jsonByDate').document(u'testing6')
+	# doc_ref = db.collection(u'projects').document(u''+projecstDate)
+	# doc = doc_ref.get()
 
-	if doc.exists:
+	users_concepts_doc_ref = db.collection(u'projects').document(u''+projecstDate)
+	users_concepts_doc = users_concepts_doc_ref.get()
+
+	if users_concepts_doc.exists:
 		print('hi doc exists')
 		# print(u'Document data: {}'.format(doc.to_dict()))
 	else:
-		username_dict = {}
-		db.collection(u'jsonByDate').document(u'testing2').set(username_dict)
-		print("created a new document named testing2 ")
+		# db.collection(u'jsonByDate').document(u'testing2').set(username_dict)
+		db.collection(u'projects').document(u''+projecstDate).set({'VisiBlends':{}})
+		db.collection(u'projects').document(u''+projecstDate).collection(u''+'VisiBlends').document(u'concept_data').set({"concepts_dict":{}})
+		print("created a new collection named projects and it's document is ", projecstDate)
 
 	# # if exists, get the full concept_dict
 	#with open('username_symbols.json') as json_file:
 	# 	username_dict = json.load(json_file)
-	username_dict = doc.to_dict()
-	return jsonify(username_dict)
+	# username_dict = doc.to_dict()
+	users_concepts_doc = users_concepts_doc_ref.get()
+	doc_json = users_concepts_doc.to_dict()
+
+	return jsonify(doc_json)
 
 '''
 @app.route('/symbols/get_concepts', methods=['POST'])
@@ -220,54 +256,78 @@ def save_concept():
 	concept_dict = request.get_json()
 	concept = concept_dict["concept"]
 	username = concept_dict["username"]
-
 	print("save_concept: ", concept)
 
-	#get json from firestore
+	doc_ref = db.collection(u'projects').document(u''+projecstDate).collection(u''+username).document(concept)
 	doc = doc_ref.get()
-	json_data = doc.to_dict()
-	username_dict = json_data
 
-	if concept not in username_dict[username]["concepts"]:
-		#concept fields
-		concept_data = {}
-		concept_data["tree_view_json"] = {}
-		concept_data["selected_symbols"] = {}
-	
-		#generate tree view json 
+
+	if doc.exists:
+		print("project->user-> concept exist")
+		# print(u'Document data: {}'.format(doc.to_dict()))
+	else:
+		# create tree 
 		tree_view_json, all_cluster_words = get_cluster_json_for_root(concept)
-		concept_data["tree_view_json"] = json.dumps(tree_view_json)
+		db.collection(u'projects').document(u''+projecstDate).collection(u''+username).document(concept).set({"tree_view_json":json.dumps(tree_view_json)})
 
-		#add new concept to user 
-		path =  username +'.concepts.' + concept
-		doc_ref.update({u''+path:concept_data})
+		# concept_doc = all_user_doc_ref.get()
+		users_concepts_doc_ref = db.collection(u'projects').document(u''+projecstDate)
+		users_concepts_doc = users_concepts_doc_ref.get()
+		doc_json = users_concepts_doc.to_dict()
+		doc_json[username]["concepts"][concept] = {}
+		doc_json[username]["concepts"][concept]["selected_symbols"] = {}
 
-	doc = doc_ref.get()
-	username_dict = doc.to_dict()
-	return jsonify(username_dict)
+		users_concepts_doc_ref.update(doc_json)
+
+
+	# #get json from firestore
+	# doc = doc_ref.get()
+	# json_data = doc.to_dict()
+	# username_dict = json_data
+
+	# if concept not in username_dict[username]["concepts"]:
+	# 	#concept fields
+	# 	concept_data = {}
+	# 	concept_data["tree_view_json"] = {}
+	# 	concept_data["selected_symbols"] = {}
+	
+	# 	#generate tree view json 
+	# 	tree_view_json, all_cluster_words = get_cluster_json_for_root(concept)
+	# 	concept_data["tree_view_json"] = json.dumps(tree_view_json)
+
+	# 	#add new concept to user 
+	# 	path =  username +'.concepts.' + concept
+	# 	doc_ref.update({u''+path:concept_data})
+
+	# doc = doc_ref.get()
+	# username_dict = doc.to_dict()
+	return jsonify(doc_json)
 
 #done
 @app.route('/save_username', methods=['POST'])
 def save_username():
 	username = request.get_json()
-
 	print("save_username ", username)
-    
-	#get data from firestore
+
+	doc_ref = db.collection(u'projects').document(u''+projecstDate).collection(u''+username).document(u'allConcepts')
 	doc = doc_ref.get()
-	json_data = doc.to_dict()
-	username_dict = json_data
+	
+	if doc.exists:
+		print("project->user-> exists")
+		# print(u'Document data: {}'.format(doc.to_dict()))
+	else:
+		#new document for concepts 
+		db.collection(u'projects').document(u''+projecstDate).collection(u''+username).document(u'concept_data').set({"concepts_dict":{}})
+		all_user_doc_ref = db.collection(u'projects').document(u''+projecstDate)
+		# add new username to allUsers document 
+		allUser_doc = all_user_doc_ref.get()
+		doc_json = allUser_doc.to_dict()
+		doc_json[username] = {"concepts":{}}
 
-	if username not in username_dict:
-		username_data = {"concepts": {}}
+		# path =  "users_dict" 
+		all_user_doc_ref.update(doc_json)
 
-		#add new user to JSON 
-		path =  username 
-		doc_ref.update({u''+path:username_data})
-
-	doc = doc_ref.get()
-	username_dict = doc.to_dict()
-	return jsonify(username_dict)
+	return jsonify(doc_json)
 
 
 '''
@@ -290,8 +350,13 @@ def finder_for_concept(username,concept):
 	json_data = doc.to_dict()
 	username_dict = json_data
 
+	user_concept_tree_ref = db.collection(u'projects').document(u''+projecstDate).collection(u''+username).document(concept)
+	user_concept_tree_doc = user_concept_tree_ref.get()
+	doc_json = user_concept_tree_doc.to_dict()
+	tree_view_json = json.loads(doc_json['tree_view_json'])
+
 	# Retrieve tree_view_json and all_cluster_words, and convert them from string to dict
-	tree_view_json = json.loads(username_dict[username]["concepts"][concept]["tree_view_json"])
+	# tree_view_json = json.loads(username_dict[username]["concepts"][concept]["tree_view_json"])
 	# all_cluster_words = json.loads(username_dict[username]["concepts"][concept]["all_cluster_words"])
 	# print('Heres tree_view_json!!!\n\n\n')
 	# print(json.dumps(tree_view_json, indent=4))
