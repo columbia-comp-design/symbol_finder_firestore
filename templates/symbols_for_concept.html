@@ -86,6 +86,8 @@
               .attr({ "id": clusters_obj[i].key, "class": "clusterDiv" })
             );
 
+          $('#'+clusters_obj[i].key).hide();
+
           // $('#'+tree_view_json[i].title).html('<h3>' +tree_view_json[i].title + '</h3>');
           append_children_image_to_cluster(clusters_obj[i].children, clusters_obj[i].key);
 
@@ -96,20 +98,22 @@
       append_children_image_to_cluster = function (children, cluster_key) {
 
         for (let i = 0; i < children.length; i++) {
+
+          // if statement for each children 
           if (children[i].data.hasOwnProperty("saved_img")) {
             if (!isObjEmpty(children[i].data.saved_img)) {
               // console.log("children[i].data.saved_img i ",  children[i].title);
               // console.log( children[i].title + ": , children[i].data.saved_img i ",  children[i].data.saved_img);
               append_term_to_cluster(children[i], cluster_key)
+              $('#'+cluster_key).show();
               //append images to term 
 
             }
           }
 
-          //  console.log("before Recursive")
+          //  recursive
           if (children[i].hasOwnProperty("children")) {
-            // console.log("after Recursive")
-            console.log(children[i].title, " has children")
+            console.log(children[i].title, "has children")
             append_children_image_to_cluster(children[i].children, cluster_key);
           }
         }
