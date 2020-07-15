@@ -1491,7 +1491,8 @@ function fill_treeview_sidebar(node_name, tree_view_json) {
         var path = data["node"].getPath()
         var path_split = path.split("/")
 
-        if (path_split.length < 2) {
+        //debth
+        if (path_split.length < 4) {
 
           for (var i = 0; i < children_list.length; i++) {
             var child_node = children_list[i];

@@ -96,39 +96,38 @@ def modified_selected_symbols():
 	doc_ref.update({u''+dicPath:selected_symbols})
 	return jsonify(selected_symbols)
 
+# @app.route('/update_tree_view', method=['POST'])
+# def update_tree_view():
+# 	print("update_tree_view_json() called")
+# 	json_data = request.get_json()
+# 	retrieved_username = json_data["username"]
+# 	retrieved_concept = json_data["concept"]
+# 	retrieved_tree_view_json = json_data["tree_view_json"]
+# 	hi = "d"
 
-
-@app.route('/update_tree_view_json', methods=['POST'])
-def update_tree_view_json():
-    print("update_tree_view_json() called")
-    json_data = request.get_json()
-    retrieved_username = json_data["username"]
-    retrieved_concept = json_data["concept"]
-    retrieved_tree_view_json = json_data["tree_view_json"]
-
-    print ("\n\n\n Here's the retrieved_username ", retrieved_username)
-    print ("Here's the retrieved_concept: ", retrieved_concept)
-    dicPath =  retrieved_username +'.concepts.' + retrieved_concept + '.tree_view_json'
-    doc_ref.update({u''+dicPath:json.dumps(retrieved_tree_view_json)})
-    return jsonify(retrieved_tree_view_json)
-
-@app.route('/update_tree_view_json', methods=['POST'])
-def update_tree_view_json():
-    print("update_tree_view_json() called")
-    json_data = request.get_json()
-    retrieved_username = json_data["username"]
-    retrieved_concept = json_data["concept"]
-    retrieved_tree_view_json = json_data["tree_view_json"]
-
-    print ("\n\n\n Here's the retrieved_username ", retrieved_username)
-    print ("Here's the retrieved_concept: ", retrieved_concept)
-    dicPath =  retrieved_username +'.concepts.' + retrieved_concept + '.tree_view_json'
-    doc_ref.update({u''+dicPath:json.dumps(retrieved_tree_view_json)})
-    return jsonify(retrieved_tree_view_json)
 
 
 
 
+@app.route('/update_tree_view_json', methods=['POST'])
+def update_tree_view_json():
+	print("update_tree_view_json() called")
+	json_data = request.get_json()
+	retrieved_username = json_data["username"]
+	retrieved_concept = json_data["concept"]
+	retrieved_tree_view_json = json_data["tree_view_json"]
+
+	user_concept_tree_ref = db.collection(u'projects').document(u''+projecstDate).collection(u''+retrieved_username).document(retrieved_concept)
+	user_concept_tree_doc = user_concept_tree_ref.get()
+	doc_json = user_concept_tree_doc.to_dict()
+	doc_json['tree_view_json'] = json.dumps(retrieved_tree_view_json)
+
+	print ("\n\n\n Here's the retrieved_username ", retrieved_username)
+	print ("Here's the retrieved_concept: ", retrieved_concept)
+
+	# dicPath =  retrieved_username +'.concepts.' + retrieved_concept + '.tree_view_json'
+	user_concept_tree_ref.set(doc_json)
+	return jsonify(retrieved_tree_view_json)
 
 @app.route('/get_selected_symbols', methods=['POST'])
 def get_selected_symbols():
