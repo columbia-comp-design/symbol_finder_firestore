@@ -119,7 +119,7 @@ cluster_google_search = function (cluster_title) {
   var tree = $("#tree").fancytree("getTree");
   var node = tree.getNodeByKey(node_key);
 
-  if (isObjEmpty(node.data.google_image_urls)) {
+  // if (isObjEmpty(node.data.google_image_urls)) {
 
   $.when.apply(null, async_request).done(function () {
     console.log("all requests complete.")
@@ -135,13 +135,13 @@ cluster_google_search = function (cluster_title) {
     fill_grids_for_cluster_concept(url_obj, cluster_title, order);
   });
 
-  }
-  else{
-    console.log(" Reusing Search from from the server ")
-    url_obj = node.data.google_image_urls;
-    fill_grids_for_cluster_concept(url_obj, cluster_title, order);
+  //}
+  // else{
+  //   console.log(" Reusing Search from from the server ")
+  //   url_obj = node.data.google_image_urls;
+  //   fill_grids_for_cluster_concept(url_obj, cluster_title, order);
 
-  }
+  // }
 
 }
 
