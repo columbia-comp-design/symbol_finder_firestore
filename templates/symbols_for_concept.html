@@ -120,7 +120,7 @@
       }
 
       append_term_to_cluster = function (child, cluster_key) {
-        $('#' + cluster_key).append($('<div id=' + child.key + ' class="termDiv"> <h4 class=cluster_child_term >' + child.title + '</h4> </div>'))
+        $('#' + cluster_key).append($('<div id=' + child.key + ' class="termDiv"> <h4 class="cluster_child_term">' + child.title + '</h4> </div>'))
         // .attr({"id":child.key , "class":"cluster_child_term"});
         append_images_to_term(child);
       }
@@ -128,8 +128,11 @@
       append_images_to_term = function (child) {
         console.log(child.title + ": , child.data.saved_img i ", child.data.saved_img);
         save_img_dict_ex = child.data.saved_img;
+        
         for (k in child.data.saved_img) {
-          $('#' + child.key).append($('<img alt="" class="node_img" src=' + k + '>'))
+          $('#' + child.key).append($('<div> <img alt="" class="node_img" src=' + k + '> <h6 class="searchterm">' + child.data.saved_img[k].google_search_term + '</h6> </div>'))
+          
+          //for(k in save_img_dict_ex){ console.log(child.data.saved_img[k].google_search_term)}
           // console.log(k)
         }
         // child.data.saved_img.forEach((url, url) => console.log(`Key is ${url} and value is ${url.url}`));
