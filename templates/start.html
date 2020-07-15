@@ -237,7 +237,7 @@
 			data: JSON.stringify({ "concept": concept, "username": username }),
 			success: function (data, text) {
 				// console.log("data: " ,  data[select_username]["concepts"][entered_concept])
-				console.log('success: save_concept_ajax')
+				console.log('success: save_concept_ajax data: ', data)
 				username_dict = data;
 				add_concept_button(concept);
 				$('#concept_alert').hide();

@@ -76,7 +76,7 @@
 
       populate_clusters_images = function (tree_view_json) {
         // var symbol_grid  = document.getElementById('symbol_grid');
-        $('#symbol_grid');
+        // $('#symbol_grid');
         //symbol_grid.appendChild(image_table);
         //print all clusters
         for (let i = 0; i < tree_view_json.length; i++) {
@@ -121,9 +121,9 @@
 
       append_images_to_term = function (child) {
         console.log(child.title + ": , child.data.saved_img i ", child.data.saved_img);
-        // save_img_dict_ex = child.data.saved_img;
+        save_img_dict_ex = child.data.saved_img;
         for (k in child.data.saved_img) {
-          $('#' + child.key).append($('<img alt="" class="node_img" src=' + k + '/>'))
+          $('#' + child.key).append($('<img alt="" class="node_img" src=' + k + '>'))
           // console.log(k)
         }
         // child.data.saved_img.forEach((url, url) => console.log(`Key is ${url} and value is ${url.url}`));
