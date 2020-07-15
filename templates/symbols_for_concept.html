@@ -61,7 +61,7 @@
           if (tree_view_json.hasOwnProperty("children")) {
             let tree_view_json_children = tree_view_json.children;
             console.log("get_tree_view_json, tree_view_json.children:  ", tree_view_json_children);
-            populate_clusters_images(tree_view_json_children);
+            populate_clusters_images(tree_view_json_children); //pass as an argument as an array of children, (all the clusters obj) 
           }
 
 
@@ -74,20 +74,22 @@
         }
       });
 
-      populate_clusters_images = function (tree_view_json) {
+      populate_clusters_images = function (clusters_obj) {
         // var symbol_grid  = document.getElementById('symbol_grid');
         // $('#symbol_grid');
         //symbol_grid.appendChild(image_table);
         //print all clusters
-        for (let i = 0; i < tree_view_json.length; i++) {
-          console.log("\n\n cluster title: ", tree_view_json[i].title);
+        for (let i = 0; i < clusters_obj.length; i++) {
+          console.log("\n\n cluster title: ", clusters_obj[i].title);
           $('#symbol_grid')
-            .append($('<div>' + '<h3>' + tree_view_json[i].title + '</h3>' + '</div>')
-              .attr({ "id": tree_view_json[i].key, "class": "clusterDiv" })
+            .append($('<div>' + '<h3>' + clusters_obj[i].title + '</h3>' + '</div>')
+              .attr({ "id": clusters_obj[i].key, "class": "clusterDiv" })
             );
 
+          $('#'+clusters_obj[i].key).hide();
+
           // $('#'+tree_view_json[i].title).html('<h3>' +tree_view_json[i].title + '</h3>');
-          append_children_image_to_cluster(tree_view_json[i].children, tree_view_json[i].key);
+          append_children_image_to_cluster(clusters_obj[i].children, clusters_obj[i].key);
 
           //while children has children 
         }
@@ -96,25 +98,29 @@
       append_children_image_to_cluster = function (children, cluster_key) {
 
         for (let i = 0; i < children.length; i++) {
+
+          // if statement for each children 
           if (children[i].data.hasOwnProperty("saved_img")) {
             if (!isObjEmpty(children[i].data.saved_img)) {
               // console.log("children[i].data.saved_img i ",  children[i].title);
               // console.log( children[i].title + ": , children[i].data.saved_img i ",  children[i].data.saved_img);
               append_term_to_cluster(children[i], cluster_key)
+              $('#'+cluster_key).show();
               //append images to term 
 
             }
           }
 
-          if (children.hasOwnProperty("children")) {
-            console.log(children[i].title, " has children")
-            append_children_image_to_cluster(children.children, cluster_key);
+          //  recursive
+          if (children[i].hasOwnProperty("children")) {
+            console.log(children[i].title, "has children")
+            append_children_image_to_cluster(children[i].children, cluster_key);
           }
         }
       }
 
       append_term_to_cluster = function (child, cluster_key) {
-        $('#' + cluster_key).append($('<div id=' + child.key + '> <h4 class=cluster_child_term >' + child.title + '</h4> </div>'))
+        $('#' + cluster_key).append($('<div id=' + child.key + ' class="termDiv"> <h4 class=cluster_child_term >' + child.title + '</h4> </div>'))
         // .attr({"id":child.key , "class":"cluster_child_term"});
         append_images_to_term(child);
       }
