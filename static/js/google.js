@@ -154,8 +154,8 @@ function isObjEmpty(obj) {
 }
 
 
-multi_google_search = function (term, parent_term, tree_title_click, tree_node_key) {
-  console.log("calling multi_google_search!!, term: ", term, " ,tree_title_click: ", tree_title_click, "tree_node_key: ", tree_node_key);
+multi_google_search = function (term, parent_term, tree_title_click, node_path_key) {
+  console.log("calling multi_google_search!!, term: ", term, " ,tree_title_click: ", tree_title_click, "node_path_key: ", node_path_key);
 
   var parent_child_search = parent_term + " " + term;
   var icon_search = term + " icon";
@@ -164,7 +164,13 @@ multi_google_search = function (term, parent_term, tree_title_click, tree_node_k
 
 
   var tree = $("#tree").fancytree("getTree");
-  var node = tree.getNodeByKey(tree_node_key);
+  //find a node the node's path 
+  let keySeq = node_path_key.split('/');
+  let node =  tree.rootNode;
+  for(let i=0;i<keySeq.length;i++){
+    node = tree.getNodeByKey(keySeq[i],node);
+  }
+  // console.log(" found node: ", node.title, " and its path is ", node.getPath(true, "key", "/"));
 
   if (isObjEmpty(node.data.google_image_urls)) {
     //use google Search API 
@@ -200,14 +206,14 @@ multi_google_search = function (term, parent_term, tree_title_click, tree_node_k
       var updated_tree_view_json = tree.toDict(true);
       update_tree_view_json_to_server(updated_tree_view_json);
 
-      fill_grids_for_concept(url_obj, term, tree_node_key);
+      fill_grids_for_concept(url_obj, term, node_path_key);
 
     });
   }
   else {
     console.log(" Reusing Search from from the server ")
     url_obj = node.data.google_image_urls;
-    fill_grids_for_concept(url_obj, term, tree_node_key);
+    fill_grids_for_concept(url_obj, term, node_path_key);
   }
 }
 

@@ -515,6 +515,8 @@ def generate_treeview_json(sorted_cluster_list):
 		parent_node["expanded_once"] = False
 		parent_node["saved_img"] = {}
 		parent_node["google_image_urls"] = {}
+		# parent_node["node_key_path"] = ""
+
 
 		# Field for tracking selected clusters 
 		parent_node["selected"] = False
@@ -535,6 +537,8 @@ def generate_treeview_json(sorted_cluster_list):
 			#images 
 			child_node["saved_img"] = {}
 			child_node["google_image_urls"] = {}
+			# child_node["node_key_path"] = ""
+
 	
 		
 			parent_node["children"].append(child_node)
