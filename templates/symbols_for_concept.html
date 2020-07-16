@@ -40,6 +40,8 @@
 
     var concept_dict = null;
     var save_img_dict_ex;
+    var imageTotal = 0;
+    var clusterTotal = 0;
 
     window.onload = function () {
       // load past concepts
@@ -57,6 +59,8 @@
           let tree_view_json = JSON.parse(result);
 
           console.log("get_tree_view_json, tree_view_json:  ", tree_view_json);
+
+
 
           if (tree_view_json.hasOwnProperty("children")) {
             let tree_view_json_children = tree_view_json.children;
@@ -82,19 +86,24 @@
         for (let i = 0; i < clusters_obj.length; i++) {
           console.log("\n\n cluster title: ", clusters_obj[i].title);
           $('#symbol_grid')
-            .append($('<div>' + '<h3>' + clusters_obj[i].title + '</h3>' + '</div>')
-              .attr({ "id": clusters_obj[i].key, "class": "clusterDiv" })
+            .append($('<div>' + '<h3 class="clusterTitle">' + clusters_obj[i].title + '</h3>' + '</div>')
+              .attr({ "id": clusters_obj[i].key, "class": "clusterDiv fluid-container" })
             );
 
           $('#'+clusters_obj[i].key).hide();
-
+          //let clusterImageTotal = 0; 
           // $('#'+tree_view_json[i].title).html('<h3>' +tree_view_json[i].title + '</h3>');
+          //append_children_image_to_cluster(clusters_obj[i].children, clusters_obj[i].key, clusterImageTotal);
           append_children_image_to_cluster(clusters_obj[i].children, clusters_obj[i].key);
 
           //while children has children 
+
+          console.log("image total: " + imageTotal);
+          console.log("cluster total: " + clusterTotal);
+
         }
       }
-
+      //append_children_image_to_cluster = function (children, cluster_key, clusterImageTotal)
       append_children_image_to_cluster = function (children, cluster_key) {
 
         for (let i = 0; i < children.length; i++) {
@@ -104,10 +113,20 @@
             if (!isObjEmpty(children[i].data.saved_img)) {
               // console.log("children[i].data.saved_img i ",  children[i].title);
               // console.log( children[i].title + ": , children[i].data.saved_img i ",  children[i].data.saved_img);
+              //clusterImageTotal = append_term_to_cluster(children[i], cluster_key, clusterImageTotal)
               append_term_to_cluster(children[i], cluster_key)
-              $('#'+cluster_key).show();
-              //append images to term 
 
+              //display cluster if image count > 0
+
+              //console.log("Count: ", clusterImageTotal, " ", children[i].title);
+
+              //if(clusterImageTotal > 0){
+                $('#'+cluster_key).show();
+              //}
+
+              //console.log("total clusterImageTotal: " + clusterImageTotal);
+
+              //append images to term 
             }
           }
 
@@ -118,19 +137,25 @@
           }
         }
       }
-
+      //append_term_to_cluster = function (child, cluster_key, clusterImageTotal)
       append_term_to_cluster = function (child, cluster_key) {
-        $('#' + cluster_key).append($('<div id=' + child.key + ' class="termDiv"> <h4 class="cluster_child_term">' + child.title + '</h4> </div>'))
+        $('#' + cluster_key).append($('<div id=' + child.key + ' class="termDiv"> <h4 class="cluster_child_term">' + child.title + ' (' + Object.keys(child.data.saved_img).length + ') </h4> <div id=' + cluster_key + child.key + 'flex class="imageRow"> </div> </div>'))
         // .attr({"id":child.key , "class":"cluster_child_term"});
-        append_images_to_term(child);
+
+        //imageTotal += Object.keys(child.data.saved_img).length;
+        //clusterImageTotal += Object.keys(child.data.saved_img).length;
+
+        append_images_to_term(child, cluster_key);
+
+        //return clusterImageTotal;
       }
 
-      append_images_to_term = function (child) {
+      append_images_to_term = function (child, cluster_key) {
         console.log(child.title + ": , child.data.saved_img i ", child.data.saved_img);
         save_img_dict_ex = child.data.saved_img;
         
         for (k in child.data.saved_img) {
-          $('#' + child.key).append($('<div> <img alt="" class="node_img" src=' + k + '> <h6 class="searchterm">' + child.data.saved_img[k].google_search_term + '</h6> </div>'))
+          $('#' + cluster_key + child.key + 'flex').append($('<div class = "imgSearchTermGroup"> <img alt="" class="node_img" src=' + k + '> <h6 class="searchTerm">' + child.data.saved_img[k].google_search_term + '</h6> </div>'))
           
           //for(k in save_img_dict_ex){ console.log(child.data.saved_img[k].google_search_term)}
           // console.log(k)
