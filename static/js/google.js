@@ -6,8 +6,6 @@
 */
 
 
-//var api_key = "AIzaSyC8IhKmkYCKLLd2lNKx42UBGT268f9k8ew"
-var api_key = "AIzaSyCkJApxDUXRDGcufuckDjxSFGK7XDkpJKk"
 // Extracts the actual urls from the Google API results
 extract_links = function (search_results) {
   urls = [];

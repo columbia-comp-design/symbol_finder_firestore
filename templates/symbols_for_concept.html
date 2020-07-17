@@ -71,8 +71,10 @@
           if (tree_view_json.hasOwnProperty("children")) {
             let tree_view_json_children = tree_view_json.children;
             console.log("get_tree_view_json, tree_view_json.children:  ", tree_view_json_children);
-            $('#symbol_grid').append($('<h1><span>29</span> unique terms from <span>6</span> clusters, <span>77</span> images in total</h1>'));
+            $('#symbol_grid').append($('<h1><span id = "termTotal">29</span> unique terms from <span id = "clusterTotal">6</span> clusters, <span id = "imageTotal">77</span> images in total</h1>'));
             populate_clusters_images(tree_view_json_children); //pass as an argument as an array of children, (all the clusters obj) 
+
+            count_cluster_total(tree_view_json_children);
           }
 
 
@@ -104,6 +106,8 @@
             );
 
           $('#'+clusters_obj[i].key).hide();
+
+          let clusterHasImage = false;
           //let clusterImageTotal = 0; 
           // $('#'+tree_view_json[i].title).html('<h3>' +tree_view_json[i].title + '</h3>');
           //append_children_image_to_cluster(clusters_obj[i].children, clusters_obj[i].key, clusterImageTotal);
@@ -116,34 +120,55 @@
       //append_children_image_to_cluster = function (children, cluster_key, clusterImageTotal)
       append_term_images_to_cluster = function (children, cluster_key) {
 
+        //let clusterHasImage = false;
+
+        /*
+        // check if not leaf node
+        if (children[1].data.hasOwnProperty("saved_img")) { 
+          var saved_image_url = Object.keys(children[1].data.saved_img)[0];
+          var unique_tree_path = children[1].data.saved_img[saved_image_url].tree_path_ids; 
+        }
+        */
+
+        /*
+        if(unique_tree_path.split('/').length == 2){
+          clusterHasImage = false;
+          console.log('New Cluster: ' + cluster_key);
+        }
+        */
+
         for (let i = 0; i < children.length; i++) {
+          
+          //reset clusterHasImage
+          //let clusterHasImage = false;
 
           // if statement for each children 
           if (children[i].data.hasOwnProperty("saved_img")) {
             if (!isObjEmpty(children[i].data.saved_img)) {
-              // console.log("children[i].data.saved_img i ",  children[i].title);
-              // console.log( children[i].title + ": , children[i].data.saved_img i ",  children[i].data.saved_img);
-              //clusterImageTotal = append_term_to_cluster(children[i], cluster_key, clusterImageTotal)
+              
               append_term_to_cluster(children[i], cluster_key)
               
-              // update cluster_termTotal
-              cluster_termTotal++;
+              /*
+              // update cluster_termTotal and termTotal
+              if(!clusterHasImage){
+                console.log('BEFORE clusterTotal');
+                clusterTotal++
+                clusterHasImage = true;
+                $('#clusterTotal').text(clusterTotal);
+                console.log('AFTER clusterTotal');
+              }
+              */
+
+              cluster_termTotal++
+              termTotal++;
               $('#' + cluster_key + 'termTotal').text(cluster_termTotal);
+              $('#termTotal').text(termTotal);
               console.log(children[i].title+ ' cluster term total: ' + cluster_termTotal);
 
-              //display cluster if image count > 0
-
-              //console.log("Count: ", clusterImageTotal, " ", children[i].title);
-
-              //if(clusterImageTotal > 0){
               $('#'+cluster_key).show();
+              clusterHasImage = true;
 
               console.log('ClusterTotal: ', clusterTotal);
-              //}
-
-              //console.log("total clusterImageTotal: " + clusterImageTotal);
-
-              //append images to term 
             }
           }
 
@@ -153,6 +178,15 @@
             append_term_images_to_cluster(children[i].children, cluster_key);
           }
         }
+
+        /*
+        console.log('BEFORE clusterTotal');
+        if(clusterHasImage){
+          clusterTotal++;
+          $('#clusterTotal').text(clusterTotal);
+          console.log('AFTER clusterTotal');
+        }
+        */
       }
       //append_term_to_cluster = function (child, cluster_key, clusterImageTotal)
       append_term_to_cluster = function (child, cluster_key) {
@@ -171,9 +205,11 @@
         $('#' + cluster_key).append($('<div id=' + unique_tree_path + ' class="termDiv"> ' + 
           '<h4 class="cluster_child_term">' + child.title + ' (' + Object.keys(child.data.saved_img).length + ') </h4> <div id=' + unique_tree_path + 'flex_row class="imageRow"> </div> </div>'))
 
-        // update cluster_imageTotal
+        // update cluster_imageTotal & imageTotal
         cluster_imageTotal += Object.keys(child.data.saved_img).length;
+        imageTotal += Object.keys(child.data.saved_img).length;
         $('#' + cluster_key + 'imageTotal').text(cluster_imageTotal);
+        $('#imageTotal').text(imageTotal);
         console.log(child.title + 'cluster image total: ' + cluster_imageTotal);
 
         // .attr({"id":child.key , "class":"cluster_child_term"});
@@ -198,6 +234,20 @@
           // console.log(k)
         }
         // child.data.saved_img.forEach((url, url) => console.log(`Key is ${url} and value is ${url.url}`));
+      }
+
+      count_cluster_total = function (clusters_obj) {
+        console.log('hello');
+        for (let i = 0; i < clusters_obj.length; i++) {
+          let bool = $('#' + clusters_obj[i].key).css('display') == 'none'
+          console.log(clusters_obj[i].key + ' bool ', bool);
+          if(!bool){
+          //if(!$('#' + clusters_obj[i].key).is(':visible')){
+            clusterTotal++;
+            console.log('Added to clusterTotal: ' + clusters_obj[i].key + ' ' + clusterTotal);
+          }
+        }
+        $('#clusterTotal').text(clusterTotal);
       }
 
       function isObjEmpty(obj) {
