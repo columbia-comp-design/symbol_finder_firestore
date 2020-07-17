@@ -30,8 +30,11 @@
   </div>
 
   <script>
+    var child_example;
+
     var concept = '{{ concept }}'
     var username = '{{ username }}'
+
     function go_to_finder() {
       $('#loader').attr("style", "display:block")
       window.location.href = '/' + username + '/finder/' + concept;
@@ -139,23 +142,37 @@
       }
       //append_term_to_cluster = function (child, cluster_key, clusterImageTotal)
       append_term_to_cluster = function (child, cluster_key) {
-        $('#' + cluster_key).append($('<div id=' + child.key + ' class="termDiv"> <h4 class="cluster_child_term">' + child.title + ' (' + Object.keys(child.data.saved_img).length + ') </h4> <div id=' + cluster_key + child.key + 'flex class="imageRow"> </div> </div>'))
+        // $('#' + cluster_key).append($('<div id=' + child.key + ' class="termDiv"> <h4 class="cluster_child_term">' + child.title + ' (' + Object.keys(child.data.saved_img).length + ') </h4> <div id=' + cluster_key + child.key + 'flex class="imageRow"> </div> </div>'))
+        child_example = child;
+
+        // console.log("Here's tree_path_ids: ");
+        console.log(Object.keys(child.data.saved_img)[0]['tree_path_ids']);
+        var saved_image_url = Object.keys(child.data.saved_img)[0];
+        console.log("Here's the tree_path: ", child.data.saved_img[saved_image_url].tree_path_ids);
+        var unique_tree_path = child.data.saved_img[saved_image_url].tree_path_ids;
+
+        // Fix JQuery slash issue
+        unique_tree_path = unique_tree_path.replace(/\//g, "-");
+        console.log("Here's modified unique_tree_path: ", unique_tree_path);
+        $('#' + cluster_key).append($('<div id=' + unique_tree_path + ' class="termDiv"> <h4 class="cluster_child_term">' + child.title + ' (' + Object.keys(child.data.saved_img).length + ') </h4> <div id=' + unique_tree_path + 'flex_row class="imageRow"> </div> </div>'))
+
         // .attr({"id":child.key , "class":"cluster_child_term"});
 
         //imageTotal += Object.keys(child.data.saved_img).length;
         //clusterImageTotal += Object.keys(child.data.saved_img).length;
 
-        append_images_to_term(child, cluster_key);
+        append_images_to_term(child, unique_tree_path);
 
         //return clusterImageTotal;
       }
 
-      append_images_to_term = function (child, cluster_key) {
+      // Took out cluster_key
+      append_images_to_term = function (child, node_tree_path) {
         console.log(child.title + ": , child.data.saved_img i ", child.data.saved_img);
         save_img_dict_ex = child.data.saved_img;
-        
+
         for (k in child.data.saved_img) {
-          $('#' + cluster_key + child.key + 'flex').append($('<div class = "imgSearchTermGroup"> <img alt="" class="node_img" src=' + k + '> <h6 class="searchTerm">' + child.data.saved_img[k].google_search_term + '</h6> </div>'))
+          $('#' + node_tree_path + 'flex_row').append($('<div class = "imgSearchTermGroup"> <img alt="" class="node_img" src=' + k + '> <h6 class="searchTerm">' + child.data.saved_img[k].google_search_term + '</h6> </div>'))
           
           //for(k in save_img_dict_ex){ console.log(child.data.saved_img[k].google_search_term)}
           // console.log(k)
