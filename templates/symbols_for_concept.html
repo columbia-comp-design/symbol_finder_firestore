@@ -45,6 +45,9 @@
     var save_img_dict_ex;
     var imageTotal = 0;
     var clusterTotal = 0;
+    var termTotal = 0; 
+    var cluster_imageTotal = 0;
+    var cluster_termTotal = 0;
 
     window.onload = function () {
       // load past concepts
@@ -68,6 +71,7 @@
           if (tree_view_json.hasOwnProperty("children")) {
             let tree_view_json_children = tree_view_json.children;
             console.log("get_tree_view_json, tree_view_json.children:  ", tree_view_json_children);
+            $('#symbol_grid').append($('<h1><span>29</span> unique terms from <span>6</span> clusters, <span>77</span> images in total</h1>'));
             populate_clusters_images(tree_view_json_children); //pass as an argument as an array of children, (all the clusters obj) 
           }
 
@@ -86,10 +90,16 @@
         // $('#symbol_grid');
         //symbol_grid.appendChild(image_table);
         //print all clusters
+
         for (let i = 0; i < clusters_obj.length; i++) {
+          
+          //reset counts
+          cluster_imageTotal = 0; 
+          cluster_termTotal = 0; 
+
           console.log("\n\n cluster title: ", clusters_obj[i].title);
           $('#symbol_grid')
-            .append($('<div>' + '<h3 class="clusterTitle">' + clusters_obj[i].title + '</h3>' + '</div>')
+            .append($('<div>' + '<h3 class="clusterTitle">' + clusters_obj[i].title + ' [<span id = "'+ clusters_obj[i].key + 'termTotal">6</span> terms, <span id = "'+ clusters_obj[i].key + 'imageTotal">8</span> images] </h3>' + '</div>')
               .attr({ "id": clusters_obj[i].key, "class": "clusterDiv fluid-container" })
             );
 
@@ -97,17 +107,14 @@
           //let clusterImageTotal = 0; 
           // $('#'+tree_view_json[i].title).html('<h3>' +tree_view_json[i].title + '</h3>');
           //append_children_image_to_cluster(clusters_obj[i].children, clusters_obj[i].key, clusterImageTotal);
-          append_children_image_to_cluster(clusters_obj[i].children, clusters_obj[i].key);
+          append_term_images_to_cluster(clusters_obj[i].children, clusters_obj[i].key);
 
           //while children has children 
-
-          console.log("image total: " + imageTotal);
-          console.log("cluster total: " + clusterTotal);
 
         }
       }
       //append_children_image_to_cluster = function (children, cluster_key, clusterImageTotal)
-      append_children_image_to_cluster = function (children, cluster_key) {
+      append_term_images_to_cluster = function (children, cluster_key) {
 
         for (let i = 0; i < children.length; i++) {
 
@@ -118,13 +125,20 @@
               // console.log( children[i].title + ": , children[i].data.saved_img i ",  children[i].data.saved_img);
               //clusterImageTotal = append_term_to_cluster(children[i], cluster_key, clusterImageTotal)
               append_term_to_cluster(children[i], cluster_key)
+              
+              // update cluster_termTotal
+              cluster_termTotal++;
+              $('#' + cluster_key + 'termTotal').text(cluster_termTotal);
+              console.log(children[i].title+ ' cluster term total: ' + cluster_termTotal);
 
               //display cluster if image count > 0
 
               //console.log("Count: ", clusterImageTotal, " ", children[i].title);
 
               //if(clusterImageTotal > 0){
-                $('#'+cluster_key).show();
+              $('#'+cluster_key).show();
+
+              console.log('ClusterTotal: ', clusterTotal);
               //}
 
               //console.log("total clusterImageTotal: " + clusterImageTotal);
@@ -136,7 +150,7 @@
           //  recursive
           if (children[i].hasOwnProperty("children")) {
             console.log(children[i].title, "has children")
-            append_children_image_to_cluster(children[i].children, cluster_key);
+            append_term_images_to_cluster(children[i].children, cluster_key);
           }
         }
       }
@@ -154,7 +168,13 @@
         // Fix JQuery slash issue
         unique_tree_path = unique_tree_path.replace(/\//g, "-");
         console.log("Here's modified unique_tree_path: ", unique_tree_path);
-        $('#' + cluster_key).append($('<div id=' + unique_tree_path + ' class="termDiv"> <h4 class="cluster_child_term">' + child.title + ' (' + Object.keys(child.data.saved_img).length + ') </h4> <div id=' + unique_tree_path + 'flex_row class="imageRow"> </div> </div>'))
+        $('#' + cluster_key).append($('<div id=' + unique_tree_path + ' class="termDiv"> ' + 
+          '<h4 class="cluster_child_term">' + child.title + ' (' + Object.keys(child.data.saved_img).length + ') </h4> <div id=' + unique_tree_path + 'flex_row class="imageRow"> </div> </div>'))
+
+        // update cluster_imageTotal
+        cluster_imageTotal += Object.keys(child.data.saved_img).length;
+        $('#' + cluster_key + 'imageTotal').text(cluster_imageTotal);
+        console.log(child.title + 'cluster image total: ' + cluster_imageTotal);
 
         // .attr({"id":child.key , "class":"cluster_child_term"});
 
