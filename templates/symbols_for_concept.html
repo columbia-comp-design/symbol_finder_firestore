@@ -71,7 +71,7 @@
           if (tree_view_json.hasOwnProperty("children")) {
             let tree_view_json_children = tree_view_json.children;
             console.log("get_tree_view_json, tree_view_json.children:  ", tree_view_json_children);
-            $('#symbol_grid').append($('<h1><span id = "termTotal">29</span> unique terms from <span id = "clusterTotal">6</span> clusters, <span id = "imageTotal">77</span> images in total</h1>'));
+            $('#symbol_grid').append($('<h1 class = "summaryTitle"><span id = "termTotal">29</span> unique term(s) from <span id = "clusterTotal">6</span> cluster(s), <span id = "imageTotal">77</span> image(s) in total</h1>'));
             populate_clusters_images(tree_view_json_children); //pass as an argument as an array of children, (all the clusters obj) 
 
             count_cluster_total(tree_view_json_children);
@@ -101,7 +101,7 @@
 
           console.log("\n\n cluster title: ", clusters_obj[i].title);
           $('#symbol_grid')
-            .append($('<div>' + '<h3 class="clusterTitle">' + clusters_obj[i].title + ' [<span id = "'+ clusters_obj[i].key + 'termTotal">6</span> terms, <span id = "'+ clusters_obj[i].key + 'imageTotal">8</span> images] </h3>' + '</div>')
+            .append($('<div>' + '<h3 class="clusterTitle">' + clusters_obj[i].title + '<span class="clusterInfo"> [<span id = "'+ clusters_obj[i].key + 'termTotal">6</span> term(s), <span id = "'+ clusters_obj[i].key + 'imageTotal">8</span> image(s)] </span></h3>' + '</div>')
               .attr({ "id": clusters_obj[i].key, "class": "clusterDiv fluid-container" })
             );
 
@@ -203,7 +203,7 @@
         unique_tree_path = unique_tree_path.replace(/\//g, "-");
         console.log("Here's modified unique_tree_path: ", unique_tree_path);
         $('#' + cluster_key).append($('<div id=' + unique_tree_path + ' class="termDiv"> ' + 
-          '<h4 class="cluster_child_term">' + child.title + ' (' + Object.keys(child.data.saved_img).length + ') </h4> <div id=' + unique_tree_path + 'flex_row class="imageRow"> </div> </div>'))
+          '<h4 class="cluster_child_term">' + child.title + ' (' + Object.keys(child.data.saved_img).length + ') </h4> <div id=' + unique_tree_path + 'image_row class="imageRow"> </div> </div>'))
 
         // update cluster_imageTotal & imageTotal
         cluster_imageTotal += Object.keys(child.data.saved_img).length;
@@ -228,7 +228,7 @@
         save_img_dict_ex = child.data.saved_img;
 
         for (k in child.data.saved_img) {
-          $('#' + node_tree_path + 'flex_row').append($('<div class = "imgSearchTermGroup"> <img alt="" class="node_img" src=' + k + '> <h6 class="searchTerm">' + child.data.saved_img[k].google_search_term + '</h6> </div>'))
+          $('#' + node_tree_path + 'image_row').append($('<div class = "imgSearchTermGroup"> <img alt="" class="node_img" src=' + k + '> <h6 class="searchTerm">' + child.data.saved_img[k].google_search_term + '</h6> </div>'))
           
           //for(k in save_img_dict_ex){ console.log(child.data.saved_img[k].google_search_term)}
           // console.log(k)

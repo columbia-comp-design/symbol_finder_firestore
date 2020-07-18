@@ -31,7 +31,7 @@
 .clusterDiv{
   text-align: left;
   margin-left: 10vw;
-  margin-top: 5vw;
+  margin-top: 2vw;
 }
 
 .termDiv{
@@ -44,4 +44,17 @@
   flex-wrap: wrap;
   margin-left: 3vw;
   margin-right: 3vw;
+}
+
+.summaryTitle{
+  text-align: left;
+  color: black;
+  font-weight: bold;
+  margin-left: 5vw;
+  margin-bottom: 0vw; 
+  margin-top: 1vw; 
+}
+
+.clusterInfo{
+  font-weight: normal;
 }
