@@ -20,10 +20,13 @@
 
   <div align="center">
     <br>
-    <h2> Symbols for: <b> {{ concept }} </b> </h2>
-    <br>
-    <button id="find_symbol_btn" class="symbol_button" onclick="go_to_finder()"> Find more symbols! </button>
-    <br>
+    <div id="topWrap">
+      <h2> Symbols for: <b> {{ concept }} </b> 
+      </h2>
+      <div id="find_symbol_btn" class="find_symbol_button" onclick="go_to_finder()"> Find more symbols! </div>
+
+    </div>
+  
     <hr>
     <div style="display:block" id="loader" class="loader"></div>
     <div id="symbol_grid"></div>
@@ -71,7 +74,7 @@
           if (tree_view_json.hasOwnProperty("children")) {
             let tree_view_json_children = tree_view_json.children;
             console.log("get_tree_view_json, tree_view_json.children:  ", tree_view_json_children);
-            $('#symbol_grid').append($('<h1 class = "summaryTitle"><span id = "termTotal">29</span> unique term(s) from <span id = "clusterTotal">6</span> cluster(s), <span id = "imageTotal">77</span> image(s) in total</h1>'));
+            $('#symbol_grid').append($('<h2 class = "summaryTitle"><span id = "termTotal">0 unique term</span> from <span id = "clusterTotal">0 cluster,</span> <span id = "imageTotal">0 image</span>  in total</h2>'));
             populate_clusters_images(tree_view_json_children); //pass as an argument as an array of children, (all the clusters obj) 
 
             count_cluster_total(tree_view_json_children);
@@ -101,7 +104,7 @@
 
           console.log("\n\n cluster title: ", clusters_obj[i].title);
           $('#symbol_grid')
-            .append($('<div>' + '<h3 class="clusterTitle">' + clusters_obj[i].title + '<span class="clusterInfo"> [<span id = "'+ clusters_obj[i].key + 'termTotal">6</span> term(s), <span id = "'+ clusters_obj[i].key + 'imageTotal">8</span> image(s)] </span></h3>' + '</div>')
+            .append($('<div>' + '<h3 class="clusterTitle">' + clusters_obj[i].title + '<span class="clusterInfo"> [<span id = "'+ clusters_obj[i].key + 'termTotal">0 term </span>, <span id = "'+ clusters_obj[i].key + 'imageTotal">0 image</span>] </span></h3>' + '</div>')
               .attr({ "id": clusters_obj[i].key, "class": "clusterDiv fluid-container" })
             );
 
@@ -147,28 +150,21 @@
             if (!isObjEmpty(children[i].data.saved_img)) {
               
               append_term_to_cluster(children[i], cluster_key)
-              
-              /*
-              // update cluster_termTotal and termTotal
-              if(!clusterHasImage){
-                console.log('BEFORE clusterTotal');
-                clusterTotal++
-                clusterHasImage = true;
-                $('#clusterTotal').text(clusterTotal);
-                console.log('AFTER clusterTotal');
-              }
-              */
 
               cluster_termTotal++
               termTotal++;
-              $('#' + cluster_key + 'termTotal').text(cluster_termTotal);
-              $('#termTotal').text(termTotal);
-              console.log(children[i].title+ ' cluster term total: ' + cluster_termTotal);
 
+
+              if(cluster_termTotal>1 ? $('#' + cluster_key + 'termTotal').text(cluster_termTotal + " terms") :  $('#' + cluster_key + 'termTotal').text(cluster_termTotal + " term") );
+
+              // $('#' + cluster_key + 'termTotal').text(cluster_termTotal);
+
+              if(termTotal>1 ? $('#termTotal').text(termTotal + " unique terms ") :  $('#termTotal').text(termTotal + " term ") );
+             
               $('#'+cluster_key).show();
               clusterHasImage = true;
 
-              console.log('ClusterTotal: ', clusterTotal);
+              // console.log('ClusterTotal: ', clusterTotal);
             }
           }
 
@@ -178,15 +174,6 @@
             append_term_images_to_cluster(children[i].children, cluster_key);
           }
         }
-
-        /*
-        console.log('BEFORE clusterTotal');
-        if(clusterHasImage){
-          clusterTotal++;
-          $('#clusterTotal').text(clusterTotal);
-          console.log('AFTER clusterTotal');
-        }
-        */
       }
       //append_term_to_cluster = function (child, cluster_key, clusterImageTotal)
       append_term_to_cluster = function (child, cluster_key) {
@@ -208,14 +195,13 @@
         // update cluster_imageTotal & imageTotal
         cluster_imageTotal += Object.keys(child.data.saved_img).length;
         imageTotal += Object.keys(child.data.saved_img).length;
-        $('#' + cluster_key + 'imageTotal').text(cluster_imageTotal);
-        $('#imageTotal').text(imageTotal);
-        console.log(child.title + 'cluster image total: ' + cluster_imageTotal);
 
-        // .attr({"id":child.key , "class":"cluster_child_term"});
+        // $('#' + cluster_key + 'imageTotal').text(cluster_imageTotal);
+        if(cluster_imageTotal>1 ? $('#' + cluster_key + 'imageTotal').text(cluster_imageTotal + " images") :  $('#' + cluster_key + 'imageTotal').text(cluster_imageTotal + " image") );
 
-        //imageTotal += Object.keys(child.data.saved_img).length;
-        //clusterImageTotal += Object.keys(child.data.saved_img).length;
+
+        // $('#imageTotal').text(imageTotal);
+        if(imageTotal>1 ? $('#imageTotal').text(termTotal + " images ") :  $('#imageTotal').text(termTotal + " image ") );
 
         append_images_to_term(child, unique_tree_path);
 
@@ -247,7 +233,9 @@
             console.log('Added to clusterTotal: ' + clusters_obj[i].key + ' ' + clusterTotal);
           }
         }
-        $('#clusterTotal').text(clusterTotal);
+        
+        if(clusterTotal>1 ? $('#clusterTotal').text(clusterTotal + " clusters, ") :  $('#termTotal').text(clusterTotal + " cluster, ") );
+        // $('#clusterTotal').text(clusterTotal);
       }
 
       function isObjEmpty(obj) {

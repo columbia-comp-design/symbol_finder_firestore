@@ -1719,7 +1719,7 @@ function fill_treeview_sidebar(node_name, tree_view_json) {
             while (i < regular_swow_words.length && nodes_added < new_node_num) {
               console.log("i: " + String(i));
               console.log(regular_swow_words.length)
-              console.log("nodes_added: " + String(nodes_added))
+              console.log("nodes_added: Adaviv" + String(nodes_added))
               console.log("new_node_num: " + String(new_node_num))
               var swow_word = regular_swow_words[i];
               var new_node = { title: swow_word, icon: false, is_cluster: false, expanded_once: false, google_image_urls: {}, saved_img: {} };

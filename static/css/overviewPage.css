@@ -2,6 +2,10 @@
   margin-bottom: 5vw;
 }
 
+#symbol_grid>h1,h2,h3, h4, h5, h6{
+  font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+}
+
 .cluster_children_term{
   text-align: left;
 }
@@ -57,4 +61,35 @@
 
 .clusterInfo{
   font-weight: normal;
+}
+
+.find_symbol_button {
+  border: #000 solid 2px;
+  border-color: black;
+  background-color: inherit;
+  padding-left: 8px;
+  padding-right: 8px;
+  padding-top: 5px;
+  font-size: 16px;
+  margin-left: 20px;
+  margin-bottom: 0px;
+  cursor: pointer;
+  /* display: inline-block; */
+  border-radius: 10px;
+
+}
+
+.find_symbol_button:hover {background: #eee;}
+
+#topWrap{
+  padding-left: 20px;
+  text-align: left;
+  justify-self: center;
+  display: flex;
+  flex-direction: row;
+}
+
+#topWrap>h2{
+  margin: 0;
+  padding: 0;
 }
