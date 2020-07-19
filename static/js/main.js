@@ -487,11 +487,16 @@ function update_tree_view_json_to_server(updated_tree_view_json) {
   });
 }
 
-function add_image_to_node(node_key, google_search_term, url) {
-  console.log(" called add_image_to_node(", node_key + ")")
+function add_image_to_node(node_path_key, google_search_term, url) {
+  console.log(" called add_image_to_node(", node_path_key + ")")
 
   var tree = $("#tree").fancytree("getTree");
-  var node = tree.getNodeByKey(node_key);
+  let keySeq = node_path_key.split('/');
+  let node =  tree.rootNode;
+  for(let i=0;i<keySeq.length;i++){
+    node = tree.getNodeByKey(keySeq[i],node);
+  }
+
 
   node.data.saved_img[url] = {};
   node.data.saved_img[url]["google_search_term"] = google_search_term;
@@ -509,11 +514,16 @@ function add_image_to_node(node_key, google_search_term, url) {
 
 }
 
-function delete_image_from_node(node_key, url) {
-  console.log(" called add_image_to_node(", node_key + ")")
+function delete_image_from_node(node_path_key, url) {
+  console.log(" called add_image_to_node(", node_path_key + ")")
 
   var tree = $("#tree").fancytree("getTree");
-  var node = tree.getNodeByKey(node_key);
+  let keySeq = node_path_key.split('/');
+  let node =  tree.rootNode;
+  for(let i=0;i<keySeq.length;i++){
+    node = tree.getNodeByKey(keySeq[i],node);
+  }
+
 
   delete node.data.saved_img[url];
 
@@ -569,7 +579,7 @@ function add_custom_node(node) {
 
       }
 
-      multi_google_search(val, node.title, true, new_node.key);
+      multi_google_search(val, node.title, true, data.node.getPath(true, "key", "/"));
 
       tree_view_json = node.tree.toDict(true);
       update_tree_view_json_to_server(tree_view_json);
@@ -581,8 +591,8 @@ function add_custom_node(node) {
 
 
 //term is search term 
-function confirm_image3(tree_view_node_term, term, url, image_id, tree_node_key) {
-  console.log("confirm_image3 : key: ", tree_node_key)
+function confirm_image3(tree_view_node_term, term, url, image_id, node_path_key) {
+  console.log("confirm_image3 : key: ", node_path_key)
 
   confirm_time = performance.now();
   var to_remove = false;
@@ -594,7 +604,12 @@ function confirm_image3(tree_view_node_term, term, url, image_id, tree_node_key)
   } else { img.classList.add("confirmed"); }
 
   var tree = $("#tree").fancytree("getTree");
-  var node = tree.getNodeByKey(tree_node_key);
+  //find node 
+  let keySeq = node_path_key.split('/');
+  let node =  tree.rootNode;
+  for(let i=0;i<keySeq.length;i++){
+    node = tree.getNodeByKey(keySeq[i],node);
+  }
 
   if (url in node.data.saved_img) {
     // delete_elem_from_table(url,term,image_id);
@@ -610,7 +625,7 @@ function confirm_image3(tree_view_node_term, term, url, image_id, tree_node_key)
       data: JSON.stringify({ "selected_symbols": selected_symbols, "username": username, "concept": concept }),
       success: function (data) {
         selected_symbols = data;
-        // console.log("Ajax worked for /modified_selected_symbols.");
+        // console.log("removed image for node: ", node.title);
       },
       error: function (request, status, error) {
         console.log("Error");
@@ -620,7 +635,7 @@ function confirm_image3(tree_view_node_term, term, url, image_id, tree_node_key)
       }
     });
 
-    delete_image_from_node(tree_node_key, url);
+    delete_image_from_node(node_path_key, url);
 
     updateProgress();
     // updateNodes();
@@ -656,7 +671,7 @@ function confirm_image3(tree_view_node_term, term, url, image_id, tree_node_key)
     //--------------------------------------------------------------------//
     // NEW VERSION OF SAVIGN IMAGES //
 
-    add_image_to_node(tree_node_key, term, url);
+    add_image_to_node(node_path_key, term, url);
 
   }
 
@@ -742,7 +757,7 @@ function confirm_image2(tree_view_node_term, term, url, image_id) {
 
     console.log("concept: ", concept)
 
-
+    //give node id //(path)
     add_image_to_node(node_key, term, url);
 
 
@@ -863,8 +878,8 @@ create_cluster_image_grid = function (term, urls, url_to_gs_dict) {
 }
 
 
-create_image_grid3 = function (term, urls, concept, tree_node_key) {
-  console.log('create_image_grid3 called(), term: ', term, "urls: ", urls, " concept: ", concept, " key: ", tree_node_key)
+create_image_grid3 = function (term, urls, concept, node_path_key) {
+  console.log('create_image_grid3 called(), term: ', term, "urls: ", urls, " concept: ", concept, " key: ", node_path_key)
   // var urls = ["https://images-na.ssl-images-amazon.com/images/I/61YL-c2pZOL._AC_SX355_.jpg", "https://images-na.ssl-images-amazon.com/images/I/61YL-c2pZOL._AC_SX355_.jpg", "https://images-na.ssl-images-amazon.com/images/I/61YL-c2pZOL._AC_SX355_.jpg", "https://images-na.ssl-images-amazon.com/images/I/61YL-c2pZOL._AC_SX355_.jpg", "https://images-na.ssl-images-amazon.com/images/I/61YL-c2pZOL._AC_SX355_.jpg", "https://images-na.ssl-images-amazon.com/images/I/61YL-c2pZOL._AC_SX355_.jpg", "https://images-na.ssl-images-amazon.com/images/I/61YL-c2pZOL._AC_SX355_.jpg", "https://images-na.ssl-images-amazon.com/images/I/61YL-c2pZOL._AC_SX355_.jpg", "https://images-na.ssl-images-amazon.com/images/I/61YL-c2pZOL._AC_SX355_.jpg"]
   image_table = document.createElement('table');
   row_num = 0;
@@ -874,7 +889,13 @@ create_image_grid3 = function (term, urls, concept, tree_node_key) {
   cell_num = 0;
 
   var tree = $("#tree").fancytree("getTree");
-  var node = tree.getNodeByKey(tree_node_key);
+
+  let keySeq = node_path_key.split('/');
+  let node =  tree.rootNode;
+  for(let i=0;i<keySeq.length;i++){
+    node = tree.getNodeByKey(keySeq[i],node);
+  }
+
 
   for (var i = 0; i < urls.length; i++) {
     var url = urls[i];
@@ -885,7 +906,7 @@ create_image_grid3 = function (term, urls, concept, tree_node_key) {
     cell_id = term + '_' + String(i)
     image.setAttribute('id', cell_id)
     image.setAttribute('class', 'img_in_table');
-    image.setAttribute('onclick', 'confirm_image3(\"' + concept + '\",\"' + term + '\",\"' + url + '\",\"' + cell_id + '\",\"' + tree_node_key + '\")');
+    image.setAttribute('onclick', 'confirm_image3(\"' + concept + '\",\"' + term + '\",\"' + url + '\",\"' + cell_id + '\",\"' + node_path_key + '\")');
 
     if (url in node.data.saved_img) {
       image.classList.add('confirmed');
@@ -1123,8 +1144,8 @@ toggle_show_second_row = function (row_id, but) {
 
 }
 
-fill_grids_for_concept = function (url_obj, concept, tree_node_key) {
-  console.log("called fill_grids_for_concept!!, url_obj: ", url_obj, " , concept: ", concept, ", tree_node_key:  ", tree_node_key);
+fill_grids_for_concept = function (url_obj, concept, node_path_key) {
+  console.log("called fill_grids_for_concept!!, url_obj: ", url_obj, " , concept: ", concept, ", node_path_key:  ", node_path_key);
 
   var image_grids_div = document.getElementById("image_grids");
   image_grids_div.innerHTML = "";
@@ -1152,7 +1173,7 @@ fill_grids_for_concept = function (url_obj, concept, tree_node_key) {
     padding_div.setAttribute("class", "padding_div");
 
     // image_table = create_image_grid2(search_term, urls, concept);
-    image_table = create_image_grid3(search_term, urls, concept, tree_node_key);
+    image_table = create_image_grid3(search_term, urls, concept, node_path_key);
 
     var show_second_row_button = document.createElement("button");
     show_second_row_button.setAttribute("onclick", "toggle_show_second_row(\"" + search_term + "_row_2\",this)");
@@ -1489,9 +1510,10 @@ function fill_treeview_sidebar(node_name, tree_view_json) {
 
 
         var path = data["node"].getPath()
+        console.log("data[node].getPath(): ", data["node"].getPath())
         var path_split = path.split("/")
 
-        //debth
+        //depth
         if (path_split.length < 4) {
 
           for (var i = 0; i < children_list.length; i++) {
@@ -1622,7 +1644,7 @@ function fill_treeview_sidebar(node_name, tree_view_json) {
               parent_title = split_parent[0];
             }
 
-            multi_google_search(this_node_title, parent_title, true, data.node.key);
+            multi_google_search(this_node_title, parent_title, true, data.node.getPath(true, "key", "/"));
           }
         }
       }
@@ -1656,7 +1678,8 @@ function fill_treeview_sidebar(node_name, tree_view_json) {
 
           var key_path = data["node"].getKeyPath();
           var title_path = data["node"].getPath();
-          multi_google_search(this_node_title, parent_title, true, data.node.key);
+          //node.getPath(true, "key", "/");
+          multi_google_search(this_node_title, parent_title, true, data.node.getPath(true, "key", "/"));
         }
 
 
@@ -1696,7 +1719,7 @@ function fill_treeview_sidebar(node_name, tree_view_json) {
             while (i < regular_swow_words.length && nodes_added < new_node_num) {
               console.log("i: " + String(i));
               console.log(regular_swow_words.length)
-              console.log("nodes_added: " + String(nodes_added))
+              console.log("nodes_added: Adaviv" + String(nodes_added))
               console.log("new_node_num: " + String(new_node_num))
               var swow_word = regular_swow_words[i];
               var new_node = { title: swow_word, icon: false, is_cluster: false, expanded_once: false, google_image_urls: {}, saved_img: {} };
@@ -1753,7 +1776,7 @@ function fill_treeview_sidebar(node_name, tree_view_json) {
 
               var key_path = data["node"].getKeyPath();
               var title_path = data["node"].getPath();
-              multi_google_search(this_node_title, parent_title, true, data.node.key);
+              multi_google_search(this_node_title, parent_title, true, data.node.getPath(true, "key", "/"));
             }
           }
 
