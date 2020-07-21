@@ -155,11 +155,11 @@
               termTotal++;
 
 
-              if(cluster_termTotal>1 ? $('#' + cluster_key + 'termTotal').text(cluster_termTotal + " terms") :  $('#' + cluster_key + 'termTotal').text(cluster_termTotal + " term") );
+              if(cluster_termTotal>0 ? $('#' + cluster_key + 'termTotal').text(cluster_termTotal + " terms") :  $('#' + cluster_key + 'termTotal').text(cluster_termTotal + " term") );
 
               // $('#' + cluster_key + 'termTotal').text(cluster_termTotal);
 
-              if(termTotal>1 ? $('#termTotal').text(termTotal + "/20 unique terms ") :  $('#termTotal').text(termTotal + "/20 term ") );
+              if(termTotal>0 ? $('#termTotal').text(termTotal + "/20 unique terms ") :  $('#termTotal').text(termTotal + "/20 term ") );
              
               $('#'+cluster_key).show();
               clusterHasImage = true;
@@ -197,7 +197,7 @@
         imageTotal += Object.keys(child.data.saved_img).length;
 
         // $('#' + cluster_key + 'imageTotal').text(cluster_imageTotal);
-        if(cluster_imageTotal>1 ? $('#' + cluster_key + 'imageTotal').text(cluster_imageTotal + " images") :  $('#' + cluster_key + 'imageTotal').text(cluster_imageTotal + " image") );
+        if(cluster_imageTotal>0 ? $('#' + cluster_key + 'imageTotal').text(cluster_imageTotal + " images") :  $('#' + cluster_key + 'imageTotal').text(cluster_imageTotal + " image") );
 
 
         // $('#imageTotal').text(imageTotal);/
@@ -224,7 +224,7 @@
             $('#' + node_tree_path + 'image_row').append($('<div class = "imgSearchTermGroup"> <a  title="perform google search" target="_blank" href="'+googleSearch+'"> <img alt="" class="node_img" src=' + k + '> </a> <div class="imageDescription"> <h6>(' + String.fromCharCode(countImage + asciiCode)  + ')</h6> <h6 class="searchTerm">' + child.data.saved_img[k].google_search_term + '</h6> <h6></h6> </div> </div>'))
           }
           else{
-            $('#' + node_tree_path + 'image_row').append($('<div class = "imgSearchTermGroup"> <img alt="" class="node_img" src=' + k + '> <div class="imageDescription"> <h6>(' + (countImage - 25)  + ')</h6> <h6 class="searchTerm">' + child.data.saved_img[k].google_search_term + '</h6> <h6></h6> </div> </div>'))
+            $('#' + node_tree_path + 'image_row').append($('<div class = "imgSearchTermGroup"> <a  title="perform google search" target="_blank" href="'+googleSearch+'"> <img alt="" class="node_img" src=' + k + '> </a> <div class="imageDescription"> <h6>(' + (countImage - 25)  + ')</h6> <h6 class="searchTerm">' + child.data.saved_img[k].google_search_term + '</h6> <h6></h6> </div> </div>'))
           }
           countImage++;
 
@@ -235,7 +235,6 @@
       }
 
       count_cluster_total = function (clusters_obj) {
-        console.log('hello');
         for (let i = 0; i < clusters_obj.length; i++) {
           let bool = $('#' + clusters_obj[i].key).css('display') == 'none'
           console.log(clusters_obj[i].key + ' bool ', bool);
@@ -246,7 +245,7 @@
           }
         }
         
-        if(clusterTotal>1 ? $('#clusterTotal').text(clusterTotal + " clusters, ") :  $('#termTotal').text(clusterTotal + " cluster, ") );
+        if(clusterTotal>0 ? $('#clusterTotal').text(clusterTotal + " clusters, ") :  $('#clusterTotal').text(clusterTotal + " cluster, ") );
         // $('#clusterTotal').text(clusterTotal);
       }
 

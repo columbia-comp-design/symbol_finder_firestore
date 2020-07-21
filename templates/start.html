@@ -41,7 +41,7 @@
 			<label for="inp" class="inp" id="concept_input">
 				<h5>New concept:</h5>
 				<div id="concept_alert" style="display: none;">concept already exists</div>
-				<div id="concept_not_in_swow_dict" style="display: none;">We do not have this concept in our dictionary
+				<div id="concept_not_in_swow_dict" style="display: none;">concept not found in the dictionary
 				</div>
 
 				<input type="text" id="concept_text" placeholder="Enter a new concept to symbolize">
@@ -271,8 +271,45 @@
 	}
 
 	function go_to_symbol_page(concept, username) {
-		console.log(concept)
-		window.location.href = username + '/symbols/' + concept;
+		// console.log(concept)
+
+		$.ajax({
+        type: "POST",
+        url: "/get_tree_view_json",
+        dataType: "json",
+        contentType: "application/json; charset=utf-8",
+        data: JSON.stringify({ "username": username, "concept": concept }),
+        success: function (result) {
+
+        //   $('#loader').attr("style", "display:none")
+          let tree_view_json = JSON.parse(result);
+
+
+		// //if concept has images 
+		// window.location.href = username + '/symbols/' + concept;
+
+		// //find more symbols 
+		// window.location.href = '/' + username + '/finder/' + concept;
+
+
+          if (tree_view_json.hasOwnProperty("children")) {
+			// let tree_view_json_children = tree_view_json.children;
+			window.location.href = username + '/symbols/' + concept;
+		  }
+		  else{
+			window.location.href = '/' + username + '/finder/' + concept;
+		  }
+
+        },
+        error: function (request, status, error) {
+          console.log("Error");
+          console.log(request)
+          console.log(status)
+          console.log(error)
+        }
+      });
+
+	
 	}
 
 	function select_username(username) {
