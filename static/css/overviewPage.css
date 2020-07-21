@@ -6,18 +6,24 @@
   font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
 }
 
+div{
+  font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+}
+
 .cluster_children_term{
   text-align: left;
 }
 
 .clusterTitle{
-  font-weight: bold;
+  font-weight: normal;
+  color: gray;
 }
 
 .cluster_child_term{
+  font-size: 30px;
   text-align: left;
-  font-weight: normal;
-  color: gray;
+  font-weight: bold;
+  color: black;
 }
 
 .imgSearchTermGroup{
@@ -51,6 +57,7 @@
 }
 
 .summaryTitle{
+  font-size: 35px;
   text-align: left;
   color: black;
   font-weight: bold;
@@ -83,13 +90,25 @@
 
 #topWrap{
   padding-left: 20px;
-  text-align: left;
+  text-align: center;
   justify-self: center;
+  justify-content: center;
   display: flex;
   flex-direction: row;
 }
 
 #topWrap>h2{
+  font-size: 30px;
   margin: 0;
   padding: 0;
+}
+
+.unbold{
+  font-weight: normal;
+  color: gray;
+}
+
+.imageDescription{
+  display: flex;
+  justify-content: space-between;
 }

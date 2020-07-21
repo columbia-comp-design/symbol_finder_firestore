@@ -74,7 +74,7 @@
           if (tree_view_json.hasOwnProperty("children")) {
             let tree_view_json_children = tree_view_json.children;
             console.log("get_tree_view_json, tree_view_json.children:  ", tree_view_json_children);
-            $('#symbol_grid').append($('<h2 class = "summaryTitle"><span id = "termTotal">0 unique term</span> from <span id = "clusterTotal">0 cluster,</span> <span id = "imageTotal">0 image</span>  in total</h2>'));
+            $('#symbol_grid').append($('<h2 class = "summaryTitle"><span id = "termTotal">0 unique term</span> <span class="unbold"> from <span id = "clusterTotal">0 cluster,</span> <span id = "imageTotal">0 image</span>  in total</h2> </span>'));
             populate_clusters_images(tree_view_json_children); //pass as an argument as an array of children, (all the clusters obj) 
 
             count_cluster_total(tree_view_json_children);
@@ -159,7 +159,7 @@
 
               // $('#' + cluster_key + 'termTotal').text(cluster_termTotal);
 
-              if(termTotal>1 ? $('#termTotal').text(termTotal + " unique terms ") :  $('#termTotal').text(termTotal + " term ") );
+              if(termTotal>1 ? $('#termTotal').text(termTotal + "/20 unique terms ") :  $('#termTotal').text(termTotal + "/20 term ") );
              
               $('#'+cluster_key).show();
               clusterHasImage = true;
@@ -213,9 +213,21 @@
         console.log(child.title + ": , child.data.saved_img i ", child.data.saved_img);
         save_img_dict_ex = child.data.saved_img;
 
+        let countImage = 0;
+        let asciiCode = 97;
+      
         for (k in child.data.saved_img) {
-          $('#' + node_tree_path + 'image_row').append($('<div class = "imgSearchTermGroup"> <img alt="" class="node_img" src=' + k + '> <h6 class="searchTerm">' + child.data.saved_img[k].google_search_term + '</h6> </div>'))
-          
+
+          let googleSearch = "https://www.google.com/search?q="+child.data.saved_img[k].google_search_term+"&source=lnms&tbm=isch&sa";
+          // if(countImage<26 ? asciiCode=97: asciiCode=0);
+          if(countImage<26){
+            $('#' + node_tree_path + 'image_row').append($('<div class = "imgSearchTermGroup"> <a  title="perform google search" target="_blank" href="'+googleSearch+'"> <img alt="" class="node_img" src=' + k + '> </a> <div class="imageDescription"> <h6>(' + String.fromCharCode(countImage + asciiCode)  + ')</h6> <h6 class="searchTerm">' + child.data.saved_img[k].google_search_term + '</h6> <h6></h6> </div> </div>'))
+          }
+          else{
+            $('#' + node_tree_path + 'image_row').append($('<div class = "imgSearchTermGroup"> <img alt="" class="node_img" src=' + k + '> <div class="imageDescription"> <h6>(' + (countImage - 25)  + ')</h6> <h6 class="searchTerm">' + child.data.saved_img[k].google_search_term + '</h6> <h6></h6> </div> </div>'))
+          }
+          countImage++;
+
           //for(k in save_img_dict_ex){ console.log(child.data.saved_img[k].google_search_term)}
           // console.log(k)
         }
