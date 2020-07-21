@@ -378,6 +378,28 @@ def finder_for_concept(username,concept):
 	# swow_data_for_tree_view
 	return render_template("finder.html",concept=concept, username=username, tree_view_json=json.dumps(tree_view_json), swow_dict=json.dumps(swow_dict), swow_data_for_tree_view=json.dumps(swow_data_for_tree_view))
 
+
+# Function to expand child term into phase 2 of SF
+@app.route('/<username>/finder_for_child_term/<concept>/<node_path>', methods=['POST','GET'])
+def finder_for_child_term(username,concept,node_path):
+	print("/<username>/finder_for_child_term/<concept>/<node_path> called. username: ", username, " concept: ", concept, " node_path: ", node_path)
+
+	# Call this function because modified swow_dict must be returned 
+	get_cluster_json_for_root(concept)
+	# Get data from firestore
+	doc = doc_ref.get()
+	json_data = doc.to_dict()
+	username_dict = json_data
+
+	user_concept_tree_ref = db.collection(u'projects').document(u''+projecstDate).collection(u''+username).document(concept)
+	user_concept_tree_doc = user_concept_tree_ref.get()
+	doc_json = user_concept_tree_doc.to_dict()
+	tree_view_json = json.loads(doc_json['tree_view_json'])
+
+	return render_template("finder_for_child_term.html",concept=concept, username=username, node_path=node_path, tree_view_json=json.dumps(tree_view_json), swow_dict=json.dumps(swow_dict), swow_data_for_tree_view=json.dumps(swow_data_for_tree_view))
+
+
+
 @app.route('/', methods=['POST','GET'])
 def start():
 	return render_template("start.html")

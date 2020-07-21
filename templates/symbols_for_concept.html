@@ -37,10 +37,17 @@
 
     var concept = '{{ concept }}'
     var username = '{{ username }}'
+    var node_path = '_1-_2'
 
     function go_to_finder() {
       $('#loader').attr("style", "display:block")
       window.location.href = '/' + username + '/finder/' + concept;
+      // window.location.href = '/finder/' + concept; 
+    }
+
+    function go_to_finder_for_child_term() {
+      $('#loader').attr("style", "display:block")
+      window.location.href = '/' + username + '/finder_for_child_term/' + concept + '/' + node_path;
       // window.location.href = '/finder/' + concept; 
     }
 
@@ -190,7 +197,7 @@
         unique_tree_path = unique_tree_path.replace(/\//g, "-");
         console.log("Here's modified unique_tree_path: ", unique_tree_path);
         $('#' + cluster_key).append($('<div id=' + unique_tree_path + ' class="termDiv"> ' + 
-          '<h4 class="cluster_child_term">' + child.title + ' (' + Object.keys(child.data.saved_img).length + ') </h4> <div id=' + unique_tree_path + 'image_row class="imageRow"> </div> </div>'))
+          '<h4 onclick="go_to_finder_for_child_term()" class="cluster_child_term">' + child.title + ' (' + Object.keys(child.data.saved_img).length + ') </h4> <div id=' + unique_tree_path + 'image_row class="imageRow"> </div> </div>'))
 
         // update cluster_imageTotal & imageTotal
         cluster_imageTotal += Object.keys(child.data.saved_img).length;
@@ -321,7 +328,7 @@
 //     image.setAttribute('id',cell_id)
 //     // image.setAttribute('style','width:150px');
 //     image.setAttribute('class','table_image');
-//     // image.setAttribute('onclick', 'select_image(\"'+url+'\",\"'+term+'\",\"'+cell_id+'\")');
+    // image.setAttribute('onclick', 'select_image(\"'+url+'\",\"'+term+'\",\"'+cell_id+'\")');
 
 //     image_entry_div.appendChild(image)
 
