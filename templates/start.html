@@ -56,6 +56,8 @@
 		<!-- <h5> Saved Concept(s):  </h5> -->
 
 		<div id="concept_btns"> </div>
+		<div style="display:none" id="conceptLoad" class="loader"></div>
+
 	</div>
 
 </div>
@@ -284,20 +286,14 @@
         //   $('#loader').attr("style", "display:none")
           let tree_view_json = JSON.parse(result);
 
-
-		// //if concept has images 
-		// window.location.href = username + '/symbols/' + concept;
-
-		// //find more symbols 
-		// window.location.href = '/' + username + '/finder/' + concept;
-
-
           if (tree_view_json.hasOwnProperty("children")) {
 			// let tree_view_json_children = tree_view_json.children;
 			window.location.href = username + '/symbols/' + concept;
+			$('#conceptLoad').show();
 		  }
 		  else{
 			window.location.href = '/' + username + '/finder/' + concept;
+			$('#conceptLoad').show();
 		  }
 
         },
