@@ -37,7 +37,7 @@
 
     var concept = '{{ concept }}'
     var username = '{{ username }}'
-    var node_path = '_1-_2'
+    // var node_path = '_1-_2'
 
     function go_to_finder() {
       $('#loader').attr("style", "display:block")
@@ -47,7 +47,8 @@
 
     function go_to_finder_for_child_term() {
       $('#loader').attr("style", "display:block")
-      window.location.href = '/' + username + '/finder_for_child_term/' + concept + '/' + node_path;
+      window.location.href = '/' + username + '/finder_for_child_term/' + concept;
+      // window.location.href = '/' + username + '/finder_for_child_term/' + concept + '/' + node_path;
       // window.location.href = '/finder/' + concept; 
     }
 

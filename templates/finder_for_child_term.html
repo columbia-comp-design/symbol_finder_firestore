@@ -46,11 +46,16 @@
   <div class="sidenav" id='sidebar'>
   </div>
 
+  <!-- <div class="progress" id="progress" class="block_container"> </div> -->
+
+
   <!-- Will hold the network -->
   <div class="main" id='main'>
     <div class="progresss" id="progress" class="block_container"> </div>
 
     <div id="container" class="fullscreen"> </div>
+    <!-- <button id ="delete_button" class="delete_button"> delete</button> -->
+
     <div class="symbol_bank" id="symbol_bank" style="display:none">
       <div id="progress_summary" class="progress_summary"> </div>
       <div>
@@ -58,6 +63,9 @@
         </button>
       </div>
       <div id="chosen_symbol_table_div" class="chosen_symbol_table_div">
+        <!--<table id="symbol_bank_table"> </table>
+        <tr></tr>-->
+        <!-- <button id="see_all_symbols" class="see_all_symbols_btn" onclick="toggle_show_all_symbols(this)"> show symbols </button> -->
       </div>
     </div>
     <br>
@@ -70,12 +78,14 @@
   </div>
 
 
+
   <!-- 3rd Party -->
   <!-- Load vis.js (just Network) -->
   <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/vis/4.16.1/vis-network.min.js"> </script>
   <!-- Load clipboard.js -->
   <script type="text/javascript"
     src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/1.5.12/clipboard.min.js"> </script>
+
 
 
   <!-- Transform comma field -->
@@ -89,10 +99,6 @@
   <script>
     var concept = "{{ concept }}";
     var username = "{{ username }}";
-    var node_path = "{{ node_path }}";
-
-    console.log("Here is node_path retrieved from main.py: ", node_path);
-
     var version = 2;
     var swow_dict = {{ swow_dict| tojson }};
     swow_dict = JSON.parse(swow_dict);
@@ -108,6 +114,7 @@
 
     console.log("here is swow_data_for_tree_view: ", swow_data_for_tree_view)
     console.log("Tree view json: ", tree_view_json)
+
 
     // fill_treeview_sidebar(concept,tree_view_json);
     // fill_cluster_image_grids(tree_view_json);
@@ -129,6 +136,9 @@
       fill_treeview_sidebar(concept, tree_view_json); // 1
     }
     $("#tree").hide();
+
+
+   
 
     //console.log(clusters)
     google_all_clusters(clusters);
