@@ -381,12 +381,19 @@ def finder_for_concept(username,concept):
 
 # Function to expand child term into phase 2 of SF
 # @app.route('/<username>/finder_for_child_term/<concept>/<node_path>', methods=['POST','GET'])
-@app.route('/<username>/finder_for_child_term/<concept>', methods=['POST','GET'])
+# @app.route('/<username>/finder_for_child_term/<concept>/<node_path>', methods=['POST','GET'])
+@app.route('/finder_for_child_term', methods=['POST','GET'])
+def finder_for_child_term():
+# def finder_for_child_term(username,concept,node_path):
+	json_data = request.get_json() 
+	username = json_data['username']
+	concept = json_data['concept']
+	node_path = json_data['node_path']
 
-def finder_for_child_term(username,concept):
-
+	print("calling finder_for_child_term in main.py ")
+	print("/finder_for_child_term/<concept>/<username>/<node_path> called TESTING. username: ", username, " concept: ", concept, " node_path: ", node_path)
 	# print("/<username>/finder_for_child_term/<concept> called TESTING. username: ", username, " concept: ", concept, " node_path: ", node_path)
-	print("/<username>/finder_for_child_term/<concept> called TESTING. username: ", username, " concept: ", concept)
+	# print("/<username>/finder_for_child_term/<concept> called TESTING. username: ", username, " concept: ", concept)
 
 	# Call this function because modified swow_dict must be returned 
 	get_cluster_json_for_root(concept)

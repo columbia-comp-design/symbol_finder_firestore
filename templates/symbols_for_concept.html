@@ -47,8 +47,47 @@
 
     function go_to_finder_for_child_term() {
       $('#loader').attr("style", "display:block")
-      window.location.href = '/' + username + '/finder_for_child_term/' + concept;
-      // window.location.href = '/' + username + '/finder_for_child_term/' + concept + '/' + node_path;
+      // window.location.href = '/' + username + '/finder_for_child_term/' + concept;
+      // window.location.href = '/' + username + '/finder_for_child_term/' + concept + '/_1-_2' ;
+
+      // AJAX call 
+      $.ajax({
+        type: "POST",
+        url: "/finder_for_child_term",
+        dataType: "text",
+        contentType: "application/json; charset=utf-8",
+        data: JSON.stringify({ "username": username, "concept": concept, "node_path":"_1-_2" }),
+        success: function () {
+          // var tree = $("#tree").fancytree("getTree");
+          // var tree_clusters = tree.rootNode.children;
+          $('#loader').attr("style", "display:none")
+          // let tree_view_json = JSON.parse(result);
+
+          // console.log("get_tree_view_json, tree_view_json:  ", tree_view_json);
+
+          // if (tree_view_json.hasOwnProperty("children")) {
+          //   let tree_view_json_children = tree_view_json.children;
+          //   console.log("get_tree_view_json, tree_view_json.children:  ", tree_view_json_children);
+          //   $('#symbol_grid').append($('<h2 class = "summaryTitle"><span id = "termTotal">0 unique term</span> <span class="unbold"> from <span id = "clusterTotal">0 cluster,</span> <span id = "imageTotal">0 image</span>  in total</h2> </span>'));
+          //   populate_clusters_images(tree_view_json_children); //pass as an argument as an array of children, (all the clusters obj) 
+
+          //   count_cluster_total(tree_view_json_children);
+          // }
+
+
+        },
+        error: function (request, status, error) {
+          console.log("Error");
+          console.log(request)
+          console.log(status)
+          console.log(error)
+        }
+      });
+
+
+
+      // window.location.href = '/finder_for_child_term'+ '/' +username+ '/' + concept + '/_1-_2' ;
+
       // window.location.href = '/finder/' + concept; 
     }
 
