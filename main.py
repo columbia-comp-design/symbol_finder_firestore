@@ -382,16 +382,21 @@ def finder_for_concept(username,concept):
 # Function to expand child term into phase 2 of SF
 # @app.route('/<username>/finder_for_child_term/<concept>/<node_path>', methods=['POST','GET'])
 # @app.route('/<username>/finder_for_child_term/<concept>/<node_path>', methods=['POST','GET'])
-@app.route('/finder_for_child_term', methods=['POST','GET'])
-def finder_for_child_term():
+# @app.route('/finder_for_child_term', methods=['POST','GET'])
+@app.route('/<username>/<concept>/<node_path>/finder_for_child_term', methods=['POST','GET'])
+def finder_for_child_term(username,concept,node_path):
+
+# def finder_for_child_term():
 # def finder_for_child_term(username,concept,node_path):
-	json_data = request.get_json() 
-	username = json_data['username']
-	concept = json_data['concept']
-	node_path = json_data['node_path']
+	# json_data = request.get_json() 
+	# username = json_data['username']
+	# concept = json_data['concept']
+	# node_path = json_data['node_path']
 
 	print("calling finder_for_child_term in main.py ")
-	print("/finder_for_child_term/<concept>/<username>/<node_path> called TESTING. username: ", username, " concept: ", concept, " node_path: ", node_path)
+	print("/<username>/<concept>/<node_path>/finder_for_child_term called TESTING. username: ", username, " concept: ", concept, " node_path: ", node_path)
+
+	# print("/finder_for_child_term/<concept>/<username>/<node_path> called TESTING. username: ", username, " concept: ", concept, " node_path: ", node_path)
 	# print("/<username>/finder_for_child_term/<concept> called TESTING. username: ", username, " concept: ", concept, " node_path: ", node_path)
 	# print("/<username>/finder_for_child_term/<concept> called TESTING. username: ", username, " concept: ", concept)
 
