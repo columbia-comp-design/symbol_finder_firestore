@@ -40,34 +40,44 @@ div{
 
 .clusterDiv{
   text-align: left;
-  margin-left: 10vw;
-  margin-top: 2vw;
+  margin-left: 1vw;
+  margin-top: 1.5vw;
+}
+
+.pointer{
+  cursor: pointer;
 }
 
 .termDiv{
-  margin-left: 5vw;
+  margin-left: 2vw;
 }
 
 .imageRow{
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
-  margin-left: 3vw;
-  margin-right: 3vw;
+  margin-left: 2vw;
+  margin-right: 1vw;
 }
 
 .summaryTitle{
+  
   font-size: 35px;
   text-align: left;
   color: black;
   font-weight: bold;
-  margin-left: 5vw;
+  margin-left: 1vw;
   margin-bottom: 0vw; 
-  margin-top: 1vw; 
+  margin-top: 1.5vw; 
 }
 
 .clusterInfo{
   font-weight: normal;
+}
+
+b{
+  padding-left: 3px;
+  padding-right: 3px;
 }
 
 .find_symbol_button {
@@ -77,6 +87,7 @@ div{
   padding-left: 8px;
   padding-right: 8px;
   padding-top: 5px;
+  padding-bottom: 0;
   font-size: 16px;
   margin-left: 20px;
   margin-bottom: 0px;
@@ -86,13 +97,25 @@ div{
 
 }
 
+.find_symbol_button>h3{
+  font-size: 1.5rem;
+}
+
 .find_symbol_button:hover {background: #eee;}
 
 #topWrap{
+  padding-top: 0.5vw;
+  padding-bottom: 0.5vw;
+  border-bottom: rgb(53, 53, 53) 1px solid;
   padding-left: 20px;
-  text-align: center;
-  justify-self: center;
-  justify-content: center;
+  background: #ffffff;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+#topMiddleWrap{
+  padding: 0;
   display: flex;
   flex-direction: row;
 }

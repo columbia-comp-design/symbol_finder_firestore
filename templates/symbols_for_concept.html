@@ -1,12 +1,12 @@
-{% extends "layout.html" %}
 
 {% block content %}
 
 <title> Symbols </title>
-<!-- <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+ <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
-  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script> -->
-<!-- <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.8/angular.min.js"></script> -->
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script> 
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.8/angular.min.js"></script>
 <link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='css/style.css') }}">
 <link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='css/overviewPage.css') }}">
 
@@ -20,12 +20,17 @@
 
   <div align="center">
     <br>
-    <div id="topWrap">
-      <h2> Symbols for: <b> {{ concept }} </b> 
-      </h2>
-      <div id="find_symbol_btn" class="find_symbol_button" onclick="go_to_finder()"> Find more symbols! </div>
-
+    <div class="fixed-top" id="topWrap">
+      <a class="navbar-brand" href="/">Home</a>
+     
+        <h2  id="topMiddleWrap"> Symbols for:  <b>  {{ concept }} </b> 
+          <span id="find_symbol_btn" class="find_symbol_button" onclick="go_to_finder()">Find more symbols! </span>
+        </h2>
+       
+ 
+      <h6></h6>
     </div>
+    
   
     <hr>
     <div style="display:block" id="loader" class="loader"></div>
@@ -238,7 +243,7 @@
         unique_tree_path = unique_tree_path.replace(/\//g, "-");
         console.log("Here's modified unique_tree_path: ", unique_tree_path);
         $('#' + cluster_key).append($('<div id=' + unique_tree_path + ' class="termDiv"> ' + 
-          '<h4 onclick="go_to_finder_for_child_term()" class="cluster_child_term">' + child.title + ' (' + Object.keys(child.data.saved_img).length + ') </h4> <div id=' + unique_tree_path + 'image_row class="imageRow"> </div> </div>'))
+          '<h4  class="cluster_child_term"> <span class="pointer" onclick="go_to_finder_for_child_term()">' + child.title + ' (' + Object.keys(child.data.saved_img).length + ') </span> </h4> <div id=' + unique_tree_path + 'image_row class="imageRow"> </div> </div>'))
 
         // update cluster_imageTotal & imageTotal
         cluster_imageTotal += Object.keys(child.data.saved_img).length;
