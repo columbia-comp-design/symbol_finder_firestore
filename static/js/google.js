@@ -159,23 +159,21 @@ search_node_by_path = function(node, path){
 // node has to be the root node 
    for(let i=0;i<path.length;i++){
     console.log("first for path val ", path[i], " and i: ", i);
-
-  
     // if(node.children == null){
     //   console.log("child field is null for this node: ", node);
     //   break;
     // }
 
     for(let j=0; j<node.children.length;j++){
-
-      // console.log("second for j: ", j)
+      console.log("second for j: ", j)
       if(node.children[j].key == path[i]){
          node = node.children[j];
-        //  console.log("node in for loop: ", node)
-         if(i==path.length-1){
-          // console.log(" i==path.length-1 break ");
-           break;
-         }
+         console.log("node in for loop: ", node)
+         break;
+        //  if(i==path.length-1){
+        //   // console.log(" i==path.length-1 break ");
+        //    break;
+        //  }
       }
     }
   }

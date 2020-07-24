@@ -540,20 +540,27 @@ function delete_image_from_node(node_path_key, url) {
 }
 
 // here
-function add_custom_node(node) {
+function add_custom_node(attribute_node) {
   if (event.key === 'Enter') {
-    var node_key = node.getAttribute("nkey");
-    console.log("add_custom_node node:", node);
-    console.log("node_key :", node_key);
+    console.log("add_custom_node attribute_node:", attribute_node);
 
-    var val = node.value;
-    node.value = '';
+    var keySeq = attribute_node.getAttribute("nkey").split('/');
+    // keySeq.pop();
+    console.log("keyseq ", keySeq);
+    // console.log("node_key :", node_key);
+
+    var val = attribute_node.value;
+    attribute_node.value = '';
     // if not empty, add node to treeview
+    console.log("val:  ", val);
     if (val) {
       var tree = $("#tree").fancytree("getTree");
 
-      //parents node
-      var node = tree.getNodeByKey(node_key);
+      let node = tree.rootNode;
+
+      //get the node's parent
+      node = search_node_by_path(node, keySeq);
+
       console.log("node after if(val) : ", node);
 
       let map = new Map();
@@ -573,7 +580,7 @@ function add_custom_node(node) {
       }
 
 
-      var new_child_node = { "key": newKey, "title": val, "icon": false, "checkbox": false, "is_add_your_own": false, "expanded_once": false, "is_cluster": false, "google_image_urls": {}, "saved_img": {} }
+      var new_child_node = { "children":{}, "key": newKey, "title": val, "icon": false, "checkbox": false, "is_add_your_own": false, "expanded_once": false, "is_cluster": false, "google_image_urls": {}, "saved_img": {} }
 
       var children = node.getChildren();
       var second_child = children[1];
@@ -586,7 +593,7 @@ function add_custom_node(node) {
       if (val in concept_dict) {
         // var regular_swow_words = concept_dict[val]["comb_words"];
         //using 1% of swow_dict
-        var regular_swow_words = swow_data_for_tree_view[val]["comb_words"];
+        var regular_swow_words = concept_dict[val]["comb_words"];
         var max_nodes = 5;
         var added_nodes_cnt = 0;
         for (var j = 0; j < regular_swow_words.length; j++) {
@@ -596,7 +603,7 @@ function add_custom_node(node) {
           var swow_word = regular_swow_words[j];
           var n_node = { "title": swow_word, "icon": false, "is_cluster": false, "expanded_once": false, "checkbox": false, "google_image_urls": {}, "saved_img": {} };
           var c_new_node = new_node.addNode(n_node);
-          var children_swow_words = swow_data_for_tree_view[swow_word]["comb_words"];
+          var children_swow_words = concept_dict[swow_word]["comb_words"];
           var max_g_nodes = 5;
           var g_nodes_added = 0;
           for (var i = 0; i < children_swow_words.length; i++) {
@@ -1612,8 +1619,9 @@ function fill_treeview_sidebar(node_name, tree_view_json) {
 
         // var text_area = "<input type=\"text\" placeholder=\"write your own!\" onkeydown=\"add_custom_node(\""+String(node.data.key)+"\",this)\">"
 
-
-        var text_area = '<input type=\"text\" placeholder=\"write your own!\" class=\"inp\" nkey=\"' + String(node.key) + '\"onkeydown=\"add_custom_node(this)\">'
+//getPath(true, "key", "/")
+        // var text_area = '<input type=\"text\" placeholder=\"write your own!\" class=\"inp\" nkey=\"' + String(node.key) + '\"onkeydown=\"add_custom_node(this)\">'
+        var text_area = '<input type=\"text\" placeholder=\"write your own!\" class=\"inp\" nkey=\"' + data["node"].getPath(true, "key", "/") + '\"onkeydown=\"add_custom_node(this)\">'
         var write_your_own_node = { "title": text_area, "icon": "glyphicon glyphicon-pencil", "checkbox": false, "is_add_your_own": true, "unselectable": true }
         node.addNode(write_your_own_node, "firstChild");
 
