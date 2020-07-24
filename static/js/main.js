@@ -543,18 +543,41 @@ function delete_image_from_node(node_path_key, url) {
 function add_custom_node(node) {
   if (event.key === 'Enter') {
     var node_key = node.getAttribute("nkey");
+    console.log("add_custom_node node:", node);
+    console.log("node_key :", node_key);
+
     var val = node.value;
     node.value = '';
     // if not empty, add node to treeview
     if (val) {
       var tree = $("#tree").fancytree("getTree");
+
+      //parents node
       var node = tree.getNodeByKey(node_key);
+      console.log("node after if(val) : ", node);
+
+      let map = new Map();
+      // store all the keys in hashmap 
+      for(let i=1; i< node.children.length;i++){
+         map.set(node.children[i].key,true);
+      }
+
+      //check all direct children' keys 
+        let keyValue = 1;
+        let newKey = "_" + keyValue.toString() ;
+
+      //pick new key 
+      while(map.has(newKey)){
+         keyValue++;
+         newKey = "_" + keyValue.toString() ;
+      }
 
 
-      var new_child_node = { "title": val, "icon": false, "checkbox": false, "is_add_your_own": false, "expanded_once": false, "is_cluster": false, "google_image_urls": {}, "saved_img": {} }
+      var new_child_node = { "key": newKey, "title": val, "icon": false, "checkbox": false, "is_add_your_own": false, "expanded_once": false, "is_cluster": false, "google_image_urls": {}, "saved_img": {} }
 
       var children = node.getChildren();
       var second_child = children[1];
+
 
       var new_node = node.addChildren(new_child_node, second_child.key);
       console.log("NEW NODE")
@@ -588,7 +611,9 @@ function add_custom_node(node) {
 
       }
 
-      multi_google_search(val, node.title, true, data.node.getPath(true, "key", "/"));
+      if(!(data.node == undefined )){
+        multi_google_search(val, node.title, true, data.node.getPath(true, "key", "/"));
+      }
 
       tree_view_json = node.tree.toDict(true);
       update_tree_view_json_to_server(tree_view_json);
