@@ -53,8 +53,8 @@
     // function go_to_finder_for_child_term(node_path) {
     function go_to_finder_for_child_term(node_path) {
       $('#loader').attr("style", "display:block")
-      window.location.href = '/' + username + '/' + concept + '/_1-_2' + '/finder_for_child_term' ;
-      // window.location.href = '/' + username + '/' + concept + '/' + node_path + '/finder_for_child_term' ;
+      // window.location.href = '/' + username + '/' + concept + '/_1-_2' + '/finder_for_child_term' ;
+      window.location.href = '/' + username + '/' + concept + '/' + node_path + '/finder_for_child_term' ;
     }
 
     var concept_dict = null;
@@ -204,7 +204,7 @@
         console.log("Here's modified unique_tree_path: ", unique_tree_path);
         
         $('#' + cluster_key).append($('<div id=' + unique_tree_path + ' class="termDiv"> ' + 
-          '<h4  class="cluster_child_term"> <span class="pointer" onclick="go_to_finder_for_child_term()">' + child.title + ' (' + Object.keys(child.data.saved_img).length + ') </span> </h4> <div id=' + unique_tree_path + 'image_row class="imageRow"> </div> </div>'))
+          '<h4  class="cluster_child_term"> <span class="pointer" onclick="go_to_finder_for_child_term(\''+unique_tree_path+'\')" >' + child.title + ' (' + Object.keys(child.data.saved_img).length + ') </span> </h4> <div id=' + unique_tree_path + 'image_row class="imageRow"> </div> </div>'))
 
         // update cluster_imageTotal & imageTotal
         cluster_imageTotal += Object.keys(child.data.saved_img).length;
