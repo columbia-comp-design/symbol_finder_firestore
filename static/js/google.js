@@ -117,7 +117,7 @@ cluster_google_search = function (cluster_title) {
   }
 
   var tree = $("#tree").fancytree("getTree");
-  var node = tree.getNodeByKey(node_key);
+  // var node = tree.getNodeByKey(node_key);
 
   // if (isObjEmpty(node.data.google_image_urls)) {
 
@@ -154,6 +154,36 @@ function isObjEmpty(obj) {
 }
 
 
+search_node_by_path = function(node, path){
+// path should be an array of strings ex :  [ "_1", "_3", "_193", "_1" ]
+// node has to be the root node 
+   for(let i=0;i<path.length;i++){
+    console.log("first for path val ", path[i], " and i: ", i);
+
+  
+    // if(node.children == null){
+    //   console.log("child field is null for this node: ", node);
+    //   break;
+    // }
+
+    for(let j=0; j<node.children.length;j++){
+
+      // console.log("second for j: ", j)
+      if(node.children[j].key == path[i]){
+         node = node.children[j];
+        //  console.log("node in for loop: ", node)
+         if(i==path.length-1){
+          // console.log(" i==path.length-1 break ");
+           break;
+         }
+      }
+    }
+  }
+
+  return node; 
+
+}
+
 multi_google_search = function (term, parent_term, tree_title_click, node_path_key) {
   console.log("calling multi_google_search!!, term: ", term, " ,tree_title_click: ", tree_title_click, "node_path_key: ", node_path_key);
 
@@ -163,15 +193,27 @@ multi_google_search = function (term, parent_term, tree_title_click, node_path_k
   var root_term_search = concept_searched + " " + term;
 
 
+  //search by the node's direct children 
+
   var tree = $("#tree").fancytree("getTree");
   //find a node the node's path 
   let keySeq = node_path_key.split('/');
   let node =  tree.rootNode;
-  for(let i=0;i<keySeq.length;i++){
-    node = tree.getNodeByKey(keySeq[i],node);
-  }
+  console.log("KeySeq ", keySeq);
+  console.log("node tree.rooNode before for loop: ", node)
+
+  // the length of the keySeq  [ "_1", "_3", "_193", "_1" ]
+  node = search_node_by_path(node, keySeq);
+
+  // for(let i=0;i<keySeq.length;i++){
+    
+  //   node = tree.getNodeByKey(keySeq[i],node);
+  //   console.log("node in for loop: ", node)
+
+  // }
   // console.log(" found node: ", node.title, " and its path is ", node.getPath(true, "key", "/"));
 
+  console.log("Here node after for loop" , node);
   if (isObjEmpty(node.data.google_image_urls)) {
     //use google Search API 
     // $.when(goog(term), goog(parent_child_search), goog(icon_search), goog(stock_search), goog(root_term_search)).done(function(g1, g2, g3, g4, g5){

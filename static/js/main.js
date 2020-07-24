@@ -493,9 +493,12 @@ function add_image_to_node(node_path_key, google_search_term, url) {
   var tree = $("#tree").fancytree("getTree");
   let keySeq = node_path_key.split('/');
   let node =  tree.rootNode;
-  for(let i=0;i<keySeq.length;i++){
-    node = tree.getNodeByKey(keySeq[i],node);
-  }
+
+  node = search_node_by_path(node, keySeq);
+
+  // for(let i=0;i<keySeq.length;i++){
+  //   node = tree.getNodeByKey(keySeq[i],node);
+  // }
 
 
   node.data.saved_img[url] = {};
@@ -520,9 +523,12 @@ function delete_image_from_node(node_path_key, url) {
   var tree = $("#tree").fancytree("getTree");
   let keySeq = node_path_key.split('/');
   let node =  tree.rootNode;
-  for(let i=0;i<keySeq.length;i++){
-    node = tree.getNodeByKey(keySeq[i],node);
-  }
+
+  node = search_node_by_path(node, keySeq);
+
+  // for(let i=0;i<keySeq.length;i++){
+  //   node = tree.getNodeByKey(keySeq[i],node);
+  // }
 
 
   delete node.data.saved_img[url];
@@ -533,6 +539,7 @@ function delete_image_from_node(node_path_key, url) {
   console.log("delete_image_from_node, -> modified_tree converted to a dict: ", updated_tree_view_json);
 }
 
+// here
 function add_custom_node(node) {
   if (event.key === 'Enter') {
     var node_key = node.getAttribute("nkey");
@@ -542,6 +549,8 @@ function add_custom_node(node) {
     if (val) {
       var tree = $("#tree").fancytree("getTree");
       var node = tree.getNodeByKey(node_key);
+
+
       var new_child_node = { "title": val, "icon": false, "checkbox": false, "is_add_your_own": false, "expanded_once": false, "is_cluster": false, "google_image_urls": {}, "saved_img": {} }
 
       var children = node.getChildren();
@@ -607,9 +616,14 @@ function confirm_image3(tree_view_node_term, term, url, image_id, node_path_key)
   //find node 
   let keySeq = node_path_key.split('/');
   let node =  tree.rootNode;
-  for(let i=0;i<keySeq.length;i++){
-    node = tree.getNodeByKey(keySeq[i],node);
-  }
+
+  
+  // for(let i=0;i<keySeq.length;i++){
+  //   node = tree.getNodeByKey(keySeq[i],node);
+  // }
+
+  node = search_node_by_path(node, keySeq);
+
 
   if (url in node.data.saved_img) {
     // delete_elem_from_table(url,term,image_id);
@@ -892,9 +906,13 @@ create_image_grid3 = function (term, urls, concept, node_path_key) {
 
   let keySeq = node_path_key.split('/');
   let node =  tree.rootNode;
-  for(let i=0;i<keySeq.length;i++){
-    node = tree.getNodeByKey(keySeq[i],node);
-  }
+
+
+  // for(let i=0;i<keySeq.length;i++){
+  //   node = tree.getNodeByKey(keySeq[i],node);
+  // }
+
+  node = search_node_by_path(node, keySeq);
 
 
   for (var i = 0; i < urls.length; i++) {
@@ -908,6 +926,7 @@ create_image_grid3 = function (term, urls, concept, node_path_key) {
     image.setAttribute('class', 'img_in_table');
     image.setAttribute('onclick', 'confirm_image3(\"' + concept + '\",\"' + term + '\",\"' + url + '\",\"' + cell_id + '\",\"' + node_path_key + '\")');
 
+    
     if (url in node.data.saved_img) {
       image.classList.add('confirmed');
     }
