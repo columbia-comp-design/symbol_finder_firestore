@@ -99,6 +99,7 @@
   <script>
     var concept = "{{ concept }}";
     var username = "{{ username }}";
+    var node_path = "{{ node_path }}";
     var version = 2;
     var swow_dict = {{ swow_dict| tojson }};
     swow_dict = JSON.parse(swow_dict);
@@ -119,26 +120,28 @@
     // fill_treeview_sidebar(concept,tree_view_json);
     // fill_cluster_image_grids(tree_view_json);
     var clusters = []
+
+    // if the tree is reloaded 
     if (tree_view_json.hasOwnProperty("children")) {
       tree_view_json_children = tree_view_json.children;
       for (var i = 0; i < tree_view_json_children.length; i++) {
         var cluster_title = tree_view_json_children[i]["title"];
         clusters.push(cluster_title);
       }
-      fill_treeview_sidebar(concept, tree_view_json); // 1
+      fill_treeview_sidebar(concept, tree_view_json, node_path); // 1
     }
-    else{
-      for (var i = 0; i < tree_view_json.length; i++) {
-        var cluster_title = tree_view_json[i]["title"];
-        clusters.push(cluster_title);
-      }
-      //init first time
-      fill_treeview_sidebar(concept, tree_view_json); // 1
-    }
+    // else{ // load the tree for the first time 
+    //   for (var i = 0; i < tree_view_json.length; i++) {
+    //     var cluster_title = tree_view_json[i]["title"];
+    //     clusters.push(cluster_title);
+    //   }
+    //   fill_treeview_sidebar(concept, tree_view_json); // 1
+    // }
+
+    //tree 
     $("#tree").show();
 
-    //console.log(clusters)
-    // google_all_clusters(clusters);
+    //blue box
     $('#symbol_bank').show();
     updateProgress();
     // populate_first_step_instructions();

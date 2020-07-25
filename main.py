@@ -413,7 +413,7 @@ def finder_for_child_term(username,concept,node_path):
 	tree_view_json = json.loads(doc_json['tree_view_json'])
 	print("Reached end of finder_for_child_term function in main.py!")
 
-	return render_template("finder_for_child_term.html",concept=concept, username=username, tree_view_json=json.dumps(tree_view_json), swow_dict=json.dumps(swow_dict), swow_data_for_tree_view=json.dumps(swow_data_for_tree_view))
+	return render_template("finder_for_child_term.html", node_path=node_path ,concept=concept, username=username, tree_view_json=json.dumps(tree_view_json), swow_dict=json.dumps(swow_dict), swow_data_for_tree_view=json.dumps(swow_data_for_tree_view))
 
 
 

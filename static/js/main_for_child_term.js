@@ -1407,7 +1407,7 @@ function see_more_tree() {
 }
 
 //node_name is a concept 
-function fill_treeview_sidebar(node_name, tree_view_json) {
+function fill_treeview_sidebar(node_name, tree_view_json, node_path) {
   console.log(" called fill_treeview_sidebar() node_name: " + node_name, "tree_view_json: ", tree_view_json);
 
   var sb = document.getElementById('sidebar');
@@ -1481,6 +1481,8 @@ function fill_treeview_sidebar(node_name, tree_view_json) {
   };
 
   sb.appendChild(treeview);
+
+  
 
   $("#tree").fancytree({
     extensions: ["glyph"],
@@ -1801,6 +1803,33 @@ function fill_treeview_sidebar(node_name, tree_view_json) {
           $("#ft_" + tree_clusters[i].key).hide();
         }
       }
+
+      // tree values
+      console.log(" before expand tree_view_json", tree_view_json);
+      console.log(" before expand node_path", node_path);
+
+      let path = node_path.split('-');
+
+
+      let node = data.tree.rootNode;
+      console.log("node init ", node)
+      // //
+          let chosenChild ;
+        for(let i=0;i<path.length;i++){
+          // console.log("first for path val ", path[i], " and i: ", i);
+          for(let j=0; j<node.children.length;j++){
+            // console.log("second for j: ", j)
+            if(node.children[j].key == path[i]){
+              node.children[j].setExpanded(true);
+              console.log("node.children[j].setExpanded(true): ", node.children[j]);
+              chosenChild = j;
+            }
+            else{
+              node.children[j].setExpanded(false);
+            }
+          }
+          node = node.children[chosenChild]
+        }
 
 
       tree_view_json = data.tree.toDict(true);
