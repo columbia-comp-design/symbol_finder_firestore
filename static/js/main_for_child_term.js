@@ -493,9 +493,12 @@ function add_image_to_node(node_path_key, google_search_term, url) {
   var tree = $("#tree").fancytree("getTree");
   let keySeq = node_path_key.split('/');
   let node =  tree.rootNode;
-  for(let i=0;i<keySeq.length;i++){
-    node = tree.getNodeByKey(keySeq[i],node);
-  }
+
+  node = search_node_by_path(node, keySeq);
+
+  // for(let i=0;i<keySeq.length;i++){
+  //   node = tree.getNodeByKey(keySeq[i],node);
+  // }
 
 
   node.data.saved_img[url] = {};
@@ -520,9 +523,12 @@ function delete_image_from_node(node_path_key, url) {
   var tree = $("#tree").fancytree("getTree");
   let keySeq = node_path_key.split('/');
   let node =  tree.rootNode;
-  for(let i=0;i<keySeq.length;i++){
-    node = tree.getNodeByKey(keySeq[i],node);
-  }
+  
+  node = search_node_by_path(node, keySeq);
+
+  // for(let i=0;i<keySeq.length;i++){
+  //   node = tree.getNodeByKey(keySeq[i],node);
+  // }
 
 
   delete node.data.saved_img[url];
@@ -607,9 +613,12 @@ function confirm_image3(tree_view_node_term, term, url, image_id, node_path_key)
   //find node 
   let keySeq = node_path_key.split('/');
   let node =  tree.rootNode;
-  for(let i=0;i<keySeq.length;i++){
-    node = tree.getNodeByKey(keySeq[i],node);
-  }
+
+  node = search_node_by_path(node, keySeq);
+
+  // for(let i=0;i<keySeq.length;i++){
+  //   node = tree.getNodeByKey(keySeq[i],node);
+  // }
 
   if (url in node.data.saved_img) {
     // delete_elem_from_table(url,term,image_id);
@@ -892,9 +901,10 @@ create_image_grid3 = function (term, urls, concept, node_path_key) {
 
   let keySeq = node_path_key.split('/');
   let node =  tree.rootNode;
-  for(let i=0;i<keySeq.length;i++){
-    node = tree.getNodeByKey(keySeq[i],node);
-  }
+  node = search_node_by_path(node, keySeq);
+  // for(let i=0;i<keySeq.length;i++){
+  //   node = tree.getNodeByKey(keySeq[i],node);
+  // }
 
 
   for (var i = 0; i < urls.length; i++) {
@@ -1831,7 +1841,13 @@ function fill_treeview_sidebar(node_name, tree_view_json, node_path) {
           node = node.children[chosenChild]
         }
 
+        node.setActive(true);
+        for(let k=0; k<node.children.length;k++){
+          node.children[k].setExpanded(false);
+        }
 
+      multi_google_search(node.title, node.parent.title, false, node.getPath(true, "key", "/"));
+      
       tree_view_json = data.tree.toDict(true);
       update_tree_view_json_to_server(tree_view_json);
       console.log("init called end tree_view_json ", tree_view_json);
