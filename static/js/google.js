@@ -159,10 +159,7 @@ search_node_by_path = function(node, path){
 // node has to be the root node 
    for(let i=0;i<path.length;i++){
     console.log("first for path val ", path[i], " and i: ", i);
-    // if(node.children == null){
-    //   console.log("child field is null for this node: ", node);
-    //   break;
-    // }
+
 
     for(let j=0; j<node.children.length;j++){
       console.log("second for j: ", j)
