@@ -15,7 +15,7 @@ import json
 projecstDate = "summer2020"
 cred = credentials.Certificate("./symbolFinderSecret.json")
 firebase_admin.initialize_app(cred, {
-    'projectId' : 'symbolfinder-visiblends'
+    'projectId' : 'symbol-finder-db'
 })
 # from google.cloud import firestore
 
@@ -229,12 +229,15 @@ def get_usernames_and_concepts():
 		# db.collection(u'jsonByDate').document(u'testing2').set(username_dict)
 		db.collection(u'projects').document(u''+projecstDate).set({'VisiBlends':{}})
 		db.collection(u'projects').document(u''+projecstDate).collection(u''+'VisiBlends').document(u'concept_data').set({"concepts_dict":{}})
+
+		all_user_doc_ref = db.collection(u'projects').document(u''+projecstDate)
+		# add new username to allUsers document 
+		allUser_doc = all_user_doc_ref.get()
+		doc_json = allUser_doc.to_dict()
+		doc_json['VisiBlends'] = {"concepts":{}}
+		all_user_doc_ref.update(doc_json)
 		print("created a new collection named projects and it's document is ", projecstDate)
 
-	# # if exists, get the full concept_dict
-	#with open('username_symbols.json') as json_file:
-	# 	username_dict = json.load(json_file)
-	# username_dict = doc.to_dict()
 	users_concepts_doc = users_concepts_doc_ref.get()
 	doc_json = users_concepts_doc.to_dict()
 
