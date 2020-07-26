@@ -758,8 +758,13 @@ function confirm_image2(tree_view_node_term, term, url, image_id) {
     }
   }
 
+  // var tree = $("#tree").fancytree("getTree");
+  // var node = tree.getNodeByKey(node_key);
+
   var tree = $("#tree").fancytree("getTree");
-  var node = tree.getNodeByKey(node_key);
+  let keySeq = node_key.split();
+  let node =  tree.rootNode;
+  node = search_node_by_path(node, keySeq);
 
   if (url in node.data.saved_img) {
     // delete_elem_from_table(url,term,image_id);
@@ -884,7 +889,10 @@ create_cluster_image_grid = function (term, urls, url_to_gs_dict) {
   }
 
   var tree = $("#tree").fancytree("getTree");
-  var node = tree.getNodeByKey(node_key);
+  let keySeq = node_key.split();
+  let node =  tree.rootNode;
+  node = search_node_by_path(node, keySeq);
+
   // console.log(term)
   // var urls = ["https://images-na.ssl-images-amazon.com/images/I/61YL-c2pZOL._AC_SX355_.jpg", "https://images-na.ssl-images-amazon.com/images/I/61YL-c2pZOL._AC_SX355_.jpg", "https://images-na.ssl-images-amazon.com/images/I/61YL-c2pZOL._AC_SX355_.jpg", "https://images-na.ssl-images-amazon.com/images/I/61YL-c2pZOL._AC_SX355_.jpg", "https://images-na.ssl-images-amazon.com/images/I/61YL-c2pZOL._AC_SX355_.jpg", "https://images-na.ssl-images-amazon.com/images/I/61YL-c2pZOL._AC_SX355_.jpg", "https://images-na.ssl-images-amazon.com/images/I/61YL-c2pZOL._AC_SX355_.jpg", "https://images-na.ssl-images-amazon.com/images/I/61YL-c2pZOL._AC_SX355_.jpg", "https://images-na.ssl-images-amazon.com/images/I/61YL-c2pZOL._AC_SX355_.jpg"]
   image_table = document.createElement('table');

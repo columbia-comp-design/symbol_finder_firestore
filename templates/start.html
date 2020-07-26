@@ -120,8 +120,8 @@
 		if (e.keyCode == 13) {
 			var entered_username = document.getElementById("username_text").value;
 			//Trim username, 
-			entered_username = entered_username.trim().toLowerCase();
-			entered_username = entered_username.charAt(0).toUpperCase() + entered_username.slice(1);
+			entered_username = entered_username.trim();
+			// entered_username = entered_username.charAt(0).toUpperCase() + entered_username.slice(1);
 
 			console.log("username: ", entered_username)
 			console.log(" user exist: ", username_dict.hasOwnProperty(entered_username))

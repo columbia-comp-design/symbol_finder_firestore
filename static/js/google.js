@@ -6,7 +6,7 @@
 */
 
 //change it to your own keys
-var api_key = "AIzaSyCkJApxDUXRDGcufuckDjxSFGK7XDkpJKk"
+var api_key = "AIzaSyDHip05Wvj97nipblKaisidN5TrVUltb5A"
 
 // Extracts the actual urls from the Google API results
 extract_links = function (search_results) {
@@ -38,6 +38,13 @@ goog = function (t) {
     jsonp: "$callback",
     success: function (e, data) {
       console.log("google search success for " + t + "!");
+    }, 
+    error: function (request, status, error) {
+      console.log("Google Search Api is not working, API: ", api_key, "for :" , t);
+      // alert("Google Custome Search API is not working")
+      console.log(request)
+      console.log(status)
+      console.log(error)
     }
   });
 }
@@ -208,8 +215,10 @@ multi_google_search = function (term, parent_term, tree_title_click, node_path_k
   // }
   // console.log(" found node: ", node.title, " and its path is ", node.getPath(true, "key", "/"));
 
-  console.log("Here node after for loop" , node);
+  console.log("multi_google_search: Selected node" , node);
   if (isObjEmpty(node.data.google_image_urls)) {
+    console.log("node.data.google_image_urls is empty")
+
     //use google Search API 
     // $.when(goog(term), goog(parent_child_search), goog(icon_search), goog(stock_search), goog(root_term_search)).done(function(g1, g2, g3, g4, g5){
     $.when(goog(term), goog(parent_child_search), goog(icon_search), goog(root_term_search)).done(function (g1, g2, g3, g5) {
@@ -242,13 +251,13 @@ multi_google_search = function (term, parent_term, tree_title_click, node_path_k
       node.data.google_image_urls = url_obj;
       var updated_tree_view_json = tree.toDict(true);
       update_tree_view_json_to_server(updated_tree_view_json);
-
+      console.log("calling fill_grids_for_concept, using Google Search API ")
       fill_grids_for_concept(url_obj, term, node_path_key);
 
     });
   }
   else {
-    console.log(" Reusing Search from from the server ")
+    console.log("calling fill_grids_for_concept, RE-using Google Search API ")
     url_obj = node.data.google_image_urls;
     fill_grids_for_concept(url_obj, term, node_path_key);
   }
