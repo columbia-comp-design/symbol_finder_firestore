@@ -70,8 +70,6 @@
 	var new_users = [];
 	var prev_concept = "";
 
-
-
 	window.onload = function () {
 		// load past concepts
 		/*$.ajax({
@@ -115,8 +113,12 @@
 
 	};
 
+
+
 	var username_input = document.getElementById("username_input");
 	username_input.addEventListener("keydown", function (e) {
+		$('#username_alert').html("")
+
 		if (e.keyCode == 13) {
 			var entered_username = document.getElementById("username_text").value;
 			//Trim username, 
@@ -124,11 +126,20 @@
 			// entered_username = entered_username.charAt(0).toUpperCase() + entered_username.slice(1);
 
 			console.log("username: ", entered_username)
-			console.log(" user exist: ", username_dict.hasOwnProperty(entered_username))
-			if (entered_username != "" && username_dict.hasOwnProperty(entered_username) == false) {
-				// username_dict[entered_username] = {"concepts":{}}; 
-				$('#usernameLoader').attr("style", "display:block")
 
+			let isNewProjectName = true;
+
+			for (projectName in username_dict){
+				if(projectName.toLowerCase() == entered_username.toLowerCase()){
+					isNewProjectName = false;
+					console.log("same user name: ", entered_username)
+				}
+			}
+
+			if (entered_username != "" && isNewProjectName) {
+				// username_dict[entered_username] = {"concepts":{}}; 
+			
+					$('#usernameLoader').attr("style", "display:block")
 				$.ajax({
 					type: "POST",
 					url: "save_username",
@@ -158,6 +169,7 @@
 				$('#username_alert').html("username or group already exists")
 			}
 		}
+	
 	});
 
 	var concept_input = document.getElementById("concept_input");
@@ -276,36 +288,36 @@
 		// console.log(concept)
 
 		$.ajax({
-        type: "POST",
-        url: "/get_tree_view_json",
-        dataType: "json",
-        contentType: "application/json; charset=utf-8",
-        data: JSON.stringify({ "username": username, "concept": concept }),
-        success: function (result) {
+			type: "POST",
+			url: "/get_tree_view_json",
+			dataType: "json",
+			contentType: "application/json; charset=utf-8",
+			data: JSON.stringify({ "username": username, "concept": concept }),
+			success: function (result) {
 
-        //   $('#loader').attr("style", "display:none")
-          let tree_view_json = JSON.parse(result);
+				//   $('#loader').attr("style", "display:none")
+				let tree_view_json = JSON.parse(result);
 
-          if (tree_view_json.hasOwnProperty("children")) {
-			// let tree_view_json_children = tree_view_json.children;
-			window.location.href = username + '/symbols/' + concept;
-			$('#conceptLoad').show();
-		  }
-		  else{
-			window.location.href = '/' + username + '/finder/' + concept;
-			$('#conceptLoad').show();
-		  }
+				if (tree_view_json.hasOwnProperty("children")) {
+					// let tree_view_json_children = tree_view_json.children;
+					window.location.href = username + '/symbols/' + concept;
+					$('#conceptLoad').show();
+				}
+				else {
+					window.location.href = '/' + username + '/finder/' + concept;
+					$('#conceptLoad').show();
+				}
 
-        },
-        error: function (request, status, error) {
-          console.log("Error");
-          console.log(request)
-          console.log(status)
-          console.log(error)
-        }
-      });
+			},
+			error: function (request, status, error) {
+				console.log("Error");
+				console.log(request)
+				console.log(status)
+				console.log(error)
+			}
+		});
 
-	
+
 	}
 
 	function select_username(username) {
@@ -358,21 +370,21 @@
 	}
 
 	/* send_page_info = function(state){
-	
+
 		console.log('sending page info!')
-	
+
 		var version = null;
 		if(document.getElementById('version_1').checked) {
 			version = 1;
 		}else if(document.getElementById('version_2').checked) {
 			version = 2;
 		}
-	
+
 		var practice = true;
 		if(state == 1){
 			practice = false;
 		}
-	
+
 		if(practice){
 			if(version == 1){
 				window.location.href = '/finder/practice/1'
