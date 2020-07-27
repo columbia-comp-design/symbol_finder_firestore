@@ -935,29 +935,41 @@ create_image_grid3 = function (term, urls, concept, node_path_key) {
 
   let keySeq = node_path_key.split('/');
   let node =  tree.rootNode;
-  node = search_node_by_path(node, keySeq);
+
+
   // for(let i=0;i<keySeq.length;i++){
   //   node = tree.getNodeByKey(keySeq[i],node);
   // }
+
+  node = search_node_by_path(node, keySeq);
 
 
   for (var i = 0; i < urls.length; i++) {
     var url = urls[i];
     image_and_button_div = document.createElement("div");
+
     cell = row.insertCell(-1);
     image = document.createElement('img');
+
     image.setAttribute('src', url);
     cell_id = term + '_' + String(i)
     image.setAttribute('id', cell_id)
     image.setAttribute('class', 'img_in_table');
     image.setAttribute('onclick', 'confirm_image3(\"' + concept + '\",\"' + term + '\",\"' + url + '\",\"' + cell_id + '\",\"' + node_path_key + '\")');
 
+
+    
     if (url in node.data.saved_img) {
       image.classList.add('confirmed');
     }
 
+    var label = document.createElement("h6");
+    label.setAttribute('class', 'img_label')
+    label.innerHTML = "(" + (i+1) + ")";
 
     image_and_button_div.appendChild(image);
+    image_and_button_div.appendChild(label);
+
     cell.appendChild(image_and_button_div);
 
     if ((i + 1) % col_num == 0 && row_num < 2) {
@@ -1194,8 +1206,10 @@ fill_grids_for_concept = function (url_obj, concept, node_path_key) {
   var image_grids_div = document.getElementById("image_grids");
   image_grids_div.innerHTML = "";
 
+  let row_index = 0;
   for (search_term in url_obj) {
     var urls = url_obj[search_term];
+    row_index++;
 
     var term_image_grid = document.createElement("div");
     var term_image_grid_id = search_term + "_img_block";
@@ -1207,7 +1221,7 @@ fill_grids_for_concept = function (url_obj, concept, node_path_key) {
 
     var term_headline = document.createElement("h4");
     term_headline.setAttribute("class", "img_table_title");
-    term_headline.innerHTML = "<b>" + String(search_term) + "</b> "
+    term_headline.innerHTML = "<b> (" + row_index + ") " + String(search_term) + "</b> "
 
     headline_div.appendChild(term_headline);
 
@@ -1269,7 +1283,7 @@ fill_grids_for_cluster_concept = function (url_obj, concept, order) {
 
     var term_headline = document.createElement("h4");
     term_headline.setAttribute("class", "img_table_title");
-    term_headline.innerHTML = "<b>" + String(search_term) + "</b> "
+    term_headline.innerHTML = "<b> (" + (i+1) + ") " + String(search_term) + "</b> "
 
     headline_div.appendChild(term_headline);
 

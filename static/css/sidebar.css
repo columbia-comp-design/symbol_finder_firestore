@@ -46,10 +46,10 @@
 
 .img_in_table {
   display: block;
-  max-width:200px;
-  max-height:200px;
+  /* max-width:200px;
+  max-height:200px; */
   width: auto;
-  height: auto;
+  height: 150px;
   /* width: 200px; */
   border: 5px solid white; 
   padding: 5px; 
@@ -248,7 +248,7 @@
 }
 
 .term_image_grid {
-  width: 1050px;
+  /* width: 1050px; */
   /* width: 1300px; */ 
   border-width: thin;
   border-style: solid;
