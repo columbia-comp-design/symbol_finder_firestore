@@ -115,14 +115,15 @@
 
     console.log("here is swow_data_for_tree_view: ", swow_data_for_tree_view)
     console.log("Tree view json: ", tree_view_json)
+    console.log("\n\nhere is node_path:" , node_path)
 
 
     // fill_treeview_sidebar(concept,tree_view_json);
     // fill_cluster_image_grids(tree_view_json);
     var clusters = []
 
-    // if the tree is reloaded 
-    if (tree_view_json.hasOwnProperty("children")) {
+    if (node_path == 'phase_1') {
+      if (tree_view_json.hasOwnProperty("children")) {
       tree_view_json_children = tree_view_json.children;
       for (var i = 0; i < tree_view_json_children.length; i++) {
         var cluster_title = tree_view_json_children[i]["title"];
@@ -130,6 +131,45 @@
       }
       fill_treeview_sidebar(concept, tree_view_json, node_path); // 1
     }
+    else{
+      for (var i = 0; i < tree_view_json.length; i++) {
+        var cluster_title = tree_view_json[i]["title"];
+        clusters.push(cluster_title);
+      }
+      //init first time
+      fill_treeview_sidebar(concept, tree_view_json,node_path); // 1
+    }
+    $("#tree").hide();
+
+    //console.log(clusters)
+    google_all_clusters(clusters);
+    updateProgress();
+    populate_first_step_instructions();
+
+    }
+    else {
+
+      // go to phase 2
+      // if the tree is reloaded 
+      if (tree_view_json.hasOwnProperty("children")) {
+        tree_view_json_children = tree_view_json.children;
+        for (var i = 0; i < tree_view_json_children.length; i++) {
+          var cluster_title = tree_view_json_children[i]["title"];
+          clusters.push(cluster_title);
+        }
+        fill_treeview_sidebar(concept, tree_view_json, node_path); // 1
+      }
+
+      //tree 
+      $("#tree").show();
+
+      //blue box
+      $('#symbol_bank').show();
+      updateProgress();
+
+    }
+
+
     // else{ // load the tree for the first time 
     //   for (var i = 0; i < tree_view_json.length; i++) {
     //     var cluster_title = tree_view_json[i]["title"];
@@ -138,14 +178,14 @@
     //   fill_treeview_sidebar(concept, tree_view_json); // 1
     // }
 
-    //tree 
-    $("#tree").show();
+    // //tree 
+    // $("#tree").show();
 
-    //blue box
-    $('#symbol_bank').show();
-    updateProgress();
+    // //blue box
+    // $('#symbol_bank').show();
+    // updateProgress();
     // populate_first_step_instructions();
-    
+
     $('#loader').attr("style", "display:none")
   </script>
 

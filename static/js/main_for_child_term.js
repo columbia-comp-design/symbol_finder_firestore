@@ -492,7 +492,7 @@ function add_image_to_node(node_path_key, google_search_term, url) {
 
   var tree = $("#tree").fancytree("getTree");
   let keySeq = node_path_key.split('/');
-  let node =  tree.rootNode;
+  let node = tree.rootNode;
 
   node = search_node_by_path(node, keySeq);
 
@@ -522,8 +522,8 @@ function delete_image_from_node(node_path_key, url) {
 
   var tree = $("#tree").fancytree("getTree");
   let keySeq = node_path_key.split('/');
-  let node =  tree.rootNode;
-  
+  let node = tree.rootNode;
+
   node = search_node_by_path(node, keySeq);
 
   // for(let i=0;i<keySeq.length;i++){
@@ -564,22 +564,22 @@ function add_custom_node(attribute_node) {
 
       let map = new Map();
       // store all the keys in hashmap 
-      for(let i=1; i< node.children.length;i++){
-         map.set(node.children[i].key,true);
+      for (let i = 1; i < node.children.length; i++) {
+        map.set(node.children[i].key, true);
       }
 
       //check all direct children' keys 
-        let keyValue = 1;
-        let newKey = "_" + keyValue.toString() ;
+      let keyValue = 1;
+      let newKey = "_" + keyValue.toString();
 
       //pick new key 
-      while(map.has(newKey)){
-         keyValue++;
-         newKey = "_" + keyValue.toString() ;
+      while (map.has(newKey)) {
+        keyValue++;
+        newKey = "_" + keyValue.toString();
       }
 
 
-      var new_child_node = { "children":{}, "key": newKey, "title": val, "icon": false, "checkbox": false, "is_add_your_own": false, "expanded_once": false, "is_cluster": false, "google_image_urls": {}, "saved_img": {} }
+      var new_child_node = { "children": {}, "key": newKey, "title": val, "icon": false, "checkbox": false, "is_add_your_own": false, "expanded_once": false, "is_cluster": false, "google_image_urls": {}, "saved_img": {} }
 
       var children = node.getChildren();
       var second_child = children[1];
@@ -617,7 +617,7 @@ function add_custom_node(attribute_node) {
 
       }
 
-      if(!(data.node == undefined )){
+      if (!(data.node == undefined)) {
         multi_google_search(val, node.title, true, data.node.getPath(true, "key", "/"));
       }
 
@@ -646,9 +646,30 @@ function confirm_image3(tree_view_node_term, term, url, image_id, node_path_key)
   var tree = $("#tree").fancytree("getTree");
   //find node 
   let keySeq = node_path_key.split('/');
-  let node =  tree.rootNode;
 
+  let node = tree.rootNode;
   node = search_node_by_path(node, keySeq);
+
+
+  if(keySeq.length == 1){
+    //save it under the correct child 
+
+    // find the cluster node 
+    for(let i=0;i<node.children.length;i++){
+      console.log("inside for node.children[i].title", node.children[i])
+        if(node.children[i].title == tree_view_node_term.trim()){
+          node = node.children[i];
+          node_path_key  = node.getPath(true, "key", "/");
+          console.log("found Match node: ", node);
+          break;
+        }
+    }
+  }
+
+
+
+  //save images in this node
+  // node = search_node_by_path(node, keySeq);
 
   // for(let i=0;i<keySeq.length;i++){
   //   node = tree.getNodeByKey(keySeq[i],node);
@@ -934,7 +955,7 @@ create_image_grid3 = function (term, urls, concept, node_path_key) {
   var tree = $("#tree").fancytree("getTree");
 
   let keySeq = node_path_key.split('/');
-  let node =  tree.rootNode;
+  let node = tree.rootNode;
 
 
   // for(let i=0;i<keySeq.length;i++){
@@ -957,15 +978,29 @@ create_image_grid3 = function (term, urls, concept, node_path_key) {
     image.setAttribute('class', 'img_in_table');
     image.setAttribute('onclick', 'confirm_image3(\"' + concept + '\",\"' + term + '\",\"' + url + '\",\"' + cell_id + '\",\"' + node_path_key + '\")');
 
+    //checking if it is a cluster, then check under their children
+    if(keySeq.length == 1){
+      //save it under the correct child 
+  
+      // find the cluster node 
+      for(let i=1;i< (node.children.length - 1);i++){
+        console.log("inside for node.children[i].title", node.children[i])
 
-    
-    if (url in node.data.saved_img) {
-      image.classList.add('confirmed');
+        if (url in node.children[i].data.saved_img) {
+          image.classList.add('confirmed');
+        }
+      }
     }
+    else{
+      if (url in node.data.saved_img) {
+        image.classList.add('confirmed');
+      }
+    }
+
 
     var label = document.createElement("h6");
     label.setAttribute('class', 'img_label')
-    label.innerHTML = "(" + (i+1) + ")";
+    label.innerHTML = "(" + (i + 1) + ")";
 
     image_and_button_div.appendChild(image);
     image_and_button_div.appendChild(label);
@@ -1158,7 +1193,7 @@ explore = function () {
     data: JSON.stringify({ "username": username, "concept": concept }),
     success: function (result) {
       $('#sidebar').empty();
-      fill_treeview_sidebar(concept, tree_view_json); // 1
+      fill_treeview_sidebar(concept, tree_view_json, 'phase_1'); // 1
       var tree = $("#tree").fancytree("getTree");
       var tree_clusters = tree.rootNode.children;
       console.log("explore tree", tree)
@@ -1283,7 +1318,7 @@ fill_grids_for_cluster_concept = function (url_obj, concept, order) {
 
     var term_headline = document.createElement("h4");
     term_headline.setAttribute("class", "img_table_title");
-    term_headline.innerHTML = "<b> (" + (i+1) + ") " + String(search_term) + "</b> "
+    term_headline.innerHTML = "<b> (" + (i + 1) + ") " + String(search_term) + "</b> "
 
     headline_div.appendChild(term_headline);
 
@@ -1540,7 +1575,7 @@ function fill_treeview_sidebar(node_name, tree_view_json, node_path) {
 
   sb.appendChild(treeview);
 
-  
+
 
   $("#tree").fancytree({
     extensions: ["glyph"],
@@ -1663,7 +1698,7 @@ function fill_treeview_sidebar(node_name, tree_view_json, node_path) {
         tree_view_json = data.tree.toDict(true);
         update_tree_view_json_to_server(tree_view_json);
         console.log("init called end tree_view_json ", tree_view_json);
-        
+
       }
 
       tree_view_json = data.tree.toDict(true);
@@ -1849,6 +1884,7 @@ function fill_treeview_sidebar(node_name, tree_view_json, node_path) {
 
     },
     init: function (event, data) {
+
       console.log("init called");
       var tree_clusters = data.tree.rootNode.children;
       console.log("tree_clusters", data);
@@ -1862,27 +1898,38 @@ function fill_treeview_sidebar(node_name, tree_view_json, node_path) {
         }
       }
 
-      // tree values
-      console.log(" before expand tree_view_json", tree_view_json);
-      console.log(" before expand node_path", node_path);
 
-      let path = node_path.split('-');
+      if (node_path == 'phase_1') {
+        console.log('inside if node_path', node_path )
+
+        tree_view_json = data.tree.toDict(true);
+        update_tree_view_json_to_server(tree_view_json);
+        console.log("init called end tree_view_json ", tree_view_json);
+
+      }
+      else {
+
+        // tree values
+        console.log(" before expand tree_view_json", tree_view_json);
+        console.log(" before expand node_path", node_path);
+
+        let path = node_path.split('-');
 
 
-      let node = data.tree.rootNode;
-      console.log("node init ", node)
-      // //
-          let chosenChild ;
-        for(let i=0;i<path.length;i++){
+        let node = data.tree.rootNode;
+        console.log("node init ", node)
+        // //
+        let chosenChild;
+        for (let i = 0; i < path.length; i++) {
           // console.log("first for path val ", path[i], " and i: ", i);
-          for(let j=0; j<node.children.length;j++){
+          for (let j = 0; j < node.children.length; j++) {
             // console.log("second for j: ", j)
-            if(node.children[j].key == path[i]){
+            if (node.children[j].key == path[i]) {
               node.children[j].setExpanded(true);
               console.log("node.children[j].setExpanded(true): ", node.children[j]);
               chosenChild = j;
             }
-            else{
+            else {
               node.children[j].setExpanded(false);
             }
           }
@@ -1890,15 +1937,19 @@ function fill_treeview_sidebar(node_name, tree_view_json, node_path) {
         }
 
         node.setActive(true);
-        for(let k=0; k<node.children.length;k++){
+        for (let k = 0; k < node.children.length; k++) {
           node.children[k].setExpanded(false);
         }
 
-      multi_google_search(node.title, node.parent.title, false, node.getPath(true, "key", "/"));
-      
-      tree_view_json = data.tree.toDict(true);
-      update_tree_view_json_to_server(tree_view_json);
-      console.log("init called end tree_view_json ", tree_view_json);
+        multi_google_search(node.title, node.parent.title, false, node.getPath(true, "key", "/"));
+
+        tree_view_json = data.tree.toDict(true);
+        update_tree_view_json_to_server(tree_view_json);
+        console.log("init called end tree_view_json ", tree_view_json);
+
+      }
+
+
 
     },
   });
