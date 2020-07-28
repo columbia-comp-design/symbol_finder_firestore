@@ -748,7 +748,6 @@ function confirm_image3(tree_view_node_term, term, url, image_id, node_path_key)
 function confirm_image2(tree_view_node_term, term, url, image_id) {
   console.log("confirm_image2 : term: ", term);
 
-
   confirm_time = performance.now();
 
   console.log('confirm image')
@@ -777,14 +776,37 @@ function confirm_image2(tree_view_node_term, term, url, image_id) {
   }
 
   var tree = $("#tree").fancytree("getTree");
-  var node = tree.getNodeByKey(node_key);
+  // var node = tree.getNodeByKey(node_key);
+  node_key = node_key.split();
+   node = search_node_by_path(tree.rootNode,node_key);
+  //  node_key = node_key.splt();
+  let node_path_key;
+
+
+    //save it under the correct child 
+    
+
+    // find the cluster node 
+    for(let i=0;i<node.children.length;i++){
+      console.log("inside for node.children[i].title", node.children[i])
+        if(node.children[i].title == tree_view_node_term.trim()){
+          node = node.children[i];
+          node_path_key  = node.getPath(true, "key", "/");
+          console.log("found Match node: ", node);
+          break;
+        }
+    }
+  
+
+
+
 
   if (url in node.data.saved_img) {
     // delete_elem_from_table(url,term,image_id);
     to_remove = true;
     delete selected_symbols[url];
 
-    delete_image_from_node(node_key, url)
+    delete_image_from_node(node_path_key, url)
 
 
     //ajax send selected_symbols
@@ -822,7 +844,7 @@ function confirm_image2(tree_view_node_term, term, url, image_id) {
     console.log("concept: ", concept)
 
     //give node id //(path)
-    add_image_to_node(node_key, term, url);
+    add_image_to_node(node_path_key, term, url);
 
 
 
@@ -856,39 +878,6 @@ function confirm_image2(tree_view_node_term, term, url, image_id) {
   // update_saved_symbols(url, term, to_remove);
 }
 
-/*create_image_grid = function(term,urls){
-  console.log(term)
-  // var urls = ["https://images-na.ssl-images-amazon.com/images/I/61YL-c2pZOL._AC_SX355_.jpg", "https://images-na.ssl-images-amazon.com/images/I/61YL-c2pZOL._AC_SX355_.jpg", "https://images-na.ssl-images-amazon.com/images/I/61YL-c2pZOL._AC_SX355_.jpg", "https://images-na.ssl-images-amazon.com/images/I/61YL-c2pZOL._AC_SX355_.jpg", "https://images-na.ssl-images-amazon.com/images/I/61YL-c2pZOL._AC_SX355_.jpg", "https://images-na.ssl-images-amazon.com/images/I/61YL-c2pZOL._AC_SX355_.jpg", "https://images-na.ssl-images-amazon.com/images/I/61YL-c2pZOL._AC_SX355_.jpg", "https://images-na.ssl-images-amazon.com/images/I/61YL-c2pZOL._AC_SX355_.jpg", "https://images-na.ssl-images-amazon.com/images/I/61YL-c2pZOL._AC_SX355_.jpg"]
-  image_table = document.createElement('table');
-  row_num = 0;
-  col_num = 5; 
-  var row = image_table.insertRow(row_num)
-  row.style.display = "block";
-  cell_num = 0;
-  for(var i = 0; i < urls.length; i++){
-    var url = urls[i];
-    image_and_button_div = document.createElement("div");
-    cell = row.insertCell(-1);
-    image = document.createElement('img');
-    image.setAttribute('src',url);
-    cell_id = term + '_' +String(i)
-    image.setAttribute('id',cell_id)
-    image.setAttribute('class','img_in_table');
-    image.setAttribute('onclick','confirm_image(\"'+term+'\",\"'+url+'\",\"'+cell_id+'\")')
-    image_and_button_div.appendChild(image);
-    cell.appendChild(image_and_button_div);
-
-    if((i+1)%col_num == 0 && row_num < 2){
-      row_num++;
-      row = image_table.insertRow(row_num);
-      row.setAttribute("id",String(term) + "_row_2");
-      row.style.display = "none";
-      // console.log("ROW")
-      // console.log(row)
-    }
-  }
-  return image_table;
-}*/
 
 create_cluster_image_grid = function (term, urls, url_to_gs_dict) {
 
@@ -902,7 +891,7 @@ create_cluster_image_grid = function (term, urls, url_to_gs_dict) {
   }
 
   var tree = $("#tree").fancytree("getTree");
-  var node = tree.getNodeByKey(node_key);
+  // var node = tree.getNodeByKey(node_key);
   // console.log(term)
   // var urls = ["https://images-na.ssl-images-amazon.com/images/I/61YL-c2pZOL._AC_SX355_.jpg", "https://images-na.ssl-images-amazon.com/images/I/61YL-c2pZOL._AC_SX355_.jpg", "https://images-na.ssl-images-amazon.com/images/I/61YL-c2pZOL._AC_SX355_.jpg", "https://images-na.ssl-images-amazon.com/images/I/61YL-c2pZOL._AC_SX355_.jpg", "https://images-na.ssl-images-amazon.com/images/I/61YL-c2pZOL._AC_SX355_.jpg", "https://images-na.ssl-images-amazon.com/images/I/61YL-c2pZOL._AC_SX355_.jpg", "https://images-na.ssl-images-amazon.com/images/I/61YL-c2pZOL._AC_SX355_.jpg", "https://images-na.ssl-images-amazon.com/images/I/61YL-c2pZOL._AC_SX355_.jpg", "https://images-na.ssl-images-amazon.com/images/I/61YL-c2pZOL._AC_SX355_.jpg"]
   image_table = document.createElement('table');
@@ -911,6 +900,12 @@ create_cluster_image_grid = function (term, urls, url_to_gs_dict) {
   var row = image_table.insertRow(row_num)
   row.style.display = "block";
   cell_num = 0;
+
+  var tree = $("#tree").fancytree("getTree");
+  // let keySeq = node_path_key.split('/');
+  let node = tree.rootNode; // all cluster children 
+
+
   for (var i = 0; i < urls.length; i++) {
     var url = urls[i];
     image_and_button_div = document.createElement("div");
@@ -922,9 +917,29 @@ create_cluster_image_grid = function (term, urls, url_to_gs_dict) {
     image.setAttribute('class', 'img_in_table');
     var concept = url_to_gs_dict[url];
     image.setAttribute('onclick', 'confirm_image2(\"' + concept + '\",\"' + term + '\",\"' + url + '\",\"' + cell_id + '\")');
-    if (url in node.data.saved_img) {
-      image.classList.add('confirmed');
+
+    //check each cluster child 
+    for(let j=0;j<node.children.length;j++){
+      //check each cluster
+      if(node.children[j].title == term){
+        node = node.children[j];
+        break;
+      }
     }
+
+     // find the cluster node 
+     for(let j=0;j< node.children.length ;j++){
+      // console.log("inside for node.children[i].title", node.children[j])
+
+      if(node.children[j].data.hasOwnProperty('saved_img')){
+        if (url in node.children[j].data.saved_img) {
+          image.classList.add('confirmed');
+          console.log("confirmed image")
+        }
+      }
+    }
+
+
     image_and_button_div.appendChild(image);
 
     cell.appendChild(image_and_button_div);
@@ -1022,6 +1037,11 @@ create_image_grid3 = function (term, urls, concept, node_path_key) {
 
 
 create_image_grid2 = function (term, urls, concept) {
+  // term = clusterName (x,y,z)
+
+  //concept is the cluster's child title
+
+
   console.log('create_image_grid2 called()')
   // var urls = ["https://images-na.ssl-images-amazon.com/images/I/61YL-c2pZOL._AC_SX355_.jpg", "https://images-na.ssl-images-amazon.com/images/I/61YL-c2pZOL._AC_SX355_.jpg", "https://images-na.ssl-images-amazon.com/images/I/61YL-c2pZOL._AC_SX355_.jpg", "https://images-na.ssl-images-amazon.com/images/I/61YL-c2pZOL._AC_SX355_.jpg", "https://images-na.ssl-images-amazon.com/images/I/61YL-c2pZOL._AC_SX355_.jpg", "https://images-na.ssl-images-amazon.com/images/I/61YL-c2pZOL._AC_SX355_.jpg", "https://images-na.ssl-images-amazon.com/images/I/61YL-c2pZOL._AC_SX355_.jpg", "https://images-na.ssl-images-amazon.com/images/I/61YL-c2pZOL._AC_SX355_.jpg", "https://images-na.ssl-images-amazon.com/images/I/61YL-c2pZOL._AC_SX355_.jpg"]
   image_table = document.createElement('table');
@@ -1030,6 +1050,11 @@ create_image_grid2 = function (term, urls, concept) {
   var row = image_table.insertRow(row_num)
   row.style.display = "block";
   cell_num = 0;
+
+  var tree = $("#tree").fancytree("getTree");
+  // let keySeq = node_path_key.split('/');
+  let node = tree.rootNode; // all cluster children 
+
   for (var i = 0; i < urls.length; i++) {
     var url = urls[i];
     image_and_button_div = document.createElement("div");
@@ -1041,10 +1066,29 @@ create_image_grid2 = function (term, urls, concept) {
     image.setAttribute('class', 'img_in_table');
     image.setAttribute('onclick', 'confirm_image2(\"' + concept + '\",\"' + term + '\",\"' + url + '\",\"' + cell_id + '\")');
 
-    if (url in selected_symbols) {
-      image.classList.add('confirmed');
-    }
 
+
+      //check each cluster child 
+      for(let j=0;j<node.children.length;j++){
+        //check each cluster
+        if(node.children[j].title == concept){
+          node = node.children[j];
+          break;
+        }
+      }
+      
+      // find the cluster node 
+      for(let j=0;j< node.children.length ;j++){
+        console.log("inside for node.children[i].title", node.children[j])
+
+        if(node.children[j].data.hasOwnProperty('saved_img')){
+          if (url in node.children[j].data.saved_img) {
+            image.classList.add('confirmed');
+          }
+        }
+      }
+    
+  
 
     image_and_button_div.appendChild(image);
     cell.appendChild(image_and_button_div);
