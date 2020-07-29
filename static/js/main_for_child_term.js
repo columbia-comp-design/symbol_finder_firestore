@@ -501,14 +501,17 @@ function add_image_to_node(node_path_key, google_search_term, url) {
   // }
 
 
+  //add the images to node
   node.data.saved_img[url] = {};
   node.data.saved_img[url]["google_search_term"] = google_search_term;
   node.data.saved_img[url]["tree_path_ids"] = node.getPath(true, "key", "/");
   node.data.saved_img[url]["url"] = url;
 
 
-  // console.log("Here is modified_tree ", modified_tree); 
+  // update the tree
   var updated_tree_view_json = tree.toDict(true);
+  console.log("add_image_to_node, -> tree.toDict(true)", updated_tree_view_json);
+
   update_tree_view_json_to_server(updated_tree_view_json);
   console.log("add_image_to_node, -> modified_tree converted to a dict", updated_tree_view_json);
 
@@ -1107,24 +1110,33 @@ create_image_grid2 = function (term, urls, concept) {
 
 
 add_cluster = function (cluster_title, yes_btn) {
-  // console.log("adding cluster!");
+
+  var tree = $("#tree").fancytree("getTree");
+  tree_view_json = tree.rootNode;
+  //tree.toDict(true);
+
+  // unselect cluster from tree
   if (yes_btn.classList.contains("yes_active")) {
     // console.log("removing cluster!");
     // delete chosen_clusters.cluster_title;
     if (tree_view_json.hasOwnProperty("children")) {
       for (var i = 0; i < tree_view_json.children.length; i++) {
         if (tree_view_json.children[i].title == cluster_title) {
+          console.log("deselecting cluster: ",tree_view_json.children[i].title )
           tree_view_json.children[i].selected = false
         }
       }
     }
-    else {
-      for (var i = 0; i < tree_view_json.length; i++) {
-        if (tree_view_json[i].title == cluster_title) {
-          tree_view_json[i].selected = false
-        }
-      }
-    }
+    // else {
+    //   for (var i = 0; i < tree_view_json.length; i++) {
+    //     if (tree_view_json[i].title == cluster_title) {
+    //       tree_view_json[i].selected = false
+    //     }
+    //   }
+    // }
+
+    tree_view_json = tree.toDict(true);
+
 
     $.ajax({
       type: "POST",
@@ -1151,17 +1163,22 @@ add_cluster = function (cluster_title, yes_btn) {
     if (tree_view_json.hasOwnProperty("children")) {
       for (var i = 0; i < tree_view_json.children.length; i++) {
         if (tree_view_json.children[i].title == cluster_title) {
+          console.log("selecting cluster: ",tree_view_json.children[i].title )
           tree_view_json.children[i].selected = true
         }
       }
     }
-    else {
-      for (var i = 0; i < tree_view_json.length; i++) {
-        if (tree_view_json[i].title == cluster_title) {
-          tree_view_json[i].selected = true
-        }
-      }
-    }
+    // else {
+    //   for (var i = 0; i < tree_view_json.length; i++) {
+    //     if (tree_view_json[i].title == cluster_title) {
+    //       tree_view_json[i].selected = true
+    //     }
+    //   }
+    // }
+
+    tree_view_json = tree.toDict(true);
+
+
     console.log("Here's username: ", username);
     console.log("Here's concept: ", concept);
     $.ajax({
@@ -1183,6 +1200,8 @@ add_cluster = function (cluster_title, yes_btn) {
       }
     });
   }
+
+
 
   console.log("Here's the updated tree_view_json: ", tree_view_json);
 }
