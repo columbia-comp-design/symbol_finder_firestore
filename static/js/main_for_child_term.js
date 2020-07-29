@@ -67,7 +67,12 @@ populate_first_step_instructions = function () {
   var instruction_div = document.getElementById("instructions");
 
   var instruction_text = document.createElement("p");
-  var number_of_clusters = String(tree_view_json.length);
+  if(tree_view_json.hasOwnProperty('children')){
+    var number_of_clusters = String(tree_view_json.children.length);
+  }
+  else{
+    var number_of_clusters = String(tree_view_json.length);
+  }
   instruction_text.innerHTML = "Go through each of the " + number_of_clusters + " clusters below. <br> For each one, determine if the words are related to <b>" + concept_searched + "</b>. <br> Also, select any image you think is a good symbol for <b>" + concept_searched + "</b>."
 
   instruction_div.appendChild(instruction_text);
