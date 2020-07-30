@@ -5,6 +5,8 @@
  *
  * It also contains functions to save the state of the app using Firestore
  * Hector Liang 
+ * Grace He
+ * Annie
  * July 13, 2020
 */
 
@@ -1996,18 +1998,26 @@ function fill_treeview_sidebar(node_name, tree_view_json, node_path) {
               node.children[j].setExpanded(true);
               console.log("node.children[j].setExpanded(true): ", node.children[j]);
               chosenChild = j;
+              console.log("chosenChild index j", chosenChild)
             }
             else {
               node.children[j].setExpanded(false);
             }
           }
+          
           node = node.children[chosenChild]
+          console.log("inside for node.children[chosenChild]: ", node)
         }
 
+        console.log("outside node.children[chosenChild]: ", node)
+
         node.setActive(true);
-        for (let k = 0; k < node.children.length; k++) {
-          node.children[k].setExpanded(false);
+        if(node.hasOwnProperty('children')){
+          for (let k = 0; k < node.children.length; k++) {
+            node.children[k].setExpanded(false);
+          }
         }
+     
 
         multi_google_search(node.title, node.parent.title, false, node.getPath(true, "key", "/"));
 
@@ -2045,91 +2055,93 @@ function show_found_symbols(){
 }*/
 
 function create_selected_symbol_table() {
-  concept = window.location.href.substring(window.location.href.lastIndexOf('/') + 1);
-  console.log("create_selected_symbol_table() called and the concept is ", concept)
-  // console.log("href: " , window.location.href.substring(window.location.href.lastIndexOf('/') + 1));
-  var cst_div = document.getElementById("chosen_symbol_table_div");
-  cst_div.innerHTML = "";
+  console.log("create_selected_symbol_table called")
+  render_overview_page();
+  // concept = window.location.href.substring(window.location.href.lastIndexOf('/') + 1);
+  // console.log("create_selected_symbol_table() called and the concept is ", concept)
+  // // console.log("href: " , window.location.href.substring(window.location.href.lastIndexOf('/') + 1));
+  // var cst_div = document.getElementById("chosen_symbol_table_div");
+  // cst_div.innerHTML = "";
 
 
-  $.ajax({
-    type: "POST",
-    url: "/get_selected_symbols",
-    dataType: "json",
-    contentType: "application/json; charset=utf-8",
-    data: JSON.stringify({ "username": username, "concept": concept }),
-    success: function (data) {
-      // console.log("data: ", data)
-      console.log("Ajax-call worked for /get_selected_symbols.");
-      selected_symbols = data;
-      var symbol_entries = Object.entries(selected_symbols);
-      concept_to_url_dict = {};
+  // $.ajax({
+  //   type: "POST",
+  //   url: "/get_selected_symbols",
+  //   dataType: "json",
+  //   contentType: "application/json; charset=utf-8",
+  //   data: JSON.stringify({ "username": username, "concept": concept }),
+  //   success: function (data) {
+  //     // console.log("data: ", data)
+  //     console.log("Ajax-call worked for /get_selected_symbols.");
+  //     selected_symbols = data;
+  //     var symbol_entries = Object.entries(selected_symbols);
+  //     concept_to_url_dict = {};
 
-      console.log("selected_symbols: ", selected_symbols)
-      console.log("symbol_entries: ", symbol_entries)
+  //     console.log("selected_symbols: ", selected_symbols)
+  //     console.log("symbol_entries: ", symbol_entries)
 
-      for (var i = 0; i < symbol_entries.length; i++) {
-        console.log("symbol_entry[i] ", symbol_entries[i]);
-        var symbol_entry = symbol_entries[i];
+  //     for (var i = 0; i < symbol_entries.length; i++) {
+  //       console.log("symbol_entry[i] ", symbol_entries[i]);
+  //       var symbol_entry = symbol_entries[i];
 
-        var url = symbol_entry[0];
-        var concept = symbol_entry[1]["concept"];
-        if (concept in concept_to_url_dict) {
-          var url_list = concept_to_url_dict[concept]
-          console.log(url_list);
-          url_list.push(url);
-          concept_to_url_dict[concept] = url_list;
-        }
-        else {
-          concept_to_url_dict[concept] = [url];
-        }
-      }
+  //       var url = symbol_entry[0];
+  //       var concept = symbol_entry[1]["concept"];
+  //       if (concept in concept_to_url_dict) {
+  //         var url_list = concept_to_url_dict[concept]
+  //         console.log(url_list);
+  //         url_list.push(url);
+  //         concept_to_url_dict[concept] = url_list;
+  //       }
+  //       else {
+  //         concept_to_url_dict[concept] = [url];
+  //       }
+  //     }
 
-      image_table = document.createElement('table');
-      row_num = 0;
-      col_num = 5;
-      var row = image_table.insertRow(row_num);
-      row.style.display = "block";
-      cell_num = 0;
-      var concept_to_url_entries = Object.entries(concept_to_url_dict);
-      console.log("CONCEPT TO URL ENTRIES")
-      console.log(concept_to_url_entries)
-      for (var i = 0; i < concept_to_url_entries.length; i++) {
-        var concept_to_url_entry = concept_to_url_entries[i];
-        var concept = concept_to_url_entry[0];
-        var urls = concept_to_url_entry[1];
-        console.log("concept: " + String(concept));
-        console.log("urls: " + String(urls));
+  //     image_table = document.createElement('table');
+  //     row_num = 0;
+  //     col_num = 5;
+  //     var row = image_table.insertRow(row_num);
+  //     row.style.display = "block";
+  //     cell_num = 0;
+  //     var concept_to_url_entries = Object.entries(concept_to_url_dict);
+  //     console.log("CONCEPT TO URL ENTRIES")
+  //     console.log(concept_to_url_entries)
+  //     for (var i = 0; i < concept_to_url_entries.length; i++) {
+  //       var concept_to_url_entry = concept_to_url_entries[i];
+  //       var concept = concept_to_url_entry[0];
+  //       var urls = concept_to_url_entry[1];
+  //       console.log("concept: " + String(concept));
+  //       console.log("urls: " + String(urls));
 
-        var cell = row.insertCell(-1);
-        cell.innerHTML = concept;
+  //       var cell = row.insertCell(-1);
+  //       cell.innerHTML = concept;
 
-        for (var j = 0; j < urls.length; j++) {
-          var url = urls[j];
-          image_and_button_div = document.createElement("div");
-          cell = row.insertCell(-1);
-          image = document.createElement('img');
-          image.setAttribute('src', url);
-          cell_id = concept + '_' + String(j)
-          image.setAttribute('id', cell_id)
-          image.setAttribute('class', 'img_in_table');
-          cell.appendChild(image);
-        }
+  //       for (var j = 0; j < urls.length; j++) {
+  //         var url = urls[j];
+  //         image_and_button_div = document.createElement("div");
+  //         cell = row.insertCell(-1);
+  //         image = document.createElement('img');
+  //         image.setAttribute('src', url);
+  //         cell_id = concept + '_' + String(j)
+  //         image.setAttribute('id', cell_id)
+  //         image.setAttribute('class', 'img_in_table');
+  //         cell.appendChild(image);
+  //       }
 
-        row_num++;
-        row = image_table.insertRow(row_num);
-        row.style.display = "block";
-      }
-      console.log("done.")
-      cst_div.appendChild(image_table);
-    },
-    error: function (request, status, error) {
-      console.log("Error");
-      console.log(request)
-      console.log(status)
-      console.log(error)
-    }
-  });
+  //       row_num++;
+  //       row = image_table.insertRow(row_num);
+  //       row.style.display = "block";
+  //     }
+  //     console.log("done.")
+  //     cst_div.appendChild(image_table);
+  //   },
+  //   error: function (request, status, error) {
+  //     console.log("Error");
+  //     console.log(request)
+  //     console.log(status)
+  //     console.log(error)
+  //   }
+  // });
 }
 
 
@@ -2228,14 +2240,19 @@ function get_sorted_object_count(concept_counts_dict) {
 }*/
 
 function toggle_show_all_symbols(but) {
+  //open
   if (showing_selected_symbols == false) {
     var symbol_bank = document.getElementById("symbol_bank");
+    //
+
     symbol_bank.setAttribute("style", "height:75%");
     create_selected_symbol_table();
     showing_selected_symbols = true;
     but.innerHTML = "hide symbols"
   } else {
+    //close blue box
     var symbol_bank = document.getElementById("symbol_bank");
+    $('#progress_summary').empty();
     symbol_bank.setAttribute("style", "height:auto");
     var cst_div = document.getElementById("chosen_symbol_table_div");
     cst_div.innerHTML = "";

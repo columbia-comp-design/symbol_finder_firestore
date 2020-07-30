@@ -6,7 +6,7 @@
 */
 
 //change it to your own keys
-var api_key = "jhvlwejlkvjwlejkklj"
+var api_key = "AIzaSyC8IhKndlknkx42UBGT268f9k8ew"
 
 // Extracts the actual urls from the Google API results
 extract_links = function (search_results) {
