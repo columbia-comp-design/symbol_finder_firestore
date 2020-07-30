@@ -59,16 +59,14 @@
     <!-- <button id ="delete_button" class="delete_button"> delete</button> -->
 
     <div class="symbol_bank" id="symbol_bank" style="display:none">
-      <div id="progress_summary" class="progress_summary"> </div>
-      <div>
-        <button id="see_all_symbols" class="see_all_symbols_btn" onclick="toggle_show_all_symbols(this)"> show symbols
-        </button>
+      <div id="overview_header"> 
+        <h2 id="summaryTitle">
+        <span id = "termTotal">0 unique term</span>  and <span id = "imageTotal">0 image</span>  for:  <span id="concept_name">""</span>
+      </h2> 
+
+        <button id="see_all_symbols" class="see_all_symbols_btn" onclick="toggle_show_all_symbols(this)"> show symbols</button>
       </div>
-      <div id="chosen_symbol_table_div" class="chosen_symbol_table_div">
-        <!--<table id="symbol_bank_table"> </table>
-        <tr></tr>-->
-        <!-- <button id="see_all_symbols" class="see_all_symbols_btn" onclick="toggle_show_all_symbols(this)"> show symbols </button> -->
-      </div>
+        <div id="symbol_grid" class="progress_summary"> </div> 
     </div>
     <br>
     <div id="under_progress_bar" class="under_progress_bar">
@@ -146,8 +144,11 @@
 
     //console.log(clusters)
     google_all_clusters(clusters);
+   
     updateProgress();
     populate_first_step_instructions();
+
+   
 
     }
     else {
@@ -168,7 +169,14 @@
 
       //blue box
       $('#symbol_bank').show();
-      updateProgress();
+      render_overview_page(true); //true isInit
+      // init_overview_title();
+      console.log("called render_overview_page ")
+
+      $('#symbol_grid').empty();
+      console.log("symbol_grid -> empty ")
+
+      // updateProgress();
 
     }
 

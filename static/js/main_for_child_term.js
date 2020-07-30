@@ -2013,8 +2013,10 @@ function fill_treeview_sidebar(node_name, tree_view_json, node_path) {
 
         node.setActive(true);
         if(node.hasOwnProperty('children')){
-          for (let k = 0; k < node.children.length; k++) {
-            node.children[k].setExpanded(false);
+          if(node.children != null){
+            for (let k = 0; k < node.children.length; k++) {
+              node.children[k].setExpanded(false);
+            }
           }
         }
      
@@ -2056,7 +2058,7 @@ function show_found_symbols(){
 
 function create_selected_symbol_table() {
   console.log("create_selected_symbol_table called")
-  render_overview_page();
+  render_overview_page(false);
   // concept = window.location.href.substring(window.location.href.lastIndexOf('/') + 1);
   // console.log("create_selected_symbol_table() called and the concept is ", concept)
   // // console.log("href: " , window.location.href.substring(window.location.href.lastIndexOf('/') + 1));
@@ -2243,66 +2245,65 @@ function toggle_show_all_symbols(but) {
   //open
   if (showing_selected_symbols == false) {
     var symbol_bank = document.getElementById("symbol_bank");
-    //
+    // 
 
     symbol_bank.setAttribute("style", "height:75%");
-    create_selected_symbol_table();
+    //render overviewpage
+    create_selected_symbol_table()
     showing_selected_symbols = true;
     but.innerHTML = "hide symbols"
   } else {
     //close blue box
     var symbol_bank = document.getElementById("symbol_bank");
-    $('#progress_summary').empty();
+    $('#symbol_grid').empty();
     symbol_bank.setAttribute("style", "height:auto");
-    var cst_div = document.getElementById("chosen_symbol_table_div");
-    cst_div.innerHTML = "";
+    // var cst_div = document.getElementById("chosen_symbol_table_div");
+    // cst_div.innerHTML = "";
     showing_selected_symbols = false;
     but.innerHTML = "show symbols";
   }
 }
 
+// update summary_title 
 function updateProgress() {
-  console.log()
-  p = document.getElementById('progress_summary');
-  empty_dom(p)
+  console.log("updateProgress() called");
+  render_overview_page(true);
+  
+
+  // console.log()
+  // p = document.getElementById('progress_summary');
+  // empty_dom(p)
+
+  // $('#symbol_bank').append($('<div> <h2 id="summaryTitle"> </h2> <button> </button> </div>'));
+  // populate_clusters_images(tree_view_json_children);
+
+  // $.ajax({
+  //   type: "POST",
+  //   url: "/get_selected_symbols",
+  //   dataType: "json",
+  //   contentType: "application/json; charset=utf-8",
+  //   data: JSON.stringify({ "username": username, "concept": concept }),
+  //   success: function (data) {
+
+  //     selected_symbols = data;
+  //     num_of_symbols = Object.keys(selected_symbols).length;
+  //     // var title_div = document.createElement('div');
+  //     // title_div.innerHTML = concept_searched;
+  //     // p.appendChild(title_div);
+  //     var div3 = document.createElement('div');
+  //     div3.setAttribute("class", "progress_concept_info");
+  //     var concept_counts_dict = getConceptCounts();
+  //     var number_of_concepts = Object.keys(concept_counts_dict).length;
+  //     var concept_string = '';
+  //     var concept_count_list = get_sorted_object_count(concept_counts_dict);
+  //     var target_number = 20;
+  //     /*for(var i = 0; i < concept_countgit_list.length; i++){
+  //       var concept_obj = concept_count_list[i];
+  //       concept_string = concept_string + " <b>" + String(concept_obj.concept) + "</b> (" + String(concept_obj.count) + "),";
+  //     }*/
+  //     // div3.innerHTML = String(String(num_of_symbols) + " symbols found from " + String(number_of_concepts) + " concepts:" + concept_string + " <hr>");
+  //     div3.innerHTML = String(number_of_concepts) + " / " + String(target_number) + "  unique symbols found for: <b>" + concept_searched + "</b>";
 
 
-  $.ajax({
-    type: "POST",
-    url: "/get_selected_symbols",
-    dataType: "json",
-    contentType: "application/json; charset=utf-8",
-    data: JSON.stringify({ "username": username, "concept": concept }),
-    success: function (data) {
-
-      selected_symbols = data;
-      num_of_symbols = Object.keys(selected_symbols).length;
-      // var title_div = document.createElement('div');
-      // title_div.innerHTML = concept_searched;
-      // p.appendChild(title_div);
-      var div3 = document.createElement('div');
-      div3.setAttribute("class", "progress_concept_info");
-      var concept_counts_dict = getConceptCounts();
-      var number_of_concepts = Object.keys(concept_counts_dict).length;
-      var concept_string = '';
-      var concept_count_list = get_sorted_object_count(concept_counts_dict);
-      var target_number = 20;
-      /*for(var i = 0; i < concept_countgit_list.length; i++){
-        var concept_obj = concept_count_list[i];
-        concept_string = concept_string + " <b>" + String(concept_obj.concept) + "</b> (" + String(concept_obj.count) + "),";
-      }*/
-      // div3.innerHTML = String(String(num_of_symbols) + " symbols found from " + String(number_of_concepts) + " concepts:" + concept_string + " <hr>");
-      div3.innerHTML = String(number_of_concepts) + " / " + String(target_number) + "  unique symbols found for: <b>" + concept_searched + "</b>";
-
-      p.appendChild(div3);
-
-
-    },
-    error: function (request, status, error) {
-      console.log("Error");
-      console.log(request)
-      console.log(status)
-      console.log(error)
-    }
-  });
+ 
 }
