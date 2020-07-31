@@ -82,24 +82,24 @@ app = Flask(__name__, template_folder=tmpl_dir)
 
 
 
-#done
-@app.route('/update_selected_symbols',  methods=['POST','GET'])
-def modified_selected_symbols():
-	print("/update_selected_symbols")
-	json_data = request.get_json() 
-	selected_symbols = json_data['selected_symbols']
-	username = json_data['username']
-	concept = json_data['concept']
+# #done
+# @app.route('/update_selected_symbols',  methods=['POST','GET'])
+# def modified_selected_symbols():
+# 	print("/update_selected_symbols")
+# 	json_data = request.get_json() 
+# 	selected_symbols = json_data['selected_symbols']
+# 	username = json_data['username']
+# 	concept = json_data['concept']
 
-	doc_ref = db.collection(u'projects').document(u''+projecstDate)
-	doc = doc_ref.get()
-	username_dict = doc.to_dict()
-	username_dict[username]['concepts'][concept]['selected_symbols'] = selected_symbols
+# 	doc_ref = db.collection(u'projects').document(u''+projecstDate)
+# 	doc = doc_ref.get()
+# 	username_dict = doc.to_dict()
+# 	username_dict[username]['concepts'][concept]['selected_symbols'] = selected_symbols
 
 	
-	dicPath =  username +'.concepts.' + concept + '.selected_symbols'
-	doc_ref.update({u''+dicPath:selected_symbols})
-	return jsonify(selected_symbols)
+# 	dicPath =  username +'.concepts.' + concept + '.selected_symbols'
+# 	doc_ref.update({u''+dicPath:selected_symbols})
+# 	return jsonify(selected_symbols)
 
 # @app.route('/update_tree_view', method=['POST'])
 # def update_tree_view():

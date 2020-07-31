@@ -690,24 +690,7 @@ function confirm_image3(tree_view_node_term, term, url, image_id, node_path_key)
     to_remove = true;
     delete selected_symbols[url];
 
-    //ajax send selected_symbols
-    $.ajax({
-      type: "POST",
-      url: "/update_selected_symbols",
-      dataType: "json",
-      contentType: "application/json; charset=utf-8",
-      data: JSON.stringify({ "selected_symbols": selected_symbols, "username": username, "concept": concept }),
-      success: function (data) {
-        selected_symbols = data;
-        // console.log("removed image for node: ", node.title);
-      },
-      error: function (request, status, error) {
-        console.log("Error");
-        console.log(request)
-        console.log(status)
-        console.log(error)
-      }
-    });
+   
 
     delete_image_from_node(node_path_key, url);
 
@@ -722,23 +705,7 @@ function confirm_image3(tree_view_node_term, term, url, image_id, node_path_key)
     // console.log("tree_view_node_term: ", tree_view_node_term)
     // console.log("concept: ", concept)
     //ajax send selected_symbols
-    $.ajax({
-      type: "POST",
-      url: "/update_selected_symbols",
-      dataType: "json",
-      contentType: "application/json; charset=utf-8",
-      data: JSON.stringify({ "selected_symbols": selected_symbols, "username": username, "concept": concept }),
-      success: function () {
-        // console.log("Ajax worked for /modified_selected_symbols.");
-      },
-      error: function (request, status, error) {
-        console.log("Error");
-        console.log(request)
-        console.log(status)
-        console.log(error)
-      }
-    });
-
+   
     var foundChild = false;
     var cluster_index = -1;
     //--------------------------------------------------------------------//
@@ -822,25 +789,6 @@ function confirm_image2(tree_view_node_term, term, url, image_id) {
     delete_image_from_node(node_path_key, url)
 
 
-    //ajax send selected_symbols
-    $.ajax({
-      type: "POST",
-      url: "/update_selected_symbols",
-      dataType: "json",
-      contentType: "application/json; charset=utf-8",
-      data: JSON.stringify({ "selected_symbols": selected_symbols, "username": username, "concept": concept }),
-      success: function (data) {
-        selected_symbols = data;
-        console.log("Ajax worked for /modified_selected_symbols.");
-      },
-      error: function (request, status, error) {
-        console.log("Error");
-        console.log(request)
-        console.log(status)
-        console.log(error)
-      }
-    });
-
   }
   else {
     // add_elem_to_symbol_table(url,term,image_id);
@@ -857,25 +805,6 @@ function confirm_image2(tree_view_node_term, term, url, image_id) {
     //give node id //(path)
     add_image_to_node(node_path_key, term, url);
 
-
-
-    //ajax send selected_symbols
-    $.ajax({
-      type: "POST",
-      url: "/update_selected_symbols",
-      dataType: "json",
-      contentType: "application/json; charset=utf-8",
-      data: JSON.stringify({ "selected_symbols": selected_symbols, "username": username, "concept": concept }),
-      success: function () {
-        console.log("Ajax worked for /modified_selected_symbols.");
-      },
-      error: function (request, status, error) {
-        console.log("Error");
-        console.log(request)
-        console.log(status)
-        console.log(error)
-      }
-    });
 
 
     updateProgress();
