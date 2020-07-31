@@ -1,5 +1,5 @@
 #symbol_grid{
-  margin-bottom: 5vw;
+  /* margin-bottom: 5vw; */
 }
 
 #symbol_grid>h1,h2,h3, h4, h5, h6{
@@ -139,4 +139,9 @@ b{
 #overview_header{
   display: flex;
   flex-direction: row;
+}
+
+#concept_name{
+  font-weight: bold;
+  font-size: 45px;
 }

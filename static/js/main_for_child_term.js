@@ -711,8 +711,7 @@ function confirm_image3(tree_view_node_term, term, url, image_id, node_path_key)
 
     delete_image_from_node(node_path_key, url);
 
-    updateProgress();
-    // updateNodes();
+   
   }
   else {
     selected_symbols[url] = {};
@@ -749,9 +748,13 @@ function confirm_image3(tree_view_node_term, term, url, image_id, node_path_key)
 
   }
 
+  $('#symbol_grid').empty();
+  showing_selected_symbols = false;
+  let symbol_bank = document.getElementById("symbol_bank");
+  symbol_bank.setAttribute("style", "height:auto");
+  $('#see_all_symbols').text('show symbols')
 
   updateProgress();
-  // updateNodes();
 }
 
 //for phase 1 in finder.html
@@ -838,8 +841,6 @@ function confirm_image2(tree_view_node_term, term, url, image_id) {
       }
     });
 
-    updateProgress();
-    // updateNodes();
   }
   else {
     // add_elem_to_symbol_table(url,term,image_id);
@@ -2255,8 +2256,9 @@ function toggle_show_all_symbols(but) {
   } else {
     //close blue box
     var symbol_bank = document.getElementById("symbol_bank");
-    $('#symbol_grid').empty();
+       $('#symbol_grid').empty();
     symbol_bank.setAttribute("style", "height:auto");
+ 
     // var cst_div = document.getElementById("chosen_symbol_table_div");
     // cst_div.innerHTML = "";
     showing_selected_symbols = false;
