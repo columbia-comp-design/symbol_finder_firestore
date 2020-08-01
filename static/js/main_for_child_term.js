@@ -574,7 +574,7 @@ function add_custom_node(attribute_node) {
 
       let map = new Map();
       // store all the keys in hashmap 
-      for (let i = 1; i < node.children.length; i++) {
+      for (let i = 0; i < node.children.length; i++) {
         map.set(node.children[i].key, true);
       }
 
@@ -1663,9 +1663,26 @@ function fill_treeview_sidebar(node_name, tree_view_json, node_path) {
 
         // var text_area = "<input type=\"text\" placeholder=\"write your own!\" onkeydown=\"add_custom_node(\""+String(node.data.key)+"\",this)\">"
 
+      let map = new Map();
+      // store all the keys in hashmap 
+      for (let i = 0; i < node.children.length; i++) {
+        map.set(node.children[i].key, true);
+      }
+
+      //check all direct children' keys 
+      let keyValue = 1;
+      let newKey = "_" + keyValue.toString();
+
+      //pick new key 
+      while (map.has(newKey)) {
+        keyValue++;
+        newKey = "_" + keyValue.toString();
+      }
+
+      map.set(newKey,true);
 
         var text_area = '<input type=\"text\" placeholder=\"write your own!\" class=\"inp\" nkey=\"' + data["node"].getPath(true, "key", "/") + '\"onkeydown=\"add_custom_node(this)\">'
-        var write_your_own_node = { "title": text_area, "icon": "glyphicon glyphicon-pencil", "checkbox": false, "is_add_your_own": true, "unselectable": true }
+        var write_your_own_node = { "key": newKey, "title": text_area, "icon": "glyphicon glyphicon-pencil", "checkbox": false, "is_add_your_own": true, "unselectable": true}
         node.addNode(write_your_own_node, "firstChild");
 
 
@@ -1685,11 +1702,17 @@ function fill_treeview_sidebar(node_name, tree_view_json, node_path) {
         var swow_words_for_node = concept_dict[node.title]["comb_words"];
         // var swow_words_for_node = swow_data_for_tree_view[node.title]["comb_words"];
 
+        //generating new key for "see more"
+        while (map.has(newKey)) {
+          keyValue++;
+          newKey = "_" + keyValue.toString();
+        }
+
         // console.log(node.title)
         // console.log(concept_dict[node.title])
         if (node.children.length < swow_words_for_node.length) {
           var btn_text_area = '<button class="see_more_tree_btn" id="see_more_' + String(data.node.title) + '">see more</button>';
-          var see_more_btn = { "title": btn_text_area, "icon": "glyphicon glyphicon-plus", "checkbox": false, "is_add_your_own": false, "is_cluster": false, "is_see_more": true };
+          var see_more_btn = {"key": newKey, "title": btn_text_area, "icon": "glyphicon glyphicon-plus", "checkbox": false, "is_add_your_own": false, "is_cluster": false, "is_see_more": true };
           node.addNode(see_more_btn, "child");
         }
 
