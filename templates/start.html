@@ -45,15 +45,13 @@
 				</div>
 
 				<input type="text" id="concept_text" placeholder="Enter a new concept to symbolize">
-				<!-- <span class="label">Concept</span>
-	  <span class="border"></span> -->
+				
 			</label>
 		</div>
 
 		<br>
 		<hr>
 		<br>
-		<!-- <h5> Saved Concept(s):  </h5> -->
 
 		<div id="concept_btns"> </div>
 		<div style="display:none" id="conceptLoad" class="loader"></div>
@@ -71,24 +69,6 @@
 	var prev_concept = "";
 
 	window.onload = function () {
-		// load past concepts
-		/*$.ajax({
-			  type: "POST",
-			  url: "get_concepts",                
-			  contentType: "application/json; charset=utf-8",
-			  success: function(data, text){
-				  console.log('success')
-				  console.log(data)
-				  concept_dict = data;
-				  populate_symbol_btns();
-			  },
-			  error: function(request, status, error){
-				  console.log("Error");
-				  console.log(request)
-				  console.log(status)
-				  console.log(error)
-			  }
-		});*/
 
 		$.ajax({
 			type: "POST",
@@ -305,7 +285,7 @@
 				}
 				else {
 					// window.location.href = '/' + username + '/finder/' + concept;
-					window.location.href = '/' + username + '/' + concept + '/' + 'phase_1' + '/finder_for_child_term' ;
+					window.location.href = '/' + username + '/' + concept + '/' + 'phase_1' + '/finder' ;
 
 					$('#conceptLoad').show();
 				}
@@ -371,61 +351,8 @@
 
 	}
 
-	/* send_page_info = function(state){
-
-		console.log('sending page info!')
-
-		var version = null;
-		if(document.getElementById('version_1').checked) {
-			version = 1;
-		}else if(document.getElementById('version_2').checked) {
-			version = 2;
-		}
-
-		var practice = true;
-		if(state == 1){
-			practice = false;
-		}
-
-		if(practice){
-			if(version == 1){
-				window.location.href = '/finder/practice/1'
-			}
-			else{
-				window.location.href = '/finder/practice/2'
-			}
-		}
-		else{
-			if(version == 1){
-				window.location.href = '/finder/real/1'
-			}
-			else{
-				window.location.href = '/finder/real/2'
-			}
-		}*/
-
-	/*$.ajax({
-        type: "POST",
-        url: "send_page_info",
-        dataType : "json",
-        contentType: "application/json; charset=utf-8",
-        data : JSON.stringify({"version": version, "practice": practice}),
-        //data : JSON.stringify({"version": version}),
-	    success: function(data, text){
-	    	console.log('success')
-	    },
-	    error: function(request, status, error){
-	    	console.log("Error");
-	        console.log(request)
-	        console.log(status)
-	        console.log(error)
-	    }
-    });*/
-
 
 </script>
 
-
-<!-- <script type=text/javascript src="{{ url_for('static', filename='js/start.js') }}"></script>-->
 
 {% endblock %}

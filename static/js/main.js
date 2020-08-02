@@ -5,6 +5,8 @@
  *
  * It also contains functions to save the state of the app using Firestore
  * Hector Liang 
+ * Grace He
+ * Annie Sui
  * July 13, 2020
 */
 
@@ -35,7 +37,7 @@ var start_time;
 // IF STATE == 0, PRACTICE
 // IF STATE == 1, REAL 
 
-
+// explore();
 // This function empties a JS dom of all its children
 empty_dom = function (d) {
   while (d.firstChild) {
@@ -67,7 +69,12 @@ populate_first_step_instructions = function () {
   var instruction_div = document.getElementById("instructions");
 
   var instruction_text = document.createElement("p");
-  var number_of_clusters = String(tree_view_json.length);
+  if(tree_view_json.hasOwnProperty('children')){
+    var number_of_clusters = String(tree_view_json.children.length);
+  }
+  else{
+    var number_of_clusters = String(tree_view_json.length);
+  }
   instruction_text.innerHTML = "Go through each of the " + number_of_clusters + " clusters below. <br> For each one, determine if the words are related to <b>" + concept_searched + "</b>. <br> Also, select any image you think is a good symbol for <b>" + concept_searched + "</b>."
 
   instruction_div.appendChild(instruction_text);
@@ -77,9 +84,7 @@ populate_second_step_instructions = function () {
   var element = document.getElementById("instructions");
   element.parentNode.removeChild(element);
   // instruction_div.innerHTML = "";
-  /*var instruction_text = document.createElement("p");
-  instruction_text.innerHTML = "Find concrete symbols for the concept: <b>" + concept_searched + "</b>. Select clusters on the left to explore the words within them and see their images."; 
-  instruction_div.appendChild(instruction_text);*/
+
 }
 
 
@@ -100,14 +105,12 @@ updateNodes = function () {
     else {
       if (node in swow_data_for_tree_view) {
         //using 1% of swow_dict
-        //  var search_terms = Object.keys(concept_dict[node].urls);
 
         var search_terms = Object.keys(swow_data_for_tree_view[node].urls);
 
         var search_term = search_terms[0];
 
         //using 1% of swow_dict
-        //  var first_url = concept_dict[node].urls[search_term][0];
         var first_url = swow_data_for_tree_view[node].urls[search_term][0];
 
         nodes.update({ id: node, label: node, shape: "circularImage", image: first_url, font: { color: 'black' } });
@@ -127,11 +130,6 @@ for (i = 0; i < toggler.length; i++) {
     this.classList.toggle("caret-down");
   });
 }
-
-
-
-
-
 
 
 
@@ -216,36 +214,6 @@ update_delete_node_button = function (selected_node) {
     del_but.style.display = "none";
   }
 }
-
-// update_saved_symbols = function (url, term, to_remove) {
-
-//
-//   var confirm_time = -1;
-//   if (to_remove == false) {
-//     // confirm_time = selected_symbols[url]["confirm_time"];
-//   }
-//   // graph
-//   console.log("UPDATE SAVE SYMBOLS")
-//   console.log(data)
-//   console.log('hi')
-//   $.ajax({
-//     type: "POST",
-//     url: "save_symbols",
-//     contentType: "application/json; charset=utf-8",
-//     data: JSON.stringify({ "username": username, "concept": concept, "url": url, "term": term, "to_remove": to_remove, "step_one": on_step_one, "confirm_time": confirm_time }),
-//     success: function (data, text) {
-//       console.log('success')
-//       // add_concept_button(entered_concept);
-//     },
-//     error: function (request, status, error) {
-//       console.log("Error");
-//       console.log(request)
-//       console.log(status)
-//       console.log(error)
-//     }
-//   });
-
-// }
 
 
 function post(path, params, method = 'post') {
@@ -492,28 +460,25 @@ function add_image_to_node(node_path_key, google_search_term, url) {
 
   var tree = $("#tree").fancytree("getTree");
   let keySeq = node_path_key.split('/');
-  let node =  tree.rootNode;
+  let node = tree.rootNode;
 
   node = search_node_by_path(node, keySeq);
 
-  // for(let i=0;i<keySeq.length;i++){
-  //   node = tree.getNodeByKey(keySeq[i],node);
-  // }
 
-
+  //add the images to node
   node.data.saved_img[url] = {};
   node.data.saved_img[url]["google_search_term"] = google_search_term;
   node.data.saved_img[url]["tree_path_ids"] = node.getPath(true, "key", "/");
   node.data.saved_img[url]["url"] = url;
 
 
-  // console.log("Here is modified_tree ", modified_tree); 
+  // update the tree
   var updated_tree_view_json = tree.toDict(true);
+  console.log("add_image_to_node, -> tree.toDict(true)", updated_tree_view_json);
+
   update_tree_view_json_to_server(updated_tree_view_json);
   console.log("add_image_to_node, -> modified_tree converted to a dict", updated_tree_view_json);
 
-
-  // delete selected_symbols[url];
 
 }
 
@@ -522,13 +487,9 @@ function delete_image_from_node(node_path_key, url) {
 
   var tree = $("#tree").fancytree("getTree");
   let keySeq = node_path_key.split('/');
-  let node =  tree.rootNode;
+  let node = tree.rootNode;
 
   node = search_node_by_path(node, keySeq);
-
-  // for(let i=0;i<keySeq.length;i++){
-  //   node = tree.getNodeByKey(keySeq[i],node);
-  // }
 
 
   delete node.data.saved_img[url];
@@ -539,13 +500,11 @@ function delete_image_from_node(node_path_key, url) {
   console.log("delete_image_from_node, -> modified_tree converted to a dict: ", updated_tree_view_json);
 }
 
-// here
 function add_custom_node(attribute_node) {
   if (event.key === 'Enter') {
     console.log("add_custom_node attribute_node:", attribute_node);
 
     var keySeq = attribute_node.getAttribute("nkey").split('/');
-    // keySeq.pop();
     console.log("keyseq ", keySeq);
     // console.log("node_key :", node_key);
 
@@ -565,22 +524,22 @@ function add_custom_node(attribute_node) {
 
       let map = new Map();
       // store all the keys in hashmap 
-      for(let i=1; i< node.children.length;i++){
-         map.set(node.children[i].key,true);
+      for (let i = 0; i < node.children.length; i++) {
+        map.set(node.children[i].key, true);
       }
 
       //check all direct children' keys 
-        let keyValue = 1;
-        let newKey = "_" + keyValue.toString() ;
+      let keyValue = 1;
+      let newKey = "_" + keyValue.toString();
 
       //pick new key 
-      while(map.has(newKey)){
-         keyValue++;
-         newKey = "_" + keyValue.toString() ;
+      while (map.has(newKey)) {
+        keyValue++;
+        newKey = "_" + keyValue.toString();
       }
 
 
-      var new_child_node = { "children":{}, "key": newKey, "title": val, "icon": false, "checkbox": false, "is_add_your_own": false, "expanded_once": false, "is_cluster": false, "google_image_urls": {}, "saved_img": {} }
+      var new_child_node = { "children": {}, "key": newKey, "title": val, "icon": false, "checkbox": false, "is_add_your_own": false, "expanded_once": false, "is_cluster": false, "google_image_urls": {}, "saved_img": {} }
 
       var children = node.getChildren();
       var second_child = children[1];
@@ -618,7 +577,7 @@ function add_custom_node(attribute_node) {
 
       }
 
-      if(!(data.node == undefined )){
+      if (!(data.node == undefined)) {
         multi_google_search(val, node.title, true, data.node.getPath(true, "key", "/"));
       }
 
@@ -647,14 +606,25 @@ function confirm_image3(tree_view_node_term, term, url, image_id, node_path_key)
   var tree = $("#tree").fancytree("getTree");
   //find node 
   let keySeq = node_path_key.split('/');
-  let node =  tree.rootNode;
 
-  
-  // for(let i=0;i<keySeq.length;i++){
-  //   node = tree.getNodeByKey(keySeq[i],node);
-  // }
-
+  let node = tree.rootNode;
   node = search_node_by_path(node, keySeq);
+
+
+  if(keySeq.length == 1){
+    //save it under the correct child 
+
+    // find the cluster node 
+    for(let i=0;i<node.children.length;i++){
+      console.log("inside for node.children[i].title", node.children[i])
+        if(node.children[i].title == tree_view_node_term.trim()){
+          node = node.children[i];
+          node_path_key  = node.getPath(true, "key", "/");
+          console.log("found Match node: ", node);
+          break;
+        }
+    }
+  }
 
 
   if (url in node.data.saved_img) {
@@ -662,74 +632,33 @@ function confirm_image3(tree_view_node_term, term, url, image_id, node_path_key)
     to_remove = true;
     delete selected_symbols[url];
 
-    //ajax send selected_symbols
-    $.ajax({
-      type: "POST",
-      url: "/update_selected_symbols",
-      dataType: "json",
-      contentType: "application/json; charset=utf-8",
-      data: JSON.stringify({ "selected_symbols": selected_symbols, "username": username, "concept": concept }),
-      success: function (data) {
-        selected_symbols = data;
-        // console.log("removed image for node: ", node.title);
-      },
-      error: function (request, status, error) {
-        console.log("Error");
-        console.log(request)
-        console.log(status)
-        console.log(error)
-      }
-    });
+   
 
     delete_image_from_node(node_path_key, url);
 
-    updateProgress();
-    // updateNodes();
+   
   }
   else {
-    selected_symbols[url] = {};
-    selected_symbols[url]["google_search_term"] = term;
-    selected_symbols[url]["concept"] = tree_view_node_term;
-    selected_symbols[url]["confirm_time"] = confirm_time - start_time;
-
-    // console.log("tree_view_node_term: ", tree_view_node_term)
-    // console.log("concept: ", concept)
-    //ajax send selected_symbols
-    $.ajax({
-      type: "POST",
-      url: "/update_selected_symbols",
-      dataType: "json",
-      contentType: "application/json; charset=utf-8",
-      data: JSON.stringify({ "selected_symbols": selected_symbols, "username": username, "concept": concept }),
-      success: function () {
-        // console.log("Ajax worked for /modified_selected_symbols.");
-      },
-      error: function (request, status, error) {
-        console.log("Error");
-        console.log(request)
-        console.log(status)
-        console.log(error)
-      }
-    });
 
     var foundChild = false;
     var cluster_index = -1;
-    //--------------------------------------------------------------------//
-    // NEW VERSION OF SAVIGN IMAGES //
 
     add_image_to_node(node_path_key, term, url);
 
   }
 
+  $('#symbol_grid').empty();
+  showing_selected_symbols = false;
+  let symbol_bank = document.getElementById("symbol_bank");
+  symbol_bank.setAttribute("style", "height:auto");
+  $('#see_all_symbols').text('show symbols')
 
   updateProgress();
-  // updateNodes();
 }
 
 //for phase 1 in finder.html
 function confirm_image2(tree_view_node_term, term, url, image_id) {
   console.log("confirm_image2 : term: ", term);
-
 
   confirm_time = performance.now();
 
@@ -758,124 +687,57 @@ function confirm_image2(tree_view_node_term, term, url, image_id) {
     }
   }
 
-  // var tree = $("#tree").fancytree("getTree");
-  // var node = tree.getNodeByKey(node_key);
-
   var tree = $("#tree").fancytree("getTree");
-  let keySeq = node_key.split();
-  let node =  tree.rootNode;
-  node = search_node_by_path(node, keySeq);
+  // var node = tree.getNodeByKey(node_key);
+  node_key = node_key.split();
+   node = search_node_by_path(tree.rootNode,node_key);
+  //  node_key = node_key.splt();
+  let node_path_key;
+
+
+    //save it under the correct child 
+    
+
+    // find the cluster node 
+    for(let i=0;i<node.children.length;i++){
+      console.log("inside for node.children[i].title", node.children[i])
+        if(node.children[i].title == tree_view_node_term.trim()){
+          node = node.children[i];
+          node_path_key  = node.getPath(true, "key", "/");
+          console.log("found Match node: ", node);
+          break;
+        }
+    }
+  
+
+
+
 
   if (url in node.data.saved_img) {
     // delete_elem_from_table(url,term,image_id);
     to_remove = true;
     delete selected_symbols[url];
 
-    delete_image_from_node(node_key, url)
+    delete_image_from_node(node_path_key, url)
 
 
-    //ajax send selected_symbols
-    $.ajax({
-      type: "POST",
-      url: "/update_selected_symbols",
-      dataType: "json",
-      contentType: "application/json; charset=utf-8",
-      data: JSON.stringify({ "selected_symbols": selected_symbols, "username": username, "concept": concept }),
-      success: function (data) {
-        selected_symbols = data;
-        console.log("Ajax worked for /modified_selected_symbols.");
-      },
-      error: function (request, status, error) {
-        console.log("Error");
-        console.log(request)
-        console.log(status)
-        console.log(error)
-      }
-    });
-
-    updateProgress();
-    // updateNodes();
   }
   else {
-    // add_elem_to_symbol_table(url,term,image_id);
-    // selected_symbols[url] = term
-    selected_symbols[url] = {};
-    selected_symbols[url]["google_search_term"] = term;
-    selected_symbols[url]["concept"] = tree_view_node_term;
-    selected_symbols[url]["confirm_time"] = confirm_time - start_time;
 
     console.log("tree_view_node_term: ", tree_view_node_term)
 
     console.log("concept: ", concept)
 
     //give node id //(path)
-    add_image_to_node(node_key, term, url);
-
-
-
-    //ajax send selected_symbols
-    $.ajax({
-      type: "POST",
-      url: "/update_selected_symbols",
-      dataType: "json",
-      contentType: "application/json; charset=utf-8",
-      data: JSON.stringify({ "selected_symbols": selected_symbols, "username": username, "concept": concept }),
-      success: function () {
-        console.log("Ajax worked for /modified_selected_symbols.");
-      },
-      error: function (request, status, error) {
-        console.log("Error");
-        console.log(request)
-        console.log(status)
-        console.log(error)
-      }
-    });
-
-
+    add_image_to_node(node_path_key, term, url);
     updateProgress();
-    // updateNodes();
   }
 
   if (showing_selected_symbols) {
     create_selected_symbol_table();
   }
-  // update_progress_info();
-  // update_saved_symbols(url, term, to_remove);
 }
 
-/*create_image_grid = function(term,urls){
-  console.log(term)
-  // var urls = ["https://images-na.ssl-images-amazon.com/images/I/61YL-c2pZOL._AC_SX355_.jpg", "https://images-na.ssl-images-amazon.com/images/I/61YL-c2pZOL._AC_SX355_.jpg", "https://images-na.ssl-images-amazon.com/images/I/61YL-c2pZOL._AC_SX355_.jpg", "https://images-na.ssl-images-amazon.com/images/I/61YL-c2pZOL._AC_SX355_.jpg", "https://images-na.ssl-images-amazon.com/images/I/61YL-c2pZOL._AC_SX355_.jpg", "https://images-na.ssl-images-amazon.com/images/I/61YL-c2pZOL._AC_SX355_.jpg", "https://images-na.ssl-images-amazon.com/images/I/61YL-c2pZOL._AC_SX355_.jpg", "https://images-na.ssl-images-amazon.com/images/I/61YL-c2pZOL._AC_SX355_.jpg", "https://images-na.ssl-images-amazon.com/images/I/61YL-c2pZOL._AC_SX355_.jpg"]
-  image_table = document.createElement('table');
-  row_num = 0;
-  col_num = 5; 
-  var row = image_table.insertRow(row_num)
-  row.style.display = "block";
-  cell_num = 0;
-  for(var i = 0; i < urls.length; i++){
-    var url = urls[i];
-    image_and_button_div = document.createElement("div");
-    cell = row.insertCell(-1);
-    image = document.createElement('img');
-    image.setAttribute('src',url);
-    cell_id = term + '_' +String(i)
-    image.setAttribute('id',cell_id)
-    image.setAttribute('class','img_in_table');
-    image.setAttribute('onclick','confirm_image(\"'+term+'\",\"'+url+'\",\"'+cell_id+'\")')
-    image_and_button_div.appendChild(image);
-    cell.appendChild(image_and_button_div);
-
-    if((i+1)%col_num == 0 && row_num < 2){
-      row_num++;
-      row = image_table.insertRow(row_num);
-      row.setAttribute("id",String(term) + "_row_2");
-      row.style.display = "none";
-      // console.log("ROW")
-      // console.log(row)
-    }
-  }
-  return image_table;
-}*/
 
 create_cluster_image_grid = function (term, urls, url_to_gs_dict) {
 
@@ -889,11 +751,6 @@ create_cluster_image_grid = function (term, urls, url_to_gs_dict) {
   }
 
   var tree = $("#tree").fancytree("getTree");
-  let keySeq = node_key.split();
-  let node =  tree.rootNode;
-  node = search_node_by_path(node, keySeq);
-
-  // console.log(term)
   // var urls = ["https://images-na.ssl-images-amazon.com/images/I/61YL-c2pZOL._AC_SX355_.jpg", "https://images-na.ssl-images-amazon.com/images/I/61YL-c2pZOL._AC_SX355_.jpg", "https://images-na.ssl-images-amazon.com/images/I/61YL-c2pZOL._AC_SX355_.jpg", "https://images-na.ssl-images-amazon.com/images/I/61YL-c2pZOL._AC_SX355_.jpg", "https://images-na.ssl-images-amazon.com/images/I/61YL-c2pZOL._AC_SX355_.jpg", "https://images-na.ssl-images-amazon.com/images/I/61YL-c2pZOL._AC_SX355_.jpg", "https://images-na.ssl-images-amazon.com/images/I/61YL-c2pZOL._AC_SX355_.jpg", "https://images-na.ssl-images-amazon.com/images/I/61YL-c2pZOL._AC_SX355_.jpg", "https://images-na.ssl-images-amazon.com/images/I/61YL-c2pZOL._AC_SX355_.jpg"]
   image_table = document.createElement('table');
   row_num = 0;
@@ -901,6 +758,12 @@ create_cluster_image_grid = function (term, urls, url_to_gs_dict) {
   var row = image_table.insertRow(row_num)
   row.style.display = "block";
   cell_num = 0;
+
+  var tree = $("#tree").fancytree("getTree");
+  // let keySeq = node_path_key.split('/');
+  let node = tree.rootNode; // all cluster children 
+
+
   for (var i = 0; i < urls.length; i++) {
     var url = urls[i];
     image_and_button_div = document.createElement("div");
@@ -912,9 +775,29 @@ create_cluster_image_grid = function (term, urls, url_to_gs_dict) {
     image.setAttribute('class', 'img_in_table');
     var concept = url_to_gs_dict[url];
     image.setAttribute('onclick', 'confirm_image2(\"' + concept + '\",\"' + term + '\",\"' + url + '\",\"' + cell_id + '\")');
-    if (url in node.data.saved_img) {
-      image.classList.add('confirmed');
+
+    //check each cluster child 
+    for(let j=0;j<node.children.length;j++){
+      //check each cluster
+      if(node.children[j].title == term){
+        node = node.children[j];
+        break;
+      }
     }
+
+     // find the cluster node 
+     for(let j=0;j< node.children.length ;j++){
+      // console.log("inside for node.children[i].title", node.children[j])
+
+      if(node.children[j].data.hasOwnProperty('saved_img')){
+        if (url in node.children[j].data.saved_img) {
+          image.classList.add('confirmed');
+          console.log("confirmed image")
+        }
+      }
+    }
+
+
     image_and_button_div.appendChild(image);
 
     cell.appendChild(image_and_button_div);
@@ -924,8 +807,6 @@ create_cluster_image_grid = function (term, urls, url_to_gs_dict) {
       row = image_table.insertRow(row_num);
       row.setAttribute("id", String(term) + "_row_2");
       row.style.display = "none";
-      // console.log("ROW")
-      // console.log(row)
     }
   }
   return image_table;
@@ -945,12 +826,7 @@ create_image_grid3 = function (term, urls, concept, node_path_key) {
   var tree = $("#tree").fancytree("getTree");
 
   let keySeq = node_path_key.split('/');
-  let node =  tree.rootNode;
-
-
-  // for(let i=0;i<keySeq.length;i++){
-  //   node = tree.getNodeByKey(keySeq[i],node);
-  // }
+  let node = tree.rootNode;
 
   node = search_node_by_path(node, keySeq);
 
@@ -968,15 +844,29 @@ create_image_grid3 = function (term, urls, concept, node_path_key) {
     image.setAttribute('class', 'img_in_table');
     image.setAttribute('onclick', 'confirm_image3(\"' + concept + '\",\"' + term + '\",\"' + url + '\",\"' + cell_id + '\",\"' + node_path_key + '\")');
 
+    //checking if it is a cluster, then check under their children
+    if(keySeq.length == 1){
+      //save it under the correct child 
+  
+      // find the cluster node 
+      for(let i=1;i< (node.children.length - 1);i++){
+        console.log("inside for node.children[i].title", node.children[i])
 
-    
-    if (url in node.data.saved_img) {
-      image.classList.add('confirmed');
+        if (url in node.children[i].data.saved_img) {
+          image.classList.add('confirmed');
+        }
+      }
     }
+    else{
+      if (url in node.data.saved_img) {
+        image.classList.add('confirmed');
+      }
+    }
+
 
     var label = document.createElement("h6");
     label.setAttribute('class', 'img_label')
-    label.innerHTML = "(" + (i+1) + ")";
+    label.innerHTML = "(" + (i + 1) + ")";
 
     image_and_button_div.appendChild(image);
     image_and_button_div.appendChild(label);
@@ -988,75 +878,34 @@ create_image_grid3 = function (term, urls, concept, node_path_key) {
       row = image_table.insertRow(row_num);
       row.setAttribute("id", String(term) + "_row_2");
       row.style.display = "none";
-      // console.log("ROW")
-      // console.log(row)
     }
   }
   return image_table;
 }
 
-
-
-create_image_grid2 = function (term, urls, concept) {
-  console.log('create_image_grid2 called()')
-  // var urls = ["https://images-na.ssl-images-amazon.com/images/I/61YL-c2pZOL._AC_SX355_.jpg", "https://images-na.ssl-images-amazon.com/images/I/61YL-c2pZOL._AC_SX355_.jpg", "https://images-na.ssl-images-amazon.com/images/I/61YL-c2pZOL._AC_SX355_.jpg", "https://images-na.ssl-images-amazon.com/images/I/61YL-c2pZOL._AC_SX355_.jpg", "https://images-na.ssl-images-amazon.com/images/I/61YL-c2pZOL._AC_SX355_.jpg", "https://images-na.ssl-images-amazon.com/images/I/61YL-c2pZOL._AC_SX355_.jpg", "https://images-na.ssl-images-amazon.com/images/I/61YL-c2pZOL._AC_SX355_.jpg", "https://images-na.ssl-images-amazon.com/images/I/61YL-c2pZOL._AC_SX355_.jpg", "https://images-na.ssl-images-amazon.com/images/I/61YL-c2pZOL._AC_SX355_.jpg"]
-  image_table = document.createElement('table');
-  row_num = 0;
-  col_num = 5;
-  var row = image_table.insertRow(row_num)
-  row.style.display = "block";
-  cell_num = 0;
-  for (var i = 0; i < urls.length; i++) {
-    var url = urls[i];
-    image_and_button_div = document.createElement("div");
-    cell = row.insertCell(-1);
-    image = document.createElement('img');
-    image.setAttribute('src', url);
-    cell_id = term + '_' + String(i)
-    image.setAttribute('id', cell_id)
-    image.setAttribute('class', 'img_in_table');
-    image.setAttribute('onclick', 'confirm_image2(\"' + concept + '\",\"' + term + '\",\"' + url + '\",\"' + cell_id + '\")');
-
-    if (url in selected_symbols) {
-      image.classList.add('confirmed');
-    }
-
-
-    image_and_button_div.appendChild(image);
-    cell.appendChild(image_and_button_div);
-
-    if ((i + 1) % col_num == 0 && row_num < 2) {
-      row_num++;
-      row = image_table.insertRow(row_num);
-      row.setAttribute("id", String(term) + "_row_2");
-      row.style.display = "none";
-      // console.log("ROW")
-      // console.log(row)
-    }
-  }
-  return image_table;
-}
 
 
 add_cluster = function (cluster_title, yes_btn) {
-  // console.log("adding cluster!");
+
+  var tree = $("#tree").fancytree("getTree");
+  tree_view_json = tree.rootNode;
+  //tree.toDict(true);
+
+  // unselect cluster from tree
   if (yes_btn.classList.contains("yes_active")) {
     // console.log("removing cluster!");
     // delete chosen_clusters.cluster_title;
     if (tree_view_json.hasOwnProperty("children")) {
       for (var i = 0; i < tree_view_json.children.length; i++) {
         if (tree_view_json.children[i].title == cluster_title) {
+          console.log("deselecting cluster: ",tree_view_json.children[i].title )
           tree_view_json.children[i].selected = false
         }
       }
     }
-    else {
-      for (var i = 0; i < tree_view_json.length; i++) {
-        if (tree_view_json[i].title == cluster_title) {
-          tree_view_json[i].selected = false
-        }
-      }
-    }
+
+    tree_view_json = tree.toDict(true);
+
 
     $.ajax({
       type: "POST",
@@ -1083,17 +932,15 @@ add_cluster = function (cluster_title, yes_btn) {
     if (tree_view_json.hasOwnProperty("children")) {
       for (var i = 0; i < tree_view_json.children.length; i++) {
         if (tree_view_json.children[i].title == cluster_title) {
+          console.log("selecting cluster: ",tree_view_json.children[i].title )
           tree_view_json.children[i].selected = true
         }
       }
     }
-    else {
-      for (var i = 0; i < tree_view_json.length; i++) {
-        if (tree_view_json[i].title == cluster_title) {
-          tree_view_json[i].selected = true
-        }
-      }
-    }
+
+    tree_view_json = tree.toDict(true);
+
+
     console.log("Here's username: ", username);
     console.log("Here's concept: ", concept);
     $.ajax({
@@ -1116,40 +963,11 @@ add_cluster = function (cluster_title, yes_btn) {
     });
   }
 
+
+
   console.log("Here's the updated tree_view_json: ", tree_view_json);
 }
 
-/*yes_no_button = function(cluster_title,yn_button,button_type,other_button_id){
-  var button_class = yn_button.getAttribute("class");
-
-  if(button_type == "yes"){
-
-    var no_button = document.getElementById(other_button_id);
-    console.log("yes_button");
-    if(yn_button.classList.contains("yes_active")){
-      yn_button.classList.remove("yes_active") 
-    }
-    else{
-      if(no_button.classList.contains("no_active")){
-        no_button.classList.remove("no_active");
-      }
-      yn_button.classList.add("yes_active");
-    }
-  }
-  if(button_type == "no"){
-    var yes_button = document.getElementById(other_button_id);
-    console.log("no button");
-    if(yn_button.classList.contains("no_active")){
-      yn_button.classList.remove("no_active") 
-    }
-    else{
-      if(yes_button.classList.contains("yes_active")){
-        yes_button.classList.remove("yes_active");
-      }
-      yn_button.classList.add("no_active");
-    }
-  }
-}*/
 
 function topFunction() {
   document.body.scrollTop = 0; // For Safari
@@ -1169,7 +987,7 @@ explore = function () {
     data: JSON.stringify({ "username": username, "concept": concept }),
     success: function (result) {
       $('#sidebar').empty();
-      fill_treeview_sidebar(concept, tree_view_json); // 1
+      fill_treeview_sidebar(concept, tree_view_json, 'phase_1'); // 1
       var tree = $("#tree").fancytree("getTree");
       var tree_clusters = tree.rootNode.children;
       console.log("explore tree", tree)
@@ -1219,8 +1037,8 @@ fill_grids_for_concept = function (url_obj, concept, node_path_key) {
 
   let row_index = 0;
   for (search_term in url_obj) {
-    row_index++;
     var urls = url_obj[search_term];
+    row_index++;
 
     var term_image_grid = document.createElement("div");
     var term_image_grid_id = search_term + "_img_block";
@@ -1278,7 +1096,6 @@ fill_grids_for_cluster_concept = function (url_obj, concept, order) {
 
 
   for (var i = 0; i < order.length; i++) {
-    // for(search_term in url_obj){
 
     var search_term = order[i].search_term;
     var concept = order[i].concept;
@@ -1294,7 +1111,7 @@ fill_grids_for_cluster_concept = function (url_obj, concept, order) {
 
     var term_headline = document.createElement("h4");
     term_headline.setAttribute("class", "img_table_title");
-    term_headline.innerHTML = "<b> (" + (i+1) + ") " + String(search_term) + "</b> "
+    term_headline.innerHTML = "<b> (" + (i + 1) + ") " + String(search_term) + "</b> "
 
     headline_div.appendChild(term_headline);
 
@@ -1372,66 +1189,6 @@ fill_cluster_image_grids = function (clusters) {
     // cluster_div.appendChild(image_instruction_and_grid_div);
     image_grids_div.appendChild(cluster_div);
 
-
-
-
-    /*
-    var term_image_grid = document.createElement("div");
-    var term_image_grid_id = concept + "_img_block";
-    term_image_grid.setAttribute("class","term_image_grid");
-    term_image_grid.setAttribute("id",term_image_grid_id);
-
-    var headline_div = document.createElement("div");
-    headline_div.setAttribute("class","headline");
-
-    var term_headline = document.createElement("h4"); 
-    term_headline.setAttribute("class","img_table_title");
-    term_headline.innerHTML = "<b>" + String(cluster_title) + "</b> "
-    
-    headline_div.appendChild(term_headline);
-    
-    term_image_grid.appendChild(headline_div);
-
-    var padding_div = document.createElement("div");
-    padding_div.setAttribute("class","padding_div");
-
-    console.log(concept_dict)
-    console.log(concept_dict[cluster_title])
-
-    var urls = concept_dict[cluster_title].urls[cluster_title];
-
-    image_table = create_image_grid(cluster_title,urls);
-
-    var question_div = document.createElement("div");
-    question_div.setAttribute("class","question_div");
-
-    var question_span = document.createElement("span");
-    question_span.innerHTML = "Would you like to explore more images and related words for this cluster?"
-
-    no_button_id = "no_" + cluster_title;
-    yes_button_id = "yes_ " + cluster_title;
-
-    var yes_button = document.createElement("button");
-    yes_button.setAttribute("class","yes_button");
-    yes_button.setAttribute("id",yes_button_id)
-    yes_button.setAttribute("onclick","yes_no_button(\""+cluster_title+"\",this,\"yes\",\""+no_button_id+"\")");
-    yes_button.innerHTML = "yes";*/
-
-    /*
-    var no_button = document.createElement("button");
-    no_button.setAttribute("class","no_button");
-    no_button.setAttribute("id",no_button_id);
-    no_button.setAttribute("onclick","yes_no_button(\""+cluster_title+"\",this,\"no\",\""+yes_button_id+"\")");
-    no_button.innerHTML = "no";
-    question_div.appendChild(question_span);
-    question_div.appendChild(yes_button);
-    question_div.appendChild(no_button);
-
-
-    term_image_grid.appendChild(image_table);
-    term_image_grid.appendChild(question_div);
-    padding_div.appendChild(term_image_grid);
-    image_grids_div.appendChild(padding_div);*/
   }
   // console.log("phase 1 tree_view_json: ", tree_view_json)
 
@@ -1476,7 +1233,7 @@ function see_more_tree() {
 }
 
 //node_name is a concept 
-function fill_treeview_sidebar(node_name, tree_view_json) {
+function fill_treeview_sidebar(node_name, tree_view_json, node_path) {
   console.log(" called fill_treeview_sidebar() node_name: " + node_name, "tree_view_json: ", tree_view_json);
 
   var sb = document.getElementById('sidebar');
@@ -1532,13 +1289,6 @@ function fill_treeview_sidebar(node_name, tree_view_json) {
   overview_div.appendChild(overview_panel_div);
   sb.appendChild(overview_div);
 
-  // if (tree_view_json[0].selected == true) 
-
-
-  // ===============================================================================
-
-  // console.log(tree_view_json)
-
   var treeview = document.createElement("div");
   treeview.setAttribute("id", "tree");
 
@@ -1550,6 +1300,8 @@ function fill_treeview_sidebar(node_name, tree_view_json) {
   };
 
   sb.appendChild(treeview);
+
+
 
   $("#tree").fancytree({
     extensions: ["glyph"],
@@ -1602,69 +1354,45 @@ function fill_treeview_sidebar(node_name, tree_view_json) {
           }
         }
 
-
-        /*
-        if(data.node.data.is_clister){
-          for(var i = 0; i < children_list.length; i++){
-            var child_node = children_list[i];
-            var node_title = child_node.title; 
-            // var regular_swow_words = concept_dict[node_title]["master_words"];
-            var regular_swow_words = concept_dict[node_title]["comb_words"];
-            for(var j = 0; j < regular_swow_words.length; j++){
-              var swow_word = regular_swow_words[j];
-              var new_node = {title: swow_word, icon: false, is_cluster: false, expanded_once: false};
-              child_node.addNode(new_node)
-            }
-          }
-        }
-        else{
-          for(var i = 0; i < children_list.length; i++){
-            var child_node = children_list[i];
-            var node_title = child_node.title; 
-            // var regular_swow_words = concept_dict[node_title]["master_words"];
-            var regular_swow_words = concept_dict[node_title]["comb_words"];
-            var max_nodes = 5;
-            for(var j = 0; j < regular_swow_words.length; j++){
-              if(j >= max_nodes){
-                break;
-              }
-              var swow_word = regular_swow_words[j];
-              var new_node = {title: swow_word, icon: false, is_cluster: false, expanded_once: false};
-              child_node.addNode(new_node);
-            }
-          }
-        }*/
-
         // var text_area = "<input type=\"text\" placeholder=\"write your own!\" onkeydown=\"add_custom_node(\""+String(node.data.key)+"\",this)\">"
 
-//getPath(true, "key", "/")
-        // var text_area = '<input type=\"text\" placeholder=\"write your own!\" class=\"inp\" nkey=\"' + String(node.key) + '\"onkeydown=\"add_custom_node(this)\">'
+      let map = new Map();
+      // store all the keys in hashmap 
+      for (let i = 0; i < node.children.length; i++) {
+        map.set(node.children[i].key, true);
+      }
+
+      //check all direct children' keys 
+      let keyValue = 1;
+      let newKey = "_" + keyValue.toString();
+
+      //pick new key 
+      while (map.has(newKey)) {
+        keyValue++;
+        newKey = "_" + keyValue.toString();
+      }
+
+      map.set(newKey,true);
+
         var text_area = '<input type=\"text\" placeholder=\"write your own!\" class=\"inp\" nkey=\"' + data["node"].getPath(true, "key", "/") + '\"onkeydown=\"add_custom_node(this)\">'
-        var write_your_own_node = { "title": text_area, "icon": "glyphicon glyphicon-pencil", "checkbox": false, "is_add_your_own": true, "unselectable": true }
+        var write_your_own_node = { "key": newKey, "title": text_area, "icon": "glyphicon glyphicon-pencil", "checkbox": false, "is_add_your_own": true, "unselectable": true}
         node.addNode(write_your_own_node, "firstChild");
-
-
-        /*
-        if(node.data.is_cluster != true){
-          // var btn_text_area = '<a onclick="see_more_tree()" class="see_more_tree" href="#" id="see_more_'+String(data.node.title)+'">see more</a>';
-
-          var swow_words_for_node = concept_dict[node.title]["comb_words"];
-          if(node.children.length < swow_words_for_node.length){
-            var btn_text_area = '<button class="see_more_tree_btn" id="see_more_'+String(data.node.title)+'">see more</button>';
-            var see_more_btn = {"title": btn_text_area, "icon": "glyphicon glyphicon-plus", "checkbox": false, "is_add_your_own": false, "is_cluster": false, "is_see_more": true};
-            node.addNode(see_more_btn,"child");
-          }
-        }*/
 
         //using 1% of swow_dict
         var swow_words_for_node = concept_dict[node.title]["comb_words"];
         // var swow_words_for_node = swow_data_for_tree_view[node.title]["comb_words"];
 
+        //generating new key for "see more"
+        while (map.has(newKey)) {
+          keyValue++;
+          newKey = "_" + keyValue.toString();
+        }
+
         // console.log(node.title)
         // console.log(concept_dict[node.title])
         if (node.children.length < swow_words_for_node.length) {
           var btn_text_area = '<button class="see_more_tree_btn" id="see_more_' + String(data.node.title) + '">see more</button>';
-          var see_more_btn = { "title": btn_text_area, "icon": "glyphicon glyphicon-plus", "checkbox": false, "is_add_your_own": false, "is_cluster": false, "is_see_more": true };
+          var see_more_btn = {"key": newKey, "title": btn_text_area, "icon": "glyphicon glyphicon-plus", "checkbox": false, "is_add_your_own": false, "is_cluster": false, "is_see_more": true };
           node.addNode(see_more_btn, "child");
         }
 
@@ -1673,7 +1401,7 @@ function fill_treeview_sidebar(node_name, tree_view_json) {
         tree_view_json = data.tree.toDict(true);
         update_tree_view_json_to_server(tree_view_json);
         console.log("init called end tree_view_json ", tree_view_json);
-        
+
       }
 
       tree_view_json = data.tree.toDict(true);
@@ -1753,11 +1481,6 @@ function fill_treeview_sidebar(node_name, tree_view_json) {
         }
 
 
-
-
-
-
-
         // multi_google_search
 
         // ==================================================================================================================
@@ -1813,8 +1536,6 @@ function fill_treeview_sidebar(node_name, tree_view_json) {
             }
           }
 
-
-
         }
         // ==================================================================================================================
         // ==================================================================================================================
@@ -1859,6 +1580,7 @@ function fill_treeview_sidebar(node_name, tree_view_json) {
 
     },
     init: function (event, data) {
+
       console.log("init called");
       var tree_clusters = data.tree.rootNode.children;
       console.log("tree_clusters", data);
@@ -1873,9 +1595,66 @@ function fill_treeview_sidebar(node_name, tree_view_json) {
       }
 
 
-      tree_view_json = data.tree.toDict(true);
-      update_tree_view_json_to_server(tree_view_json);
-      console.log("init called end tree_view_json ", tree_view_json);
+      if (node_path == 'phase_1') {
+        console.log('inside if node_path', node_path )
+
+        tree_view_json = data.tree.toDict(true);
+        update_tree_view_json_to_server(tree_view_json);
+        console.log("init called end tree_view_json ", tree_view_json);
+
+      }
+      else {
+
+        // tree values
+        console.log(" before expand tree_view_json", tree_view_json);
+        console.log(" before expand node_path", node_path);
+
+        let path = node_path.split('-');
+
+
+        let node = data.tree.rootNode;
+        console.log("node init ", node)
+        // //
+        let chosenChild;
+        for (let i = 0; i < path.length; i++) {
+          // console.log("first for path val ", path[i], " and i: ", i);
+          for (let j = 0; j < node.children.length; j++) {
+            // console.log("second for j: ", j)
+            if (node.children[j].key == path[i]) {
+              node.children[j].setExpanded(true);
+              console.log("node.children[j].setExpanded(true): ", node.children[j]);
+              chosenChild = j;
+              console.log("chosenChild index j", chosenChild)
+            }
+            else {
+              node.children[j].setExpanded(false);
+            }
+          }
+          
+          node = node.children[chosenChild]
+          console.log("inside for node.children[chosenChild]: ", node)
+        }
+
+        console.log("outside node.children[chosenChild]: ", node)
+
+        node.setActive(true);
+        if(node.hasOwnProperty('children')){
+          if(node.children != null){
+            for (let k = 0; k < node.children.length; k++) {
+              node.children[k].setExpanded(false);
+            }
+          }
+        }
+     
+
+        multi_google_search(node.title, node.parent.title, false, node.getPath(true, "key", "/"));
+
+        tree_view_json = data.tree.toDict(true);
+        update_tree_view_json_to_server(tree_view_json);
+        console.log("init called end tree_view_json ", tree_view_json);
+
+      }
+
 
     },
   });
@@ -1894,149 +1673,13 @@ function get_color(value) {
   return "rgb(" + red + "," + blue + "," + green + ")";
 }
 
-/*
-function show_found_symbols(){
-  console.log('time to show those symbols!')
-  var urls = Object.keys(selected_symbols);
-  create_symbol_sidebar(urls,concept_searched)
-  viewing_symbols = true;
-}*/
 
 function create_selected_symbol_table() {
-  concept = window.location.href.substring(window.location.href.lastIndexOf('/') + 1);
-  console.log("create_selected_symbol_table() called and the concept is ", concept)
-  // console.log("href: " , window.location.href.substring(window.location.href.lastIndexOf('/') + 1));
-  var cst_div = document.getElementById("chosen_symbol_table_div");
-  cst_div.innerHTML = "";
-
-
-  $.ajax({
-    type: "POST",
-    url: "/get_selected_symbols",
-    dataType: "json",
-    contentType: "application/json; charset=utf-8",
-    data: JSON.stringify({ "username": username, "concept": concept }),
-    success: function (data) {
-      // console.log("data: ", data)
-      console.log("Ajax-call worked for /get_selected_symbols.");
-      selected_symbols = data;
-      var symbol_entries = Object.entries(selected_symbols);
-      concept_to_url_dict = {};
-
-      console.log("selected_symbols: ", selected_symbols)
-      console.log("symbol_entries: ", symbol_entries)
-
-      for (var i = 0; i < symbol_entries.length; i++) {
-        console.log("symbol_entry[i] ", symbol_entries[i]);
-        var symbol_entry = symbol_entries[i];
-
-        var url = symbol_entry[0];
-        var concept = symbol_entry[1]["concept"];
-        if (concept in concept_to_url_dict) {
-          var url_list = concept_to_url_dict[concept]
-          console.log(url_list);
-          url_list.push(url);
-          concept_to_url_dict[concept] = url_list;
-        }
-        else {
-          concept_to_url_dict[concept] = [url];
-        }
-      }
-
-      image_table = document.createElement('table');
-      row_num = 0;
-      col_num = 5;
-      var row = image_table.insertRow(row_num);
-      row.style.display = "block";
-      cell_num = 0;
-      var concept_to_url_entries = Object.entries(concept_to_url_dict);
-      console.log("CONCEPT TO URL ENTRIES")
-      console.log(concept_to_url_entries)
-      for (var i = 0; i < concept_to_url_entries.length; i++) {
-        var concept_to_url_entry = concept_to_url_entries[i];
-        var concept = concept_to_url_entry[0];
-        var urls = concept_to_url_entry[1];
-        console.log("concept: " + String(concept));
-        console.log("urls: " + String(urls));
-
-        var cell = row.insertCell(-1);
-        cell.innerHTML = concept;
-
-        for (var j = 0; j < urls.length; j++) {
-          var url = urls[j];
-          image_and_button_div = document.createElement("div");
-          cell = row.insertCell(-1);
-          image = document.createElement('img');
-          image.setAttribute('src', url);
-          cell_id = concept + '_' + String(j)
-          image.setAttribute('id', cell_id)
-          image.setAttribute('class', 'img_in_table');
-          cell.appendChild(image);
-        }
-
-        row_num++;
-        row = image_table.insertRow(row_num);
-        row.style.display = "block";
-      }
-      console.log("done.")
-      cst_div.appendChild(image_table);
-    },
-    error: function (request, status, error) {
-      console.log("Error");
-      console.log(request)
-      console.log(status)
-      console.log(error)
-    }
-  });
+  console.log("create_selected_symbol_table called")
+  render_overview_page(false);
+  
 }
 
-
-/*
-function add_elem_to_symbol_table(url,term,image_id){
-  var symbol_found_table = document.getElementById("symbol_bank_table");
-
-  var sym_table_size = $('#symbol_bank_table tbody tr').length;
-  var row = 0;
-  if(sym_table_size == 0){
-    console.log("table_size == 0")
-    row = symbol_found_table.insertRow(0);
-  }
-  else{
-    row = symbol_found_table.rows[0];
-  }
-  var cell = row.insertCell(-1);
-  var image_caption_div = document.createElement('div');
-  image_caption_div.setAttribute('class','symbol_image_div');
-  var image = document.createElement('img');
-  image.setAttribute('src',url);
-  cell.setAttribute("img_id",image_id);
-  image.setAttribute('id',cell_id)
-  image.setAttribute('class','symbol_image')
-  var label_text_node = document.createTextNode(term);
-  image_caption_div.appendChild(label_text_node);
-  linebreak = document.createElement("br");
-  image_caption_div.appendChild(linebreak);
-  image_caption_div.appendChild(image);
-  cell.append(image_caption_div);
-}
-
-
-function delete_elem_from_table(url, term, image_id){
-  var symbol_found_table = document.getElementById("symbol_bank_table");
-  var row = symbol_found_table.rows[0];
-  for(var i = 0; i < row.children.length; i++){
-    var c = row.children[i];
-    var c_img_id = c.getAttribute("img_id")
-    console.log("HEHEHEHE")
-    console.log(c)
-    console.log(c_img_id)
-    console.log(image_id)
-    if(c_img_id == image_id){
-      row.deleteCell(i);
-    }
-  }
-
-}*/
 
 function compare(a, b) {
   // Use toUpperCase() to ignore character casing
@@ -2069,81 +1712,34 @@ function get_sorted_object_count(concept_counts_dict) {
   return concept_count_list;
 }
 
-/*function toggle_show_all_symbols(but){
-  var x = document.getElementById("symbol_bank_table");
-  if (x.style.display === "none") {
-    create_selected_symbol_table();
-    showing_selected_symbols = true;
-    x.style.display = "block";
-    but.innerHTML = "hide symbols"
-  } else {
-    var cst_div = document.getElementById(chosen_symbol_table_div);
-    cst_div = "";
-    showing_selected_symbols = false;
-    x.style.display = "none";
-    but.innerHTML = "show symbols";
-  }
-}*/
 
 function toggle_show_all_symbols(but) {
+  //open
   if (showing_selected_symbols == false) {
     var symbol_bank = document.getElementById("symbol_bank");
+    
+
     symbol_bank.setAttribute("style", "height:75%");
-    create_selected_symbol_table();
+    //render overviewpage
+    create_selected_symbol_table()
     showing_selected_symbols = true;
     but.innerHTML = "hide symbols"
   } else {
+    //close blue box
     var symbol_bank = document.getElementById("symbol_bank");
+       $('#symbol_grid').empty();
     symbol_bank.setAttribute("style", "height:auto");
-    var cst_div = document.getElementById("chosen_symbol_table_div");
-    cst_div.innerHTML = "";
+ 
+    // var cst_div = document.getElementById("chosen_symbol_table_div");
+    // cst_div.innerHTML = "";
     showing_selected_symbols = false;
     but.innerHTML = "show symbols";
   }
 }
 
+// update summary_title 
 function updateProgress() {
-  console.log()
-  p = document.getElementById('progress_summary');
-  empty_dom(p)
-
-
-  $.ajax({
-    type: "POST",
-    url: "/get_selected_symbols",
-    dataType: "json",
-    contentType: "application/json; charset=utf-8",
-    data: JSON.stringify({ "username": username, "concept": concept }),
-    success: function (data) {
-
-      selected_symbols = data;
-      num_of_symbols = Object.keys(selected_symbols).length;
-      // var title_div = document.createElement('div');
-      // title_div.innerHTML = concept_searched;
-      // p.appendChild(title_div);
-      var div3 = document.createElement('div');
-      div3.setAttribute("class", "progress_concept_info");
-      var concept_counts_dict = getConceptCounts();
-      var number_of_concepts = Object.keys(concept_counts_dict).length;
-      var concept_string = '';
-      var concept_count_list = get_sorted_object_count(concept_counts_dict);
-      var target_number = 20;
-      /*for(var i = 0; i < concept_countgit_list.length; i++){
-        var concept_obj = concept_count_list[i];
-        concept_string = concept_string + " <b>" + String(concept_obj.concept) + "</b> (" + String(concept_obj.count) + "),";
-      }*/
-      // div3.innerHTML = String(String(num_of_symbols) + " symbols found from " + String(number_of_concepts) + " concepts:" + concept_string + " <hr>");
-      div3.innerHTML = String(number_of_concepts) + " / " + String(target_number) + "  unique symbols found for: <b>" + concept_searched + "</b>";
-
-      p.appendChild(div3);
-
-
-    },
-    error: function (request, status, error) {
-      console.log("Error");
-      console.log(request)
-      console.log(status)
-      console.log(error)
-    }
-  });
+  console.log("updateProgress() called");
+  render_overview_page(true);
+ 
 }

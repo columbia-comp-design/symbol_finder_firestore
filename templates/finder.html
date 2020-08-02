@@ -11,19 +11,19 @@
   <!-- Load ionicons -->
   <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css" type="text/css" />
 
-  <link rel="stylesheet" href="./../../static/css/style.css" type="text/css" />
+  <link rel="stylesheet" href="./../../../static/css/style.css" type="text/css" />
 
-  <link rel="stylesheet" href="./../../static/css/image.css" type="text/css" />
+  <link rel="stylesheet" href="./../../../static/css/image.css" type="text/css" />
   <!-- Load CSS for top bar -->
-  <link rel="stylesheet" href="./../../static/css/bar.css" type="text/css" />
+  <link rel="stylesheet" href="./../../../static/css/bar.css" type="text/css" />
   <!-- Load CSS for bottom right buttons -->
-  <link rel="stylesheet" href="./../../static/css/buttongroup.css" type="text/css" />
+  <link rel="stylesheet" href="./../../../static/css/buttongroup.css" type="text/css" />
   <!-- Load css for comma input field -->
-  <!-- <link rel="stylesheet" href="./../static/css/commafield.css" type="text/css"/>-->
-  <link rel="stylesheet" href="./../../static/css/commafield.css" type="text/css" />
+  <!-- <link rel="stylesheet" href="./../../static/css/commafield.css" type="text/css"/>-->
+  <link rel="stylesheet" href="./../../../static/css/commafield.css" type="text/css" />
 
-  <!-- <link rel="stylesheet" href="./../static/css/sidebar.css" type="text/css"/>-->
-  <link rel="stylesheet" href="./../../static/css/sidebar.css" type="text/css" />
+  <!-- <link rel="stylesheet" href="./../../static/css/sidebar.css" type="text/css"/>-->
+  <link rel="stylesheet" href="./../../../static/css/sidebar.css" type="text/css" />
 
 
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
@@ -36,8 +36,10 @@
     crossorigin="anonymous"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.fancytree/2.33.0/jquery.fancytree-all.min.js"></script>
 
-  <link rel="stylesheet" href="./../../static/css/skin-bootstrap-ui-fancytree.css" type="text/css" />
+  <link rel="stylesheet" href="./../../../static/css/skin-bootstrap-ui-fancytree.css" type="text/css" />
   <link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='css/loader.css') }}">
+  <link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='css/overviewPage.css') }}">
+
 </head>
 
 <body>
@@ -57,16 +59,14 @@
     <!-- <button id ="delete_button" class="delete_button"> delete</button> -->
 
     <div class="symbol_bank" id="symbol_bank" style="display:none">
-      <div id="progress_summary" class="progress_summary"> </div>
-      <div>
-        <button id="see_all_symbols" class="see_all_symbols_btn" onclick="toggle_show_all_symbols(this)"> show symbols
-        </button>
+      <div id="overview_header"> 
+        <h2 id="summaryTitle">
+        <span id = "termTotal">0 unique term</span>  and <span id = "imageTotal">0 image</span>  for:  <span id="concept_name">""</span>
+      </h2> 
+
+        <button id="see_all_symbols" class="see_all_symbols_btn" onclick="toggle_show_all_symbols(this)"> show symbols</button>
       </div>
-      <div id="chosen_symbol_table_div" class="chosen_symbol_table_div">
-        <!--<table id="symbol_bank_table"> </table>
-        <tr></tr>-->
-        <!-- <button id="see_all_symbols" class="see_all_symbols_btn" onclick="toggle_show_all_symbols(this)"> show symbols </button> -->
-      </div>
+        <div id="symbol_grid" class="progress_summary"> </div> 
     </div>
     <br>
     <div id="under_progress_bar" class="under_progress_bar">
@@ -89,16 +89,18 @@
 
 
   <!-- Transform comma field -->
-  <script type="text/javascript" src="./../../static/js/main.js"> </script>
-  <script type="text/javascript" src="./../../static/js/select_custom.js"></script>
-  <script type="text/javascript" src="./../../static/js/network_helper.js"></script>
-  <script type="text/javascript" src="./../../static/js/network.js"></script>
-  <script type="text/javascript" src="./../../static/js/commafield.js"> </script>
-  <script type="text/javascript" src="./../../static/js/google.js"></script>
+  <script type="text/javascript" src="./../../../static/js/main.js"> </script>
+  <script type="text/javascript" src="./../../../static/js/overview_phase_2.js"> </script>
+  <script type="text/javascript" src="./../../../static/js/select_custom.js"></script>
+  <script type="text/javascript" src="./../../../static/js/network_helper.js"></script>
+  <script type="text/javascript" src="./../../../static/js/network.js"></script>
+  <script type="text/javascript" src="./../../../static/js/commafield.js"> </script>
+  <script type="text/javascript" src="./../../../static/js/google.js"></script>
 
   <script>
     var concept = "{{ concept }}";
     var username = "{{ username }}";
+    var node_path = "{{ node_path }}";
     var version = 2;
     var swow_dict = {{ swow_dict| tojson }};
     swow_dict = JSON.parse(swow_dict);
@@ -114,18 +116,21 @@
 
     console.log("here is swow_data_for_tree_view: ", swow_data_for_tree_view)
     console.log("Tree view json: ", tree_view_json)
+    console.log("\n\nhere is node_path:" , node_path)
 
 
     // fill_treeview_sidebar(concept,tree_view_json);
     // fill_cluster_image_grids(tree_view_json);
     var clusters = []
-    if (tree_view_json.hasOwnProperty("children")) {
+
+    if (node_path == 'phase_1') {
+      if (tree_view_json.hasOwnProperty("children")) {
       tree_view_json_children = tree_view_json.children;
       for (var i = 0; i < tree_view_json_children.length; i++) {
         var cluster_title = tree_view_json_children[i]["title"];
         clusters.push(cluster_title);
       }
-      fill_treeview_sidebar(concept, tree_view_json); // 1
+      fill_treeview_sidebar(concept, tree_view_json, node_path); // 1
     }
     else{
       for (var i = 0; i < tree_view_json.length; i++) {
@@ -133,17 +138,65 @@
         clusters.push(cluster_title);
       }
       //init first time
-      fill_treeview_sidebar(concept, tree_view_json); // 1
+      fill_treeview_sidebar(concept, tree_view_json,node_path); // 1
     }
     $("#tree").hide();
 
+    //console.log(clusters)
+    google_all_clusters(clusters);
+   
+    updateProgress();
+    populate_first_step_instructions();
 
    
 
-    //console.log(clusters)
-    google_all_clusters(clusters);
-    updateProgress();
-    populate_first_step_instructions();
+    }
+    else {
+
+      // go to phase 2
+      // if the tree is reloaded 
+      if (tree_view_json.hasOwnProperty("children")) {
+        tree_view_json_children = tree_view_json.children;
+        for (var i = 0; i < tree_view_json_children.length; i++) {
+          var cluster_title = tree_view_json_children[i]["title"];
+          clusters.push(cluster_title);
+        }
+        fill_treeview_sidebar(concept, tree_view_json, node_path); // 1
+      }
+
+      //tree 
+      $("#tree").show();
+
+      //blue box
+      $('#symbol_bank').show();
+      render_overview_page(true); //true isInit
+      // init_overview_title();
+      console.log("called render_overview_page ")
+
+      $('#symbol_grid').empty();
+      console.log("symbol_grid -> empty ")
+
+      // updateProgress();
+
+    }
+
+
+    // else{ // load the tree for the first time 
+    //   for (var i = 0; i < tree_view_json.length; i++) {
+    //     var cluster_title = tree_view_json[i]["title"];
+    //     clusters.push(cluster_title);
+    //   }
+    //   fill_treeview_sidebar(concept, tree_view_json); // 1
+    // }
+
+    // //tree 
+    // $("#tree").show();
+
+    // //blue box
+    // $('#symbol_bank').show();
+    // updateProgress();
+    // populate_first_step_instructions();
+
     $('#loader').attr("style", "display:none")
   </script>
 

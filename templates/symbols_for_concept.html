@@ -42,22 +42,18 @@
 
     var concept = '{{ concept }}'
     var username = '{{ username }}'
-    // var node_path = '_1-_2'
+
 
     function go_to_finder() {
       $('#loader').attr("style", "display:block")
-      // window.location.href = '/' + username + '/finder/' + concept;
-      window.location.href = '/' + username + '/' + concept + '/' + 'phase_1' + '/finder_for_child_term' ;
+      window.location.href = '/' + username + '/' + concept + '/' + 'phase_1' + '/finder' ;
 
-
-      // window.location.href = '/finder/' + concept; 
     }
 
-    // function go_to_finder_for_child_term(node_path) {
+
     function go_to_finder_for_child_term(node_path) {
       $('#loader').attr("style", "display:block")
-      // window.location.href = '/' + username + '/' + concept + '/_1-_2' + '/finder_for_child_term' ;
-      window.location.href = '/' + username + '/' + concept + '/' + node_path + '/finder_for_child_term' ;
+      window.location.href = '/' + username + '/' + concept + '/' + node_path + '/finder' ;
     }
 
     var concept_dict = null;
@@ -107,10 +103,6 @@
       });
 
       populate_clusters_images = function (clusters_obj) {
-        // var symbol_grid  = document.getElementById('symbol_grid');
-        // $('#symbol_grid');
-        //symbol_grid.appendChild(image_table);
-        //print all clusters
 
         for (let i = 0; i < clusters_obj.length; i++) {
           
@@ -127,41 +119,16 @@
           $('#'+clusters_obj[i].key).hide();
 
           let clusterHasImage = false;
-          //let clusterImageTotal = 0; 
-          // $('#'+tree_view_json[i].title).html('<h3>' +tree_view_json[i].title + '</h3>');
-          //append_children_image_to_cluster(clusters_obj[i].children, clusters_obj[i].key, clusterImageTotal);
           append_term_images_to_cluster(clusters_obj[i].children, clusters_obj[i].key);
-
-          //while children has children 
 
         }
       }
-      //append_children_image_to_cluster = function (children, cluster_key, clusterImageTotal)
+
+
       append_term_images_to_cluster = function (children, cluster_key) {
-
-        //let clusterHasImage = false;
-
-        /*
-        // check if not leaf node
-        if (children[1].data.hasOwnProperty("saved_img")) { 
-          var saved_image_url = Object.keys(children[1].data.saved_img)[0];
-          var unique_tree_path = children[1].data.saved_img[saved_image_url].tree_path_ids; 
-        }
-        */
-
-        /*
-        if(unique_tree_path.split('/').length == 2){
-          clusterHasImage = false;
-          console.log('New Cluster: ' + cluster_key);
-        }
-        */
 
         for (let i = 0; i < children.length; i++) {
           
-          //reset clusterHasImage
-          //let clusterHasImage = false;
-
-          // if statement for each children 
           if (children[i].data.hasOwnProperty("saved_img")) {
             if (!isObjEmpty(children[i].data.saved_img)) {
               
@@ -173,14 +140,11 @@
 
               if(cluster_termTotal>0 ? $('#' + cluster_key + 'termTotal').text(cluster_termTotal + " terms") :  $('#' + cluster_key + 'termTotal').text(cluster_termTotal + " term") );
 
-              // $('#' + cluster_key + 'termTotal').text(cluster_termTotal);
-
               if(termTotal>0 ? $('#termTotal').text(termTotal + "/20 unique terms ") :  $('#termTotal').text(termTotal + "/20 term ") );
              
               $('#'+cluster_key).show();
               clusterHasImage = true;
 
-              // console.log('ClusterTotal: ', clusterTotal);
             }
           }
 
@@ -191,12 +155,9 @@
           }
         }
       }
-      //append_term_to_cluster = function (child, cluster_key, clusterImageTotal)
       append_term_to_cluster = function (child, cluster_key) {
-        // $('#' + cluster_key).append($('<div id=' + child.key + ' class="termDiv"> <h4 class="cluster_child_term">' + child.title + ' (' + Object.keys(child.data.saved_img).length + ') </h4> <div id=' + cluster_key + child.key + 'flex class="imageRow"> </div> </div>'))
         child_example = child;
 
-        // console.log("Here's tree_path_ids: ");
         console.log(Object.keys(child.data.saved_img)[0]['tree_path_ids']);
         var saved_image_url = Object.keys(child.data.saved_img)[0];
         console.log("Here's the tree_path: ", child.data.saved_img[saved_image_url].tree_path_ids);
@@ -213,16 +174,12 @@
         cluster_imageTotal += Object.keys(child.data.saved_img).length;
         imageTotal += Object.keys(child.data.saved_img).length;
 
-        // $('#' + cluster_key + 'imageTotal').text(cluster_imageTotal);
         if(cluster_imageTotal>0 ? $('#' + cluster_key + 'imageTotal').text(cluster_imageTotal + " images") :  $('#' + cluster_key + 'imageTotal').text(cluster_imageTotal + " image") );
 
-
-        // $('#imageTotal').text(imageTotal);/
         if(imageTotal>1 ? $('#imageTotal').text(imageTotal + " images ") :  $('#imageTotal').text(imageTotal + " image ") );
 
         append_images_to_term(child, unique_tree_path);
 
-        //return clusterImageTotal;
       }
 
       // Took out cluster_key
@@ -236,7 +193,6 @@
         for (k in child.data.saved_img) {
 
           let googleSearch = "https://www.google.com/search?q="+child.data.saved_img[k].google_search_term+"&source=lnms&tbm=isch&sa";
-          // if(countImage<26 ? asciiCode=97: asciiCode=0);
           if(countImage<26){
             $('#' + node_tree_path + 'image_row').append($('<div class = "imgSearchTermGroup"> <a  title="perform google search" target="_blank" href="'+googleSearch+'"> <img alt="" class="node_img" src=' + k + '> </a> <div class="imageDescription"> <h6>(' + String.fromCharCode(countImage + asciiCode)  + ')</h6> <h6 class="searchTerm">' + child.data.saved_img[k].google_search_term + '</h6> <h6></h6> </div> </div>'))
           }
@@ -245,10 +201,7 @@
           }
           countImage++;
 
-          //for(k in save_img_dict_ex){ console.log(child.data.saved_img[k].google_search_term)}
-          // console.log(k)
         }
-        // child.data.saved_img.forEach((url, url) => console.log(`Key is ${url} and value is ${url.url}`));
       }
 
       count_cluster_total = function (clusters_obj) {
@@ -256,14 +209,12 @@
           let bool = $('#' + clusters_obj[i].key).css('display') == 'none'
           console.log(clusters_obj[i].key + ' bool ', bool);
           if(!bool){
-          //if(!$('#' + clusters_obj[i].key).is(':visible')){
             clusterTotal++;
             console.log('Added to clusterTotal: ' + clusters_obj[i].key + ' ' + clusterTotal);
           }
         }
         
         if(clusterTotal>0 ? $('#clusterTotal').text(clusterTotal + " clusters, ") :  $('#clusterTotal').text(clusterTotal + " cluster, ") );
-        // $('#clusterTotal').text(clusterTotal);
       }
 
       function isObjEmpty(obj) {
@@ -274,87 +225,7 @@
         return true;
       }
 
-
-
-      // $.ajax({
-      //     type: "POST",
-      //     url: "get_symbols_for_username",                
-      //     contentType: "application/json; charset=utf-8",
-      //     data : JSON.stringify({"concept":concept,"username":username}),
-      //     success: function(data, text){
-      //       $('#loader').attr("style","display:none")
-      //     	console.log('success')
-      //     	console.log(data)
-      //     	// populate_symbols(data)
-      //     },
-      //     error: function(request, status, error){
-      //     	console.log("Error");
-      //         console.log(request)
-      //         console.log(status)
-      //         console.log(error)
-      //     }
-      // });
-
     };
-
-
-
-// populate_symbols = function(img_list){
-//   console.log("populate_symbols")
-//   console.log(img_list)
-//   // var img_list = concept_dict[concept]['img_list']
-//   image_table = document.createElement('table');
-//   row_num = 0;
-//   col_num = 5; 
-//   var row = image_table.insertRow(row_num)
-//   cell_num = 0;
-
-//   var sorted_img_list = img_list.sort((a, b) => (a.confirm_time > b.confirm_time) ? 1 : -1);
-//   for(var i = 0; i < sorted_img_list.length; i++){
-//     var url = sorted_img_list[i]['url'];
-//     var term = sorted_img_list[i]['search_term'];
-//     var confirm_time = sorted_img_list[i]['confirm_time'];
-//     var on_step_one = sorted_img_list[i]['on_step_one'];
-
-
-//     var cf_seconds = confirm_time / 1000.0;
-//     var cf_minutes = cf_seconds / 60.0;
-//     cf_minutes = cf_minutes.toFixed(2);
-
-//     var rem_seconds = (cf_minutes % 1) * 60.0;
-//     var rem_seconds = Math.floor(rem_seconds);
-
-//     var written_time = String(Math.floor(cf_minutes)) + " min " + String(rem_seconds) + " sec."
-
-
-//     cell = row.insertCell(-1);
-
-//     image_entry_div = document.createElement('div');
-//     image_entry_div.innerHTML = String(term) + "<br>" + written_time + "<br> step one: " + String(on_step_one) + "<br>"
-
-//     image = document.createElement('img');
-//     image.setAttribute('src',url);
-//     cell_id = term + '_' +String(i)
-//     image.setAttribute('id',cell_id)
-//     // image.setAttribute('style','width:150px');
-//     image.setAttribute('class','table_image');
-    // image.setAttribute('onclick', 'select_image(\"'+url+'\",\"'+term+'\",\"'+cell_id+'\")');
-
-//     image_entry_div.appendChild(image)
-
-//     //cell.append(String(term))
-//     //cell.append("<br>")
-//     // cell.appendChild(image);
-//     cell.append(image_entry_div)
-//     if((i+1)%col_num == 0){
-//       row_num++;
-//       row = image_table.insertRow(row_num)
-//     }
-//   }
-
-//   var symbol_grid  = document.getElementById('symbol_grid');
-//   symbol_grid.appendChild(image_table);
-// }
 
   </script>
 

@@ -6,7 +6,7 @@
 */
 
 //change it to your own keys
-var api_key = "lneljkwkjlkw"
+var api_key = "aefuhafjcmawfucawde"
 
 // Extracts the actual urls from the Google API results
 extract_links = function (search_results) {
@@ -41,7 +41,6 @@ goog = function (t) {
     }, 
     error: function (request, status, error) {
       console.log("Google Search Api is not working, API: ", api_key, "for :" , t);
-      // alert("Google Custome Search API is not working")
       console.log(request)
       console.log(status)
       console.log(error)
@@ -50,7 +49,6 @@ goog = function (t) {
 }
 
 cluster_google_search = function (cluster_title) {
-  // var api_key = "enter your google api_key here";
   var async_request = [];
   var responses = [];
   var cluster_words = cluster_title.split(",");
@@ -110,8 +108,6 @@ cluster_google_search = function (cluster_title) {
     order.push(order_obj);
     order.push(order_obj2);
 
-    // order.push(cluster_word);
-    // order.push(concept_searched + " " + cluster_word);
   }
 
   //find key 
@@ -124,9 +120,6 @@ cluster_google_search = function (cluster_title) {
   }
 
   var tree = $("#tree").fancytree("getTree");
-  // var node = tree.getNodeByKey(node_key);
-
-  // if (isObjEmpty(node.data.google_image_urls)) {
 
   $.when.apply(null, async_request).done(function () {
     console.log("all requests complete.")
@@ -141,14 +134,6 @@ cluster_google_search = function (cluster_title) {
     console.log("before fill_grids_for_cluster_concept", cluster_title);
     fill_grids_for_cluster_concept(url_obj, cluster_title, order);
   });
-
-  //}
-  // else{
-  //   console.log(" Reusing Search from from the server ")
-  //   url_obj = node.data.google_image_urls;
-  //   fill_grids_for_cluster_concept(url_obj, cluster_title, order);
-
-  // }
 
 }
 
@@ -174,10 +159,6 @@ search_node_by_path = function(node, path){
          node = node.children[j];
          console.log("node in for loop: ", node)
          break;
-        //  if(i==path.length-1){
-        //   // console.log(" i==path.length-1 break ");
-        //    break;
-        //  }
       }
     }
   }
@@ -191,36 +172,24 @@ multi_google_search = function (term, parent_term, tree_title_click, node_path_k
 
   var parent_child_search = parent_term + " " + term;
   var icon_search = term + " icon";
-  // var stock_search = term + " stock";
   var root_term_search = concept_searched + " " + term;
-
 
   //search by the node's direct children 
 
   var tree = $("#tree").fancytree("getTree");
-  //find a node the node's path 
+  //find the node's path 
   let keySeq = node_path_key.split('/');
   let node =  tree.rootNode;
   console.log("KeySeq ", keySeq);
   console.log("node tree.rooNode before for loop: ", node)
 
-  // the length of the keySeq  [ "_1", "_3", "_193", "_1" ]
   node = search_node_by_path(node, keySeq);
-
-  // for(let i=0;i<keySeq.length;i++){
-    
-  //   node = tree.getNodeByKey(keySeq[i],node);
-  //   console.log("node in for loop: ", node)
-
-  // }
-  // console.log(" found node: ", node.title, " and its path is ", node.getPath(true, "key", "/"));
 
   console.log("multi_google_search: Selected node" , node);
   if (isObjEmpty(node.data.google_image_urls)) {
     console.log("node.data.google_image_urls is empty")
 
     //use google Search API 
-    // $.when(goog(term), goog(parent_child_search), goog(icon_search), goog(stock_search), goog(root_term_search)).done(function(g1, g2, g3, g4, g5){
     $.when(goog(term), goog(parent_child_search), goog(icon_search), goog(root_term_search)).done(function (g1, g2, g3, g5) {
       console.log("used Google Search API")
       var url_obj = {};
@@ -234,11 +203,9 @@ multi_google_search = function (term, parent_term, tree_title_click, node_path_k
       url_obj[parent_child_search] = urls_2;
       url_obj[root_term_search] = urls_5;
       url_obj[icon_search] = urls_3;
-      // url_obj[stock_search] = urls_4;
 
       //using 1% of swow_dict
       if (term in swow_data_for_tree_view) {
-        // concept_dict[term].urls = url_obj;
         swow_data_for_tree_view[term].urls = url_obj;
       }
       else {
@@ -263,57 +230,8 @@ multi_google_search = function (term, parent_term, tree_title_click, node_path_k
   }
 }
 
-/*
-google_all_clusters = function(clusters){
-  var async_request=[];
-  var responses=[];
-  for(var i = 0; i < clusters.length; i++){
-    console.log(clusters[i])
-
-    var cluster_title = clusters[i];
-    var cluster_words = cluster_title.split(",");
-
-
-    
-    async_request.push($.ajax({
-            type: "GET",
-            dataType: 'JSON', 
-            url: "https://www.googleapis.com/customsearch/v1",
-            data: ({ 'key':  savvas_key,
-                     'cx': '015890050991066315514:iz21fmvdyja',
-                     'alt':  'json',
-                     'q':  clusters[i],
-                     'searchType': 'image',
-                     'filter': '1', // removes duplicates?
-                     'start': '1', // starting image for search (can only return 10 at a time)
-                  }),
-            jsonp: "$callback",
-            success: function( e, data ) {  
-              console.log(i)
-              responses.push(e);
-            } 
-        }));
-  }
-
-  $.when.apply(null,async_request).done(function(){
-    console.log("all requests complete.")
-    console.log(responses);
-    for(var i = 0; i < responses.length; i++){
-      var response = responses[i];
-      var search_term = response.queries.request[0].searchTerms;
-      var urls = extract_links(response);
-      // concept_dict[search_term] = {};
-      var url_obj = {};
-      url_obj[search_term] = urls;
-      concept_dict[search_term].urls = url_obj;
-    }
-    fill_cluster_image_grids(clusters);
-  });
-}*/
-
 
 google_all_clusters = function (clusters) {
-  // var api_key = "";
   var async_request = [];
   var responses = [];
   var cluster_dict = {};
@@ -331,9 +249,6 @@ google_all_clusters = function (clusters) {
       var cluster_word = cluster_word.trim();
       cluster_dict[cluster_word] = cluster_title;
     }
-
-    // cluster_dict.cluster_title = {};
-    // cluster_dict.cluster_title.cluster_words = cluster_words;
 
     for (var j = 0; j < cluster_words.length; j++) {
       var cluster_word = cluster_words[j];
@@ -410,10 +325,6 @@ google_all_clusters = function (clusters) {
 
 
 
-
-
-
-
 root_google_search = function (term, term_image_grid, padding_div, main_div) {
   // var api_key = "";
   $.ajax({
@@ -433,10 +344,6 @@ root_google_search = function (term, term_image_grid, padding_div, main_div) {
     jsonp: "$callback",
     success: function (e, data) {
       urls = extract_links(e);
-      // var url_obj = {};
-      // url_obj[term] = urls;
-      // concept_dict[term].urls = url_obj;
-
       image_table = create_image_grid(term, urls);
       term_image_grid.appendChild(image_table);
       padding_div.appendChild(term_image_grid);
