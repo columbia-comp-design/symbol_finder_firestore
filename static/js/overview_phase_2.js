@@ -1,13 +1,14 @@
+var imageTotal = 0;
+var clusterTotal = 0;
+var termTotal = 0; 
+var cluster_imageTotal = 0;
+var cluster_termTotal = 0;
 
 render_overview_page = function (isInit) {
 
     // var concept_dict = null;
     // var save_img_dict_ex;
-    var imageTotal = 0;
-    var clusterTotal = 0;
-    var termTotal = 0; 
-    var cluster_imageTotal = 0;
-    var cluster_termTotal = 0;
+
 
     console.log("render_overview_page called")
     // load past concepts
@@ -175,6 +176,7 @@ render_overview_page = function (isInit) {
       // $('#imageTotal').text(imageTotal);/
       if(imageTotal>1 ? $('#imageTotal').text(imageTotal + " images ") :  $('#imageTotal').text(imageTotal + " image ") );
 
+      console.log('imageTotal after update', imageTotal)
       append_images_to_term(child, unique_tree_path);
 
       //return clusterImageTotal;
