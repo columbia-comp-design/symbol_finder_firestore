@@ -148,8 +148,8 @@ delete_node = function (node_to_delete) {
     var current_node = node_stack[0];
     for (edge_id in edges['_data']) {
       var edge = edges['_data'][edge_id]
-      console.log(edge)
-      console.log(edge['from'])
+      // console.log(edge)
+      // console.log(edge['from'])
       if (edge['from'] == current_node) {
         node_stack.push(edge['to']);
         edges_to_delete.push(edge_id);
@@ -161,12 +161,12 @@ delete_node = function (node_to_delete) {
   network.selectEdges(edges_to_delete);
   network.selectNodes(nodes_to_delete);
 
-  console.log('NODES TO DELETE: ')
+  // console.log('NODES TO DELETE: ')
   for (var i = 0; i < nodes_to_delete.length; i++) {
     var nd = nodes_to_delete[i];
     var node_data = nodes.get(nd);
-    console.log(nodes);
-    console.log(node_data);
+    // console.log(nodes);
+    // console.log(node_data);
     var treeview_id = node_data.tv_id;
     console.log("TREEVIEW_ID: " + String(treeview_id));
     var tree = $("#tree").fancytree("getTree");
@@ -258,18 +258,18 @@ analyze_symbols = function () {
 close_table = function (table_id, see_more_button_id, close_btn) {
   console.log("closing table! ")
   var image_table = document.getElementById(table_id);
-  console.log(image_table)
+  // console.log(image_table)
   for (var i = 0; i < image_table.rows.length; i++) {
     // console.log(image_table.rows[i])
     var cell = image_table.rows[i].cells[0];
-    console.log(cell)
+    // console.log(cell)
     if (i > 0) {
       if (cell != undefined) {
         cell.style.display = "none";
       }
     }
-    console.log(cell)
-    console.log("\n")
+    // console.log(cell)
+    // console.log("\n")
   }
   close_btn.style.display = "none";
   var see_more_btn = document.getElementById(see_more_button_id)
@@ -287,7 +287,7 @@ create_image_sidebar2 = function (url_obj, term, tree_node_key) {
 
   for (search_term in url_obj) {
     var urls = url_obj[search_term];
-    console.log(search_term);
+    // console.log(search_term);
 
     var image_table_div = document.createElement("div");
     image_table_div.setAttribute("class", "image_table_div")
@@ -338,8 +338,8 @@ create_image_sidebar2 = function (url_obj, term, tree_node_key) {
     var see_more_btn_id = "see_more_btn_" + search_term;
 
 
-    console.log("CLOSE BTN CREATED")
-    console.log(image_table_id);
+    // console.log("CLOSE BTN CREATED")
+    // console.log(image_table_id);
     var close_btn = document.createElement('a');
     close_btn.innerHTML = "close";
     close_btn.setAttribute("id", close_btn_id);
@@ -374,7 +374,7 @@ function toggle_active(button_id) {
 
 
 function toggle_sidebar_category_show(dropdown_content_id) {
-  console.log(dropdown_content_id);
+  // console.log(dropdown_content_id);
   var x = document.getElementById(dropdown_content_id);
   if (x.style.display === "none") {
     x.style.display = "block";
@@ -386,14 +386,14 @@ function toggle_sidebar_category_show(dropdown_content_id) {
 
 function add_path_of_nodes(node) {
 
-  console.log("in add_path_of_nodes")
-  console.log(node)
+  // console.log("in add_path_of_nodes")
+  // console.log(node)
   var key_path = node.getKeyPath();
   var title_path = node.getPath();
 
-  console.log(title_path)
-  console.log("KEY PATH:")
-  console.log(key_path);
+  // console.log(title_path)
+  // console.log("KEY PATH:")
+  // console.log(key_path);
   title_path = title_path.split('/');
   key_path = key_path.split('/');
   console.log(title_path)
@@ -428,8 +428,8 @@ function update_progress_info() {
   var num_of_symbols = Object.keys(selected_symbols).length;
   sic_info.innerHTML = String(num_of_symbols) + " of ideally 25 symbols found."
 
-  console.log("SELECTED SYMBOLS")
-  console.log(selected_symbols)
+  // console.log("SELECTED SYMBOLS")
+  // console.log(selected_symbols)
 
 }
 
@@ -474,10 +474,10 @@ function add_image_to_node(node_path_key, google_search_term, url) {
 
   // update the tree
   var updated_tree_view_json = tree.toDict(true);
-  console.log("add_image_to_node, -> tree.toDict(true)", updated_tree_view_json);
+  // console.log("add_image_to_node, -> tree.toDict(true)", updated_tree_view_json);
 
   update_tree_view_json_to_server(updated_tree_view_json);
-  console.log("add_image_to_node, -> modified_tree converted to a dict", updated_tree_view_json);
+  // console.log("add_image_to_node, -> modified_tree converted to a dict", updated_tree_view_json);
 
 
 }
@@ -497,15 +497,15 @@ function delete_image_from_node(node_path_key, url) {
   // console.log("Here is modified_tree ", modified_tree); 
   var updated_tree_view_json = tree.toDict(true);
   update_tree_view_json_to_server(updated_tree_view_json);
-  console.log("delete_image_from_node, -> modified_tree converted to a dict: ", updated_tree_view_json);
+  // console.log("delete_image_from_node, -> modified_tree converted to a dict: ", updated_tree_view_json);
 }
 
 function add_custom_node(attribute_node) {
   if (event.key === 'Enter') {
-    console.log("add_custom_node attribute_node:", attribute_node);
+    // console.log("add_custom_node attribute_node:", attribute_node);
 
     var keySeq = attribute_node.getAttribute("nkey").split('/');
-    console.log("keyseq ", keySeq);
+    // console.log("keyseq ", keySeq);
     // console.log("node_key :", node_key);
 
     var val = attribute_node.value;
@@ -546,8 +546,8 @@ function add_custom_node(attribute_node) {
 
 
       var new_node = node.addChildren(new_child_node, second_child.key);
-      console.log("NEW NODE")
-      console.log(new_node)
+      // console.log("NEW NODE")
+      // console.log(new_node)
 
       if (val in concept_dict) {
         // var regular_swow_words = concept_dict[val]["comb_words"];
@@ -583,7 +583,7 @@ function add_custom_node(attribute_node) {
 
       tree_view_json = node.tree.toDict(true);
       update_tree_view_json_to_server(tree_view_json);
-      console.log("init called end tree_view_json ", tree_view_json);
+      // console.log("init called end tree_view_json ", tree_view_json);
 
     }
   }
@@ -608,7 +608,7 @@ function confirm_image3(tree_view_node_term, term, url, image_id, node_path_key)
 
   let node = tree.rootNode;
   node = search_node_by_path(node, clusterSeq);
-  console.log("found cluster node: ", node)
+  // console.log("found cluster node: ", node)
 
   // if term exist in cluster, then use existing path to append images
   if(node.data.mapping_childterm_to_path.hasOwnProperty(tree_view_node_term)){
@@ -1373,6 +1373,8 @@ function fill_treeview_sidebar(node_name, tree_view_json, node_path) {
         console.log("data[node].getPath(): ", data["node"].getPath())
         var path_split = path.split("/")
 
+        // let parent_node = node.getParent();;
+
         //depth
         if (path_split.length < 4) {
 
@@ -1381,6 +1383,8 @@ function fill_treeview_sidebar(node_name, tree_view_json, node_path) {
             var node_title = child_node.title;
             var regular_swow_words = concept_dict[node_title]["comb_words"];
 
+            console.log("user expand, -> regular_swow_words", regular_swow_words);
+
             var max_nodes = 5;
             for (var j = 0; j < regular_swow_words.length; j++) {
               if (j >= max_nodes) {
@@ -1388,7 +1392,14 @@ function fill_treeview_sidebar(node_name, tree_view_json, node_path) {
               }
               var swow_word = regular_swow_words[j];
               var new_node = { title: swow_word, icon: false, is_cluster: false, expanded_once: false, google_image_urls: {}, saved_img: {} };
+              // compare 
+              console.log("here is new_node.title: ", new_node.title)
+              console.log("here is current node.title: ", node.title)
+              console.log("here is child_node node.title: ", child_node.title)
+              // console.log("here is parent node.title, " + parent_node.title + ", swow_word " + swow_word)
+             if(node.title != swow_word){
               child_node.addNode(new_node);
+             }
             }
           }
         }
@@ -1439,13 +1450,13 @@ function fill_treeview_sidebar(node_name, tree_view_json, node_path) {
         // Convert the whole tree into an dictionary
         tree_view_json = data.tree.toDict(true);
         update_tree_view_json_to_server(tree_view_json);
-        console.log("init called end tree_view_json ", tree_view_json);
+        // console.log("init called end tree_view_json ", tree_view_json);
 
       }
 
       tree_view_json = data.tree.toDict(true);
       update_tree_view_json_to_server(tree_view_json);
-      console.log("init called end tree_view_json ", tree_view_json);
+      // console.log("init called end tree_view_json ", tree_view_json);
     },
     click: function (event, data) {
       console.log(event)
@@ -1615,7 +1626,7 @@ function fill_treeview_sidebar(node_name, tree_view_json, node_path) {
 
       tree_view_json = data.tree.toDict(true);
       update_tree_view_json_to_server(tree_view_json);
-      console.log("init called end tree_view_json ", tree_view_json);
+      // console.log("init called end tree_view_json ", tree_view_json);
 
     },
     init: function (event, data) {
@@ -1635,24 +1646,20 @@ function fill_treeview_sidebar(node_name, tree_view_json, node_path) {
 
 
       if (node_path == 'phase_1') {
-        console.log('inside if node_path', node_path )
+        // console.log('inside if node_path', node_path )
 
         tree_view_json = data.tree.toDict(true);
         update_tree_view_json_to_server(tree_view_json);
-        console.log("init called end tree_view_json ", tree_view_json);
+        // console.log("init called end tree_view_json ", tree_view_json);
 
       }
       else {
-
-        // tree values
-        console.log(" before expand tree_view_json", tree_view_json);
-        console.log(" before expand node_path", node_path);
 
         let path = node_path.split('-');
 
 
         let node = data.tree.rootNode;
-        console.log("node init ", node)
+        // console.log("node init ", node)
         // //
         let chosenChild;
         for (let i = 0; i < path.length; i++) {
@@ -1661,9 +1668,9 @@ function fill_treeview_sidebar(node_name, tree_view_json, node_path) {
             // console.log("second for j: ", j)
             if (node.children[j].key == path[i]) {
               node.children[j].setExpanded(true);
-              console.log("node.children[j].setExpanded(true): ", node.children[j]);
+              // console.log("node.children[j].setExpanded(true): ", node.children[j]);
               chosenChild = j;
-              console.log("chosenChild index j", chosenChild)
+              // console.log("chosenChild index j", chosenChild)
             }
             else {
               node.children[j].setExpanded(false);
@@ -1671,10 +1678,10 @@ function fill_treeview_sidebar(node_name, tree_view_json, node_path) {
           }
           
           node = node.children[chosenChild]
-          console.log("inside for node.children[chosenChild]: ", node)
+          // console.log("inside for node.children[chosenChild]: ", node)
         }
 
-        console.log("outside node.children[chosenChild]: ", node)
+        // console.log("outside node.children[chosenChild]: ", node)
 
         node.setActive(true);
         if(node.hasOwnProperty('children')){
@@ -1690,7 +1697,7 @@ function fill_treeview_sidebar(node_name, tree_view_json, node_path) {
 
         tree_view_json = data.tree.toDict(true);
         update_tree_view_json_to_server(tree_view_json);
-        console.log("init called end tree_view_json ", tree_view_json);
+        // console.log("init called end tree_view_json ", tree_view_json);
 
       }
 

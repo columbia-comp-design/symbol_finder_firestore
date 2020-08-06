@@ -6,7 +6,7 @@
 */
 
 //change it to your own keys
-var api_key = "AIehslfjk8ew"
+var api_key = "kjfkljew"
 
 // Extracts the actual urls from the Google API results
 extract_links = function (search_results) {
@@ -71,7 +71,7 @@ cluster_google_search = function (cluster_title) {
       }),
       jsonp: "$callback",
       success: function (e, data) {
-        console.log(i)
+        // console.log(i)
         responses.push(e);
       }
     }));
@@ -92,7 +92,7 @@ cluster_google_search = function (cluster_title) {
       }),
       jsonp: "$callback",
       success: function (e, data) {
-        console.log(i)
+        // console.log(i)
         responses.push(e);
       }
     }));
@@ -150,14 +150,14 @@ search_node_by_path = function(node, path){
 // path should be an array of strings ex :  [ "_1", "_3", "_193", "_1" ]
 // node has to be the root node 
    for(let i=0;i<path.length;i++){
-    console.log("first for path val ", path[i], " and i: ", i);
+    // console.log("first for path val ", path[i], " and i: ", i);
 
 
     for(let j=0; j<node.children.length;j++){
-      console.log("second for j: ", j)
+      // console.log("second for j: ", j)
       if(node.children[j].key == path[i]){
          node = node.children[j];
-         console.log("node in for loop: ", node)
+        //  console.log("node in for loop: ", node)
          break;
       }
     }
@@ -180,8 +180,8 @@ multi_google_search = function (term, parent_term, tree_title_click, node_path_k
   //find the node's path 
   let keySeq = node_path_key.split('/');
   let node =  tree.rootNode;
-  console.log("KeySeq ", keySeq);
-  console.log("node tree.rooNode before for loop: ", node)
+  // console.log("KeySeq ", keySeq);
+  // console.log("node tree.rooNode before for loop: ", node)
 
   node = search_node_by_path(node, keySeq);
 
