@@ -19,6 +19,11 @@ render_overview_page = function (isInit) {
       contentType: "application/json; charset=utf-8",
       data: JSON.stringify({ "username": username, "concept": concept }),
       success: function (result) {
+         imageTotal = 0;
+         clusterTotal = 0;
+         termTotal = 0; 
+         cluster_imageTotal = 0;
+         cluster_termTotal = 0;
         // var tree = $("#tree").fancytree("getTree");
         // var tree_clusters = tree.rootNode.children;
         // $('#loader').attr("style", "display:none")
@@ -160,6 +165,7 @@ render_overview_page = function (isInit) {
       // update cluster_imageTotal & imageTotal
       cluster_imageTotal += Object.keys(child.data.saved_img).length;
       imageTotal += Object.keys(child.data.saved_img).length;
+      console.log('append_term_to_cluster -> imageTotal ', imageTotal)
 
       // $('#' + cluster_key + 'imageTotal').text(cluster_imageTotal);
       if(!isInit){

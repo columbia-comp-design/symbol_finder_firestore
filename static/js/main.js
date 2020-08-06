@@ -594,8 +594,31 @@ function add_custom_node(attribute_node) {
 function confirm_image3(tree_view_node_term, term, url, image_id, node_path_key) {
   console.log("confirm_image3 : key: ", node_path_key)
 
+
   confirm_time = performance.now();
   var to_remove = false;
+
+  // mapping_for_cluster_term_to_path
+  
+  //find cluster node 
+  var tree = $("#tree").fancytree("getTree");
+  //find node 
+  let keySeq = node_path_key.split('/');
+  let clusterSeq = keySeq.slice(0,1)
+
+  let node = tree.rootNode;
+  node = search_node_by_path(node, clusterSeq);
+  console.log("found cluster node: ", node)
+
+  // if term exist in cluster, then use existing path to append images
+  if(node.data.mapping_childterm_to_path.hasOwnProperty(tree_view_node_term)){
+    node_path_key = node.data.mapping_childterm_to_path[tree_view_node_term];
+
+  }  // else use default path, update the hashmap 
+  else{
+    node.data.mapping_childterm_to_path[tree_view_node_term] = node_path_key;
+  }
+  
 
   var img = document.getElementById(image_id);
   // toggle confirmed state of image
@@ -603,50 +626,47 @@ function confirm_image3(tree_view_node_term, term, url, image_id, node_path_key)
     img.classList.remove("confirmed");
   } else { img.classList.add("confirmed"); }
 
-  var tree = $("#tree").fancytree("getTree");
-  //find node 
-  let keySeq = node_path_key.split('/');
+  // var tree = $("#tree").fancytree("getTree");
+  // //find node 
+  // let keySeq = node_path_key.split('/');
 
-  let node = tree.rootNode;
+  // let node = tree.rootNode;
+  node = tree.rootNode;
   node = search_node_by_path(node, keySeq);
 
 
+  // if it is a cluster 
   if(keySeq.length == 1){
     //save it under the correct child 
 
     // find the cluster node 
     for(let i=0;i<node.children.length;i++){
-      console.log("inside for node.children[i].title", node.children[i])
+      // console.log("inside for node.children[i].title", node.children[i])
         if(node.children[i].title == tree_view_node_term.trim()){
           node = node.children[i];
           node_path_key  = node.getPath(true, "key", "/");
-          console.log("found Match node: ", node);
+          // console.log("found Match node: ", node);
           break;
         }
     }
   }
 
 
+  // phase 2 
   if (url in node.data.saved_img) {
     // delete_elem_from_table(url,term,image_id);
     to_remove = true;
     delete selected_symbols[url];
-
-   
-
     delete_image_from_node(node_path_key, url);
-
-   
   }
   else {
-
     var foundChild = false;
     var cluster_index = -1;
 
     add_image_to_node(node_path_key, term, url);
-
   }
 
+  //update the count title
   $('#symbol_grid').empty();
   showing_selected_symbols = false;
   let symbol_bank = document.getElementById("symbol_bank");
@@ -857,7 +877,26 @@ create_image_grid3 = function (term, urls, concept, node_path_key) {
         }
       }
     }
-    else{
+    else{ // it is a term node 
+
+      //check if term exist in mapping_childterm_to_path
+
+      clusterSeq = keySeq.slice(0,1)
+    
+      node = tree.rootNode;
+      node = search_node_by_path(node, clusterSeq);
+      console.log("found cluster node: ", node)
+    
+      // if term exist in cluster, then use existing path to append images
+      if(node.data.mapping_childterm_to_path.hasOwnProperty(term)){
+        node_path_key = node.data.mapping_childterm_to_path[term];
+        keySeq = node_path_key.split('/');
+        node = search_node_by_path(tree.rootNode, keySeq);
+      }  
+      else{ //use current node 
+        node = search_node_by_path(tree.rootNode, keySeq);
+      }
+
       if (url in node.data.saved_img) {
         image.classList.add('confirmed');
       }
