@@ -1,0 +1,1 @@
+# Setting your own firestore 
