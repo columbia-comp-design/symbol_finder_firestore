@@ -45,7 +45,7 @@ service cloud.firestore {
 -  copy and past the key into **./symbolFinderSecret.json** file
 - The key should look like this:
 ```js
-// (this one is fake, so don't use it!)
+// (this one is fake, so don't use it!) 
 {
   "type": "service_account",
   "project_id": "symbol-finder-db",
