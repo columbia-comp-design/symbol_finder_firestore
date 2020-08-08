@@ -26,8 +26,8 @@ You can use Visiblends' Firestore database or setup your own Firestore database
 
 ### Using Visiblends's Database 
 1. Ask a Visiblends team member for the Firestore private key
-2. copy and past the key into **./symbolFinderSecret.json** file (located in the root directory of your app)
-
+3. In the root directory of your application, create a file with the name of **symbolFinderSecret.json** 
+2. copy and past the key into **./symbolFinderSecret.json** file
 - The key should look like this on your **./symbolFinderSecret.json** file 
 ```js
 // (this one is fake, so don't use it!)
