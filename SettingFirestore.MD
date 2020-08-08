@@ -7,7 +7,8 @@
 - Click on **Start in production mode** and the **next** button
 - Choose a location. Ex: US-Central
 
-## 3. Click on "RULE" tab 
+## 3. Change permission
+- Click on "RULE" tab 
 - under **Publish**, you would see this piece of code
 ```js
 rules_version = '2';
