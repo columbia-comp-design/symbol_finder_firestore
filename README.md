@@ -22,7 +22,7 @@ git clone https://github.com/COLUMBIA-COMPUTATIONAL-DESIGN-LAB/symbol_finder_fir
 ```
 ## 2. Setting Firestore
 You can use Visiblends' Firestore database or setup your own Firestore database
-* [Click here to see intructions on how to setup your own Firestore](./SettingFirestore.md)
+* [Click here to see intructions on how to setup your own Firestore](https://github.com/COLUMBIA-COMPUTATIONAL-DESIGN-LAB/symbol_finder_firestore/blob/master/SettingFirestore.md)
 
 ### Using Visiblends's Database 
 1. Ask a Visiblends team member for the Firestore private key
