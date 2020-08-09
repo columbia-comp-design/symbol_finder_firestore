@@ -9,25 +9,25 @@ A neat webapp for brainstorming associations for concepts and finding images for
 Note: Here is the [repo](https://github.com/savvaspetridis/symbol_finder) for a version that stores the images locally on your computer 
 
 # Steps for running the webapp on your computer 
-1. cloning the repo
-2. Setting Firstore
-3. Setting Google Custom Search API
+1. Clone the repository
+2. Set up Firstore
+3. Set up Google Custom Search API
 4. Install dependencies (libraries)
-5. Running the app 
+5. Run the application
 
 
-## 1. cloning the repo
+## 1. Clone the repository
 ```shell
 git clone https://github.com/COLUMBIA-COMPUTATIONAL-DESIGN-LAB/symbol_finder_firestore.git
 ```
-## 2. Setting Firestore
+## 2. Set up Firestore
 You can use Visiblends' Firestore database or setup your own Firestore database
 * [Click here to see intructions on how to setup your own Firestore](https://github.com/COLUMBIA-COMPUTATIONAL-DESIGN-LAB/symbol_finder_firestore/blob/master/SettingFirestore.MD)
 
-### Using Visiblends's Database 
-1. Ask a Visiblends team member for the Firestore private key
+### Using VisiBlends's Database 
+1. Ask a VisiBlends team member for the Firestore private key
 3. In the root directory of your application, create a file with the name of **symbolFinderSecret.json** 
-2. copy and past the key into **./symbolFinderSecret.json** file
+2. Copy and paste the key into **./symbolFinderSecret.json** file
 - The key should look like this on your **./symbolFinderSecret.json** file 
 ```js
 // (this one is fake, so don't use it!)
@@ -46,28 +46,28 @@ You can use Visiblends' Firestore database or setup your own Firestore database
 
 ```
 
-## 3. Setting Google Custom Search API
+## 3. Set up Google Custom Search API
 1. Go to the Google Cloud Platform Console: [https://console.developers.google.com/apis/](https://console.developers.google.com/apis/)
-2. search for **custom search api**
+2. Search for **custom search api**
 3. Click on **enable**
 4. Click on **CREATE CREDENTIALS**
-5. Under **Add credential to your project**, 
--  select under *Which API are you using*:  **custom search api**
--  select under *Which API are you using*:  **web server**
--  select under *What data will you be accessing?*:  **Application data**
--  select *Are you planning to use this API with App Engine or Compute Engine?*: **No, I’m not using them**
-- then click on the button **what credentials do I need?**
-- under **Service account name*, just write any valid name
-- then click on **continue** button
-- it would pop a message: *Service account has no role*, click on **CREATE WITHOUT A ROLE**
+5. Under **Add credentials to your project**, 
+  -  under *Which API are you using*: select **custom search api**
+  -  under *Which API are you using*: select **web server**
+  -  under *What data will you be accessing?*: select **Application data**
+  -  under *Are you planning to use this API with App Engine or Compute Engine?*: select **No, I’m not using them**
+  -  then click on the button **what credentials do I need?**
+  -  under *Service account name*, **just write any valid name**
+  -  then click on the **continue** button
+  -  a message should pop up: *Service account has no role*, click on **CREATE WITHOUT A ROLE**
 6. click on **CREATE CREDENTIALS**
-- click on **API key**
-7. Use this key for your project 
-- go to static/js/google.js edit this line:
+  -  click on **API key**
+7. Copy this key for your project 
+  -  go to static/js/google.js edit this line:
 ```js
 var api_key = "enter your api key here"
 ```
-- The API looks something like this: (but this one is fake, so don't use it!)
+  -  The API looks something like this: (but this one is fake, so don't use it!)
 ```js
 var api_key = "AIzXXXXSyByCCQQGfVOYjE-Eceg-Yq4rXOA27fxopyashg"
 ```
@@ -76,7 +76,7 @@ var api_key = "AIzXXXXSyByCCQQGfVOYjE-Eceg-Yq4rXOA27fxopyashg"
 
 
 ## 4. Install dependencies (libraries)
-It is recommended to use a [virtual enviroment](https://docs.python.org/3/library/venv.html)
+It is highly recommended to use a [virtual enviroment](https://docs.python.org/3/library/venv.html)
 ```js
 pip3 install flask
 pip3 install networkx
@@ -90,10 +90,11 @@ pip3 install firebase_admin
 pip install --upgrade pyasn1-modules
 ```
 
-## 5. Running the app 
+## 5. Run the application 
 ```
 python3 main.py
 ```
+Run http://0.0.0.0:8081/ in your web browser
 
 
 
