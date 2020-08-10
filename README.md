@@ -10,7 +10,7 @@ Note: Here is the [repo](https://github.com/savvaspetridis/symbol_finder) for a 
 
 # Steps for running the webapp on your computer 
 1. Clone the repository
-2. Set up Firstore
+2. Set up Database with Firstore
 3. Set up Google Custom Search API
 4. Install dependencies (libraries)
 5. Run the application
@@ -20,7 +20,7 @@ Note: Here is the [repo](https://github.com/savvaspetridis/symbol_finder) for a 
 ```shell
 git clone https://github.com/COLUMBIA-COMPUTATIONAL-DESIGN-LAB/symbol_finder_firestore.git
 ```
-## 2. Set up Firestore
+## 2. Set up Database with Firestore
 
 You can use Visiblends' Firestore database or setup your own Firestore database
 
