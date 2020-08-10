@@ -21,13 +21,16 @@ Note: Here is the [repo](https://github.com/savvaspetridis/symbol_finder) for a 
 git clone https://github.com/COLUMBIA-COMPUTATIONAL-DESIGN-LAB/symbol_finder_firestore.git
 ```
 ## 2. Set up Firestore
+
 You can use Visiblends' Firestore database or setup your own Firestore database
+
+### For Setting up your own Firestore Database
 * [Click here to see intructions on how to setup your own Firestore](https://github.com/COLUMBIA-COMPUTATIONAL-DESIGN-LAB/symbol_finder_firestore/blob/master/SettingFirestore.MD)
 
-### Using VisiBlends's Database 
+### For VisiBlends Team: Using VisiBlends Database
 1. Ask a VisiBlends team member for the Firestore private key
-3. In the root directory of your application, create a file with the name of **symbolFinderSecret.json** 
-2. Copy and paste the key into **./symbolFinderSecret.json** file
+2. In the root directory of your application, create a file with the name of **symbolFinderSecret.json** 
+3. Copy and paste the key into **./symbolFinderSecret.json** file
 - The key should look like this on your **./symbolFinderSecret.json** file 
 ```js
 // (this one is fake, so don't use it!)
