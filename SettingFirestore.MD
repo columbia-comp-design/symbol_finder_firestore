@@ -33,7 +33,7 @@ service cloud.firestore {
 ```
 
 ## 4. Generate the private key 
-- Go to setting 
+- Go to settings
 - Click on **Users and Permissions**
 - Click on the **Service accounts** tab
 - Click on the **Generate new private key** button
@@ -42,8 +42,8 @@ service cloud.firestore {
 
 ## 5. Use the key for your symbolFinder application 
  - In the root directory of your application, create a file with the name of **symbolFinderSecret.json** 
--  copy and past the key into **./symbolFinderSecret.json** file
-- The key should look like this:
+-  Copy and paste the key into **./symbolFinderSecret.json** file
+- The key should look something like this:
 ```js
 // (this one is fake, so don't use it!) 
 {
