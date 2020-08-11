@@ -55,8 +55,8 @@ You can use Visiblends' Firestore database or setup your own Firestore database
 3. Click on **enable**
 4. Click on **CREATE CREDENTIALS**
 5. Under **Add credentials to your project**, 
-  -  under *Which API are you using*: select **custom search api**
-  -  under *Which API are you using*: select **web server**
+  -  under *Which API are you using?*: select **custom search api**
+  -  under *Where will you be calling the API from?*: select **web server**
   -  under *What data will you be accessing?*: select **Application data**
   -  under *Are you planning to use this API with App Engine or Compute Engine?*: select **No, I’m not using them**
   -  then click on the button **what credentials do I need?**
