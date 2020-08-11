@@ -4,7 +4,7 @@
 - Give it a name
 
 ## 2. Create a database
-- Click on **Start in production mode** and the **next** button
+- Under the **Develop** tab on the lefthand side, click on **Start in production mode** and the **next** button
 - Choose a location. Ex: US-Central
 
 ## 3. Change permission
