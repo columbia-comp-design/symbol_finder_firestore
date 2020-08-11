@@ -8,7 +8,7 @@
 - Choose a location. Ex: US-Central
 
 ## 3. Change permission
-- Click on "RULE" tab 
+- Under the **Database** header, click on "Rules" tab 
 - under **Publish**, you would see this piece of code
 ```js
 rules_version = '2';
