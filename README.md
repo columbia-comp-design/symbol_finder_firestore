@@ -2,15 +2,15 @@
 A neat webapp for brainstorming associations for concepts and finding images for them. 
 
 ##### Tech Overview 
-- Database: Firestore 
-- Server: Flask 
-- Interface:  Browser 
+SymbolFinder uses:
+- Firestore for data storage 
+- Flask for backend (web server)
+- Chrome for viewing the application
 
-Note: Here is the [repo](https://github.com/savvaspetridis/symbol_finder) for a version that stores the images locally on your computer 
 
 # Steps for running the webapp on your computer 
 1. Clone the repository
-2. Set up Database with Firstore
+2. Set up database with Firestore
 3. Set up Google Custom Search API
 4. Install dependencies (libraries)
 5. Run the application
@@ -21,13 +21,12 @@ Note: Here is the [repo](https://github.com/savvaspetridis/symbol_finder) for a 
 git clone https://github.com/COLUMBIA-COMPUTATIONAL-DESIGN-LAB/symbol_finder_firestore.git
 ```
 ## 2. Set up Database with Firestore
+There are 2 ways to set up Firestore:
 
-You can use Visiblends' Firestore database or setup your own Firestore database
-
-### For Setting up your own Firestore Database
+### Option 1 (Default): Create your own Firestore database
 * [Click here to see intructions on how to setup your own Firestore](https://github.com/COLUMBIA-COMPUTATIONAL-DESIGN-LAB/symbol_finder_firestore/blob/master/SettingFirestore.MD)
 
-### For VisiBlends Team: Using VisiBlends Database
+### Option 2 (For VisiBlends Team only): Get access to existing database
 1. Ask a VisiBlends team member for the Firestore private key
 2. In the root directory of your application, create a file with the name of **symbolFinderSecret.json** 
 3. Copy and paste the key into **./symbolFinderSecret.json** file
@@ -80,7 +79,7 @@ var api_key = "AIzXXXXSyByCCQQGfVOYjE-Eceg-Yq4rXOA27fxopyashg"
 
 ## 4. Install dependencies (libraries)
 It is highly recommended to use a [virtual enviroment](https://docs.python.org/3/library/venv.html)
-```js
+```shell
 pip3 install flask
 pip3 install networkx
 pip3 install community
@@ -89,15 +88,15 @@ pip3 install firebase_admin
 ```
 
 - Note: If you encounter this error : *ImportError: cannot import name 'opentype'*
-```
+```shell
 pip install --upgrade pyasn1-modules
 ```
 
 ## 5. Run the application 
-```
+```shell
 python3 main.py
 ```
-Run http://0.0.0.0:8081/ in your web browser
+Go to http://0.0.0.0:8081/ in your web browser
 
 
 
