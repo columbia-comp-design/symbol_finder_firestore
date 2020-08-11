@@ -4,7 +4,7 @@ A neat webapp for brainstorming associations for concepts and finding images for
 ##### Tech Overview 
 - Database: Firestore 
 - Server: Flask 
-- Intereface:  Browser 
+- Interface:  Browser 
 
 Note: Here is the [repo](https://github.com/savvaspetridis/symbol_finder) for a version that stores the images locally on your computer 
 
