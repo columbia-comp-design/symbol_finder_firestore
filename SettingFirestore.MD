@@ -9,7 +9,7 @@
 
 ## 3. Change permission
 - Under the **Database** header, click on "Rules" tab 
-- under **Publish**, you would see this piece of code
+- You will see this piece of code
 ```js
 rules_version = '2';
 service cloud.firestore {
@@ -20,7 +20,7 @@ service cloud.firestore {
   }
 }
 ```
-- change the false value to true
+- change the false value to true and click on **Publish**
 ```js
 rules_version = '2';
 service cloud.firestore {
