@@ -99,7 +99,8 @@ Go to http://0.0.0.0:8081/ in your web browser
 <a href="https://www.youtube.com/watch?v=5N22-DSmy3s&feature=youtu.be" target= "_blank">
 <img src="https://github.com/COLUMBIA-COMPUTATIONAL-DESIGN-LAB/symbol_finder_firestore/blob/master/videoDemo.png" width="350"/>
 </a>
-[youtube_link](https://www.youtube.com/watch?v=5N22-DSmy3s&feature=youtu.be)
+
+https://www.youtube.com/watch?v=5N22-DSmy3s&feature=youtu.be
 
 
 
