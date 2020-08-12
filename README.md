@@ -95,6 +95,9 @@ python3 main.py
 ```
 Go to http://0.0.0.0:8081/ in your web browser
 
+### Video Demo
+![Video](./videoDemo.png)
+
 
 
 
