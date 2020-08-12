@@ -24,15 +24,15 @@ git clone https://github.com/COLUMBIA-COMPUTATIONAL-DESIGN-LAB/symbol_finder_fir
 There are 2 ways to set up Firestore:
 
 ### Option 1 (Default): Create your own Firestore database
-* [Click here to see intructions on how to setup your own Firestore](https://github.com/COLUMBIA-COMPUTATIONAL-DESIGN-LAB/symbol_finder_firestore/blob/master/SettingFirestore.MD)
+* [Click here to see intructions to create your own Firestore database](https://github.com/COLUMBIA-COMPUTATIONAL-DESIGN-LAB/symbol_finder_firestore/blob/master/SettingFirestore.MD)
 
 ### Option 2 (For VisiBlends Team only): Get access to existing database
 1. Ask a VisiBlends team member for the Firestore private key
 2. In the root directory of your application, create a file with the name of **symbolFinderSecret.json** 
 3. Copy and paste the key into **./symbolFinderSecret.json** file
 - The key should look like this on your **./symbolFinderSecret.json** file 
-```js
 // (this one is fake, so don't use it!)
+```js
 {
   "type": "service_account",
   "project_id": "symbol-finder-db",
@@ -73,9 +73,6 @@ var api_key = "enter your api key here"
 ```js
 var api_key = "AIzXXXXSyByCCQQGfVOYjE-Eceg-Yq4rXOA27fxopyashg"
 ```
-
-
-
 
 ## 4. Install dependencies (libraries)
 It is highly recommended to use a [virtual enviroment](https://docs.python.org/3/library/venv.html)
