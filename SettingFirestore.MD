@@ -61,3 +61,14 @@ service cloud.firestore {
 
 ```
 
+## 6. Update the ProjectID in **main.py**
+- Under *setting* in Firestore, click on **General**
+- It would show your project ID
+- replace that project ID in **main.py**
+```js
+cred = credentials.Certificate("./symbolFinderSecret.json")
+firebase_admin.initialize_app(cred, {
+    'projectId' : 'your-project-id' //replace here
+})
+```
+
