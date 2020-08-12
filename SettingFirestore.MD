@@ -62,7 +62,7 @@ service cloud.firestore {
 ```
 
 ## 6. Update the ProjectID in **main.py**
-- Under *setting* in Firestore, click on **General**
+- Under *Project settings* in Firestore, click on **General**
 - It would show your project ID
 - replace that project ID in **main.py**
 ```js
