@@ -94,7 +94,7 @@ $ source yourenv/bin/activate
 ```s
 $ deactivate 
 ```
-[virtual enviroment info](https://docs.python.org/3/library/venv.html)
+[learn more about virtual enviroment](https://docs.python.org/3/library/venv.html)
 
 
 ### step 2 (install libraries):
