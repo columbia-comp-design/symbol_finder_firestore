@@ -74,24 +74,46 @@ var api_key = "enter your api key here"
 var api_key = "AIzXXXXSyByCCQQGfVOYjE-Eceg-Yq4rXOA27fxopyashg"
 ```
 
-## 4. Install dependencies (libraries)
-It is highly recommended to use a [virtual enviroment](https://docs.python.org/3/library/venv.html)
-```shell
-pip3 install flask
-pip3 install networkx
-pip3 install community
-pip3 install python-louvain
-pip3 install firebase_admin
+## 4. Install dependencies (libraries) using a virtual enviroment 
+
+### step 1 (virtual enviroment):
+1. Install VE software
+```s
+$ sudo /usr/bin/easy_install virtualenv
+```
+2. Go to the folder you want to be in and instantiate a new VE
+```s
+ $ python3 -m virtualenv yourenv
+ ```
+
+3. Activate your Virtual Environment: 
+```s
+$ source yourenv/bin/activate
+```
+- Note: to deactivate your virtual enviroment, go to the root directory:
+```s
+$ deactivate 
+```
+[virtual enviroment info](https://docs.python.org/3/library/venv.html)
+
+
+### step 2 (install libraries):
+```s
+$ pip3 install flask
+$ pip3 install networkx
+$ pip3 install community
+$ pip3 install python-louvain
+$ pip3 install firebase_admin
 ```
 
 - Note: If you encounter this error : *ImportError: cannot import name 'opentype'*
-```shell
-pip install --upgrade pyasn1-modules
+```s
+$ pip install --upgrade pyasn1-modules
 ```
 
 ## 5. Run the application 
-```shell
-python3 main.py
+```s
+$ python3 main.py
 ```
 Go to http://0.0.0.0:8081/ in your web browser
 
