@@ -2,15 +2,15 @@
 A neat webapp for brainstorming associations for concepts and finding images for them. 
 
 ##### Tech Overview 
-- Database: Firestore 
-- Server: Flask 
-- Intereface:  Browser 
+SymbolFinder uses:
+- Firestore for data storage 
+- Flask for backend (web server)
+- Chrome for viewing the application
 
-Note: Here is the [repo](https://github.com/savvaspetridis/symbol_finder) for a version that stores the images locally on your computer 
 
 # Steps for running the webapp on your computer 
 1. Clone the repository
-2. Set up Database with Firstore
+2. Set up database with Firestore
 3. Set up Google Custom Search API
 4. Install dependencies (libraries)
 5. Run the application
@@ -21,19 +21,18 @@ Note: Here is the [repo](https://github.com/savvaspetridis/symbol_finder) for a 
 git clone https://github.com/COLUMBIA-COMPUTATIONAL-DESIGN-LAB/symbol_finder_firestore.git
 ```
 ## 2. Set up Database with Firestore
+There are 2 ways to set up Firestore:
 
-You can use Visiblends' Firestore database or setup your own Firestore database
+### Option 1 (Default): Create your own Firestore database
+* [Click here to see intructions to create your own Firestore database](https://github.com/COLUMBIA-COMPUTATIONAL-DESIGN-LAB/symbol_finder_firestore/blob/master/SettingFirestore.MD)
 
-### For Setting up your own Firestore Database
-* [Click here to see intructions on how to setup your own Firestore](https://github.com/COLUMBIA-COMPUTATIONAL-DESIGN-LAB/symbol_finder_firestore/blob/master/SettingFirestore.MD)
-
-### For VisiBlends Team: Using VisiBlends Database
+### Option 2 (For VisiBlends Team only): Get access to existing database
 1. Ask a VisiBlends team member for the Firestore private key
 2. In the root directory of your application, create a file with the name of **symbolFinderSecret.json** 
 3. Copy and paste the key into **./symbolFinderSecret.json** file
 - The key should look like this on your **./symbolFinderSecret.json** file 
-```js
 // (this one is fake, so don't use it!)
+```js
 {
   "type": "service_account",
   "project_id": "symbol-finder-db",
@@ -55,8 +54,8 @@ You can use Visiblends' Firestore database or setup your own Firestore database
 3. Click on **enable**
 4. Click on **CREATE CREDENTIALS**
 5. Under **Add credentials to your project**, 
-  -  under *Which API are you using*: select **custom search api**
-  -  under *Which API are you using*: select **web server**
+  -  under *Which API are you using?*: select **custom search api**
+  -  under *Where will you be calling the API from?*: select **web server**
   -  under *What data will you be accessing?*: select **Application data**
   -  under *Are you planning to use this API with App Engine or Compute Engine?*: select **No, I’m not using them**
   -  then click on the button **what credentials do I need?**
@@ -75,30 +74,55 @@ var api_key = "enter your api key here"
 var api_key = "AIzXXXXSyByCCQQGfVOYjE-Eceg-Yq4rXOA27fxopyashg"
 ```
 
+## 4. Install dependencies (libraries) using a virtual enviroment 
+
+### step 1 (virtual enviroment):
+1. Install VE software
+```s
+$ sudo /usr/bin/easy_install virtualenv
+```
+2. Go to the folder you want to be in and instantiate a new VE
+```s
+ $ python3 -m virtualenv yourenv
+ ```
+
+3. Activate your Virtual Environment: 
+```s
+$ source yourenv/bin/activate
+```
+- Note: to deactivate your virtual enviroment, go to the root directory:
+```s
+$ deactivate 
+```
+[learn more about virtual enviroment](https://docs.python.org/3/library/venv.html)
 
 
-
-## 4. Install dependencies (libraries)
-It is highly recommended to use a [virtual enviroment](https://docs.python.org/3/library/venv.html)
-```js
-pip3 install flask
-pip3 install networkx
-pip3 install community
-pip3 install python-louvain
-pip3 install firebase_admin
+### step 2 (install libraries):
+```s
+$ pip3 install flask
+$ pip3 install networkx
+$ pip3 install community
+$ pip3 install python-louvain
+$ pip3 install firebase_admin
 ```
 
 - Note: If you encounter this error : *ImportError: cannot import name 'opentype'*
-```
-pip install --upgrade pyasn1-modules
+```s
+$ pip install --upgrade pyasn1-modules
 ```
 
 ## 5. Run the application 
+```s
+$ python3 main.py
 ```
-python3 main.py
-```
-Run http://0.0.0.0:8081/ in your web browser
+Go to http://0.0.0.0:8081/ in your web browser
 
+### Video Demo
+<a href="https://www.youtube.com/watch?v=5N22-DSmy3s&feature=youtu.be" target= "_blank">
+<img src="https://github.com/COLUMBIA-COMPUTATIONAL-DESIGN-LAB/symbol_finder_firestore/blob/master/videoDemo.png" width="350"/>
+</a>
+
+https://www.youtube.com/watch?v=5N22-DSmy3s&feature=youtu.be
 
 
 

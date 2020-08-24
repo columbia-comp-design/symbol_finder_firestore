@@ -4,12 +4,12 @@
 - Give it a name
 
 ## 2. Create a database
-- Click on **Start in production mode** and the **next** button
+- Under the **Develop** tab on the lefthand side, click on **Start in production mode** and the **next** button
 - Choose a location. Ex: US-Central
 
 ## 3. Change permission
-- Click on "RULE" tab 
-- under **Publish**, you would see this piece of code
+- Under the **Database** header, click on "Rules" tab 
+- You will see this piece of code
 ```js
 rules_version = '2';
 service cloud.firestore {
@@ -20,7 +20,7 @@ service cloud.firestore {
   }
 }
 ```
-- change the false value to true
+- change the false value to true and click on **Publish**
 ```js
 rules_version = '2';
 service cloud.firestore {
@@ -33,7 +33,7 @@ service cloud.firestore {
 ```
 
 ## 4. Generate the private key 
-- Go to setting 
+- Go to settings
 - Click on **Users and Permissions**
 - Click on the **Service accounts** tab
 - Click on the **Generate new private key** button
@@ -42,8 +42,8 @@ service cloud.firestore {
 
 ## 5. Use the key for your symbolFinder application 
  - In the root directory of your application, create a file with the name of **symbolFinderSecret.json** 
--  copy and past the key into **./symbolFinderSecret.json** file
-- The key should look like this:
+-  Copy and paste the key into **./symbolFinderSecret.json** file
+- The key should look something like this:
 ```js
 // (this one is fake, so don't use it!) 
 {
@@ -59,5 +59,16 @@ service cloud.firestore {
   "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x539/firebase-adminsdk-app-project.iam.gserviceaccount.com"
 }
 
+```
+
+## 6. Update the ProjectID in **main.py**
+- Under *Project settings* in Firestore, click on **General**
+- It would show your project ID
+- replace that project ID in **main.py**
+```js
+cred = credentials.Certificate("./symbolFinderSecret.json")
+firebase_admin.initialize_app(cred, {
+    'projectId' : 'your-project-id' //replace here
+})
 ```
 
