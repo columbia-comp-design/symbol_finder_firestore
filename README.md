@@ -169,8 +169,8 @@ covid-19	isolation	7	-1	-1
 For the word columbia 
 ```
 cue	response	R123	N	R123.Strength
-columbia Butler Library	1	-1	-1
-columbia	University  1	-1	-1
+columbia  Butler Library	1	-1	-1
+columbia	University 	1	-1	-1
 columbia	Tree Lighting	1	-1	-1
 ```
 - Backward associations
