@@ -129,14 +129,14 @@ https://www.youtube.com/watch?v=5N22-DSmy3s&feature=youtu.be
 # 6 Others
 ## 6. 1. How to insert a new word to the dictionary (SWOW)
 
-1. Search for the word in [https://smallworldofwords.org/en/project/explore](https://smallworldofwords.org/en/project/explore)
+1. **Search for the word in [https://smallworldofwords.org/en/project/explore]**(https://smallworldofwords.org/en/project/explore)
 - The word **Covid-19**
-2. You will see three grids:
+##### You will see three grids:
 - Forward associations 
 - Backward associations
 - Related words
 You will see words that are associated with the concept you searched for 
-3. Write down the association in **data/strength.SWOW-EN.R123.cvs**
+2. **Write down the association in *data/strength.SWOW-EN.R123.cvs***
 - Forward associations 
 ```
 cue	response	R123	N	R123.Strength
@@ -153,7 +153,7 @@ pandemic	covid-19	2	-1	-1
 - The separator for the **strength.SWOW-EN.R123.cvs** is a **Tab**
 - Make sure that "Insert spaces when pressing tab" is disable
 
-4. Delete **swow_dict.json** from your local machine located in the root directory of this application 
+3. **Delete *swow_dict.json* from your local machine located in the root directory of this application**
 
 
 
