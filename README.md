@@ -130,7 +130,7 @@ https://www.youtube.com/watch?v=5N22-DSmy3s&feature=youtu.be
 ## 6. 1. How to insert a new word to the dictionary (SWOW)
 
 1. **Find associations**
-1. 1. **Option 1: Search for the word in [https://smallworldofwords.org/en/project/explore]**(https://smallworldofwords.org/en/project/explore)
+#### **Option 1: Search for the word in [https://smallworldofwords.org/en/project/explore]**(https://smallworldofwords.org/en/project/explore)
 - The word **Covid-19**
 
 ### You will see three grids:
@@ -140,7 +140,7 @@ https://www.youtube.com/watch?v=5N22-DSmy3s&feature=youtu.be
 
 You will see words that are associated with the concept you searched for 
 
-1. 2. **Option 2: Manually input associated words** 
+#### **Option 2: Manually input associated words** 
 - The associations for the word **Columbia University** could be:
 ```
 Butler Library 
