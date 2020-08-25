@@ -131,7 +131,7 @@ https://www.youtube.com/watch?v=5N22-DSmy3s&feature=youtu.be
 
 1. **Search for the word in [https://smallworldofwords.org/en/project/explore]**(https://smallworldofwords.org/en/project/explore)
 - The word **Covid-19**
-##### You will see three grids:
+### You will see three grids:
 - Forward associations 
 - Backward associations
 - Related words
