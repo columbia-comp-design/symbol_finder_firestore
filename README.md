@@ -157,6 +157,7 @@ The Varsity Show
 
 
 2. **Write down the association in *data/strength.SWOW-EN.R123.cvs***
+## Note: your N field must be greater than 1 
 - Forward associations 
 For the word covid-19
 ```
@@ -169,9 +170,9 @@ covid-19	isolation	7	-1	-1
 For the word columbia 
 ```
 cue	response	R123	N	R123.Strength
-columbia  Butler Library	1	-1	-1
-columbia	University 	1	-1	-1
-columbia	Tree Lighting	1	-1	-1
+columbia university  Butler Library	2	-1	-1
+columbia universtiy	University 	2	-1	-1
+columbia university	Tree Lighting	2	-1	-1
 ```
 - Backward associations
 ```

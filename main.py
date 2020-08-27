@@ -12,8 +12,8 @@ import firebase_admin
 from firebase_admin import credentials, firestore
 import json 
 
-# projectsDate = "summer2020"
-projectsDate = "testing2020"
+projectsDate = "summer2020"
+# projectsDate = "demo"
 
 cred = credentials.Certificate("./symbolFinderSecret.json")
 firebase_admin.initialize_app(cred, {
