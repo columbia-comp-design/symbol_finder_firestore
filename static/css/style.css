@@ -439,3 +439,12 @@ body {
 .img_label{
   text-align: center;
 }
+
+.home_menu_bar{
+  z-index: 1;
+}
+
+.home_menu_bar > h1{
+ margin:0;
+ padding: 0;
+}

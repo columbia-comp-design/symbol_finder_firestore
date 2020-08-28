@@ -2,12 +2,24 @@
   height: 100%;
   width: 300px;
   position: fixed;
-  z-index: 1;
+  z-index: 3;
   top: 0px;
   left: 0;
   background-color: #f2f2f2;
   overflow-x: hidden;
-  padding-top: 20px;
+  padding-top: 33px;
+}
+
+.panel-body{
+  padding-top: 2px !important;
+}
+
+#home_button{
+  color: black;
+  font-family: 'Times New Roman', Times, serif;
+  margin: 0;
+  padding:0;
+  padding-left: 20px;
 }
 
 .sidenav a {
@@ -27,6 +39,7 @@
 }
 
 .main {
+  z-index: 1;
   margin-left: 300px; /* Same as the width of the sidenav */
   font-size: 28px; /* Increased text to enable scrolling */
   padding: 0px 10px;
@@ -113,10 +126,11 @@
   border-style: solid;
   border-color: black;
   background-color: inherit;
-  padding: 14px 28px;
+  padding:5px;
   font-size: 14px;
-  margin-left: 40px;
-  margin-bottom: 6px;
+  margin: 10px;
+  margin-bottom: 10px;
+
   cursor: pointer;
   display: inline-block;
 }

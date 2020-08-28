@@ -68,6 +68,28 @@ getConceptCounts = function () {
 populate_first_step_instructions = function () {
   var instruction_div = document.getElementById("instructions");
 
+
+
+  var skip_but = document.createElement("button");
+  skip_but.innerHTML = 'skip'
+
+  skip_but.onclick = function(event) {
+    // console.log(event)
+    explore()
+  }
+
+  instruction_div.appendChild(skip_but);
+
+
+
+  // chekc whether there are cluster selected 
+  // if there are selected, then show SKIP 
+
+  // alwats show select all
+
+  // show skip 
+
+
   var instruction_text = document.createElement("p");
   if(tree_view_json.hasOwnProperty('children')){
     var number_of_clusters = String(tree_view_json.children.length);
@@ -1277,6 +1299,15 @@ function fill_treeview_sidebar(node_name, tree_view_json, node_path) {
 
   var sb = document.getElementById('sidebar');
   sb.innerHTML = '';
+
+  var home_but = document.createElement("a");
+  home_but.setAttribute('href','/' );
+  home_but.setAttribute('id','home_button' );
+  home_but.innerHTML = 'Home'
+
+  sb.appendChild(home_but)
+
+  
   $("#sidebar").animate({ scrollTop: 0 }, 2000);
   var cluster_num = tree_view_json.length;
   // ========================OVERVIEW SECTION of sidebar ===========================
