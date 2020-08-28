@@ -68,17 +68,46 @@ getConceptCounts = function () {
 populate_first_step_instructions = function () {
   var instruction_div = document.getElementById("instructions");
 
+  var tree = $("#tree").fancytree("getTree");
+  var isSkip = false;
 
-
-  var skip_but = document.createElement("button");
-  skip_but.innerHTML = 'skip'
-
-  skip_but.onclick = function(event) {
-    // console.log(event)
-    explore()
+  node = tree.rootNode;
+  //check each cluster child 
+  for(let j=0;j<node.children.length;j++){
+    //check each cluster
+    if(node.children[j].selected == true){
+      isSkip = true;
+      break;
+    }
   }
 
-  instruction_div.appendChild(skip_but);
+  if(isSkip){
+    var skip_but = document.createElement("button");
+    skip_but.innerHTML = 'skip'
+    skip_but.onclick = function(event) {
+      // console.log(event)
+      explore()
+    }
+    instruction_div.appendChild(skip_but);
+  }
+
+  var select_all_but = document.createElement("button");
+  select_all_but.innerHTML = 'Select All Clusters'
+  select_all_but.onclick = function(event) {
+      // console.log(event)
+
+      for(let j=0;j<node.children.length;j++){
+        //check each cluster
+        node.children[j].selected = true
+      }
+
+      tree_view_json = tree.toDict(true);
+      update_tree_view_json_to_server(tree_view_json);
+
+      explore()
+    }
+    instruction_div.appendChild(select_all_but);
+  
 
 
 
@@ -1658,6 +1687,8 @@ function fill_treeview_sidebar(node_name, tree_view_json, node_path) {
       tree_view_json = data.tree.toDict(true);
       update_tree_view_json_to_server(tree_view_json);
       // console.log("init called end tree_view_json ", tree_view_json);
+      // document.body.scrollTop = 0;
+      topFunction()
 
     },
     init: function (event, data) {
