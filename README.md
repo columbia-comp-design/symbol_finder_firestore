@@ -1,5 +1,7 @@
+
 # Symbol Finder 
 A neat webapp for brainstorming associations for concepts and finding images for them. 
+Learn more about https://columbia-computational-design-lab.github.io/symbol_finder_web/
 
 ##### Tech Overview 
 SymbolFinder uses:
