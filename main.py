@@ -12,6 +12,10 @@ import firebase_admin
 from firebase_admin import credentials, firestore
 import json 
 
+import logging
+log = logging.getLogger('werkzeug')
+log.setLevel(logging.ERROR)
+
 projectsDate = "summer2020"
 # projectsDate = "demo"
 
@@ -195,7 +199,7 @@ def finder_for_concept(username,concept):
 def finder(username,concept,node_path):
 
 	print("calling finder() in main.py ")
-	print("/<username>/<concept>/<node_path>/finder called TESTING. username: ", username, " concept: ", concept, " node_path: ", node_path)
+	# print("/<username>/<concept>/<node_path>/finder called TESTING. username: ", username, " concept: ", concept, " node_path: ", node_path)
 
 	# Call this function because modified swow_dict must be returned 
 	get_cluster_json_for_root(concept)

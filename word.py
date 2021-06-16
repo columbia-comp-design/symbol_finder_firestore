@@ -73,7 +73,7 @@ def create_master_list(swow_dict):
 	return swow_dict
 
 def load_swow():
-	print("load_swow() called")
+	# print("load_swow() called")
 	swow_dict = {}
 	swow_f = open("./data/strength.SWOW-EN.R123.csv","r",encoding='UTF8')
 	swow_f = swow_f.read()
@@ -129,52 +129,7 @@ def load_swow():
 		i = i + 1
 	return swow_dict
 
-'''
-def create_networkx_graph(swow_dict,root,depth):
-	nodes = {}
-	edges = {}
-	curr_depth = 0
-	G = nx.Graph()
-	curr_nodes = [root]
-	while curr_depth < depth:
-		next_nodes = []
-		for n in curr_nodes: 
-			swow_entry = swow_dict[n]
-			m_list = swow_entry["master"]
-			sorted_m_list = sorted(m_list.items(), key=operator.itemgetter(1),reverse=True)
-			max_new_nodes = 5
-			new_node_cnt = 0
-			top_20 = sorted_m_list
-			# old: top_20 = sorted_m_list[:20]
-			if curr_depth == 0:
-				# old top_20 = sorted_m_list[:60]
-				top_20 = sorted_m_list[:60]
-				max_new_nodes = len(sorted_m_list)
-			for word_weight_pair in top_20:
-				word = word_weight_pair[0]
-				if new_node_cnt == max_new_nodes and word not in nodes:
-					continue
-				if word not in stop_words:
-					weight = word_weight_pair[1]
-					if word not in nodes:
-						next_nodes.append(word)
-						nodes[word] = {}
-						new_node_cnt = new_node_cnt + 1
-					edge = (n,word)
-					edge = frozenset(edge)
-					if edge not in edges and len(edge) == 2:
-						edges[edge] = {"weight": weight}
-		curr_depth = curr_depth + 1
-		curr_nodes = next_nodes
-	edge_list = [e for e in edges]
-	node_list = [n for n in nodes]
-	
 
-	# OLD
-	G.add_nodes_from(node_list)
-	G.add_edges_from(edge_list)
-	return G
-'''
 
 def create_word_replacement_dict():
 	sts_file = open("space_to_squish_final.txt","r")
@@ -275,115 +230,6 @@ def create_networkx_graph(swow_dict,root,depth):
 	G.add_weighted_edges_from(full_edge_list)
 	# print(G.edges.data('weight', default=1))
 	return G
-
-
-'''
-def create_networkx_graph(swow_dict,root,depth):
-	nodes = {}
-	edges = {}
-	curr_depth = 0
-	G = nx.Graph()
-	curr_nodes = [root]
-	while curr_depth < depth:
-		next_nodes = []
-		for n in curr_nodes: 
-			swow_entry = swow_dict[n]
-			m_list = swow_entry["master"]
-			sorted_m_list = sorted(m_list.items(), key=operator.itemgetter(1),reverse=True)
-			max_new_nodes = 10
-			new_node_cnt = 0
-			top_20 = sorted_m_list[:5]
-			# old: top_20 = sorted_m_list[:20]
-			if curr_depth == 0:
-				# old top_20 = sorted_m_list[:60]
-				top_20 = sorted_m_list[:60]
-				max_new_nodes = len(sorted_m_list)
-			for word_weight_pair in top_20:
-				if new_node_cnt == max_new_nodes and word not in nodes:
-					continue
-				word = word_weight_pair[0]
-				if word not in stop_words:
-					weight = word_weight_pair[1]
-					if word not in nodes:
-						next_nodes.append(word)
-						nodes[word] = {}
-						new_node_cnt = new_node_cnt + 1
-					edge = (n,word)
-					edge = frozenset(edge)
-					if edge not in edges and len(edge) == 2:
-						edges[edge] = {"weight": weight}
-		curr_depth = curr_depth + 1
-		curr_nodes = next_nodes
-	edge_list = [e for e in edges]
-	node_list = [n for n in nodes]
-	
-
-	# OLD
-	G.add_nodes_from(node_list)
-	G.add_edges_from(edge_list)
-	return G
-
-	comment out this bit
-	full_edge_list = []
-	for edge in edge_list:
-		s_edge = list(edge)
-		f = s_edge[0]
-		t = s_edge[1]
-		w = edges[edge]["weight"]
-		edge_with_weight = (f,t,w)
-		full_edge_list.append(edge_with_weight)
-
-	print("full_edge_list")
-	print(full_edge_list)
-	node_list = [n for n in nodes]
-	G.add_nodes_from(node_list)
-	G.add_weighted_edges_from(full_edge_list)
-	print(G.edges.data('weight', default=1))
-	return G
-	end comment out
-'''
-
-
-
-'''
-def get_clusters(word,swow_graph):
-	eigenvector_dict = nx.eigenvector_centrality(swow_graph)
-	nx.set_node_attributes(swow_graph, eigenvector_dict, 'eigenvector')
-	communities_generator = community.greedy_modularity_communities(swow_graph)
-
-	cluster_list = []
-	for comm in communities_generator:
-		eigen_list = []
-		conc_list = []
-		for node in comm:
-			if node in wtc_dict:
-				conc_list.append((node,wtc_dict[node]))
-			else:
-				if " " in node: 
-					node_s = node.split(" ")
-					highest_conc = 0
-					for node_word in node_s:
-						if node_word in wtc_dict:
-							if wtc_dict[node_word] > highest_conc:
-								highest_conc = wtc_dict[node_word]
-					if highest_conc > 0:
-						conc_list.append((node,highest_conc))
-					else:
-						conc_list.append((node,0.5))
-				else:
-					conc_list.append((node,0.5))
-			eigen_list.append((node,eigenvector_dict[node]))
-
-		sorted_eigen_list = sorted(eigen_list,key=lambda x:x[1], reverse=True)
-		sorted_eigen_list_just_words = [i[0] for i in sorted_eigen_list]
-		eigen_words = [i[0] for i in sorted_eigen_list]
-		sorted_conc_list = sorted(conc_list,key=lambda x:x[1], reverse=True)
-		sorted_conc_list_just_wrods = [i[0] for i in sorted_conc_list]
-		cluster_list.append((sorted_eigen_list_just_words,sorted_eigen_list[0][1],sorted_conc_list_just_wrods))
-
-	sorted_cluster_list = sorted(cluster_list,key=lambda x:x[1], reverse=True)
-	return sorted_cluster_list
-'''
 
 
 def get_clusters(root_word,G):
@@ -573,11 +419,11 @@ def create_swow_dict_filePath():
 		print("created swow_dict.json file and finished writing to file")
 
 def load_swow_dict_filePath():
-	print("load_swow_dict_filePath() called")
+	# print("load_swow_dict_filePath() called")
 	global swow_dict
 	global swow_data_for_tree_view 
 	# print(swow_data_for_tree_view)
-	print("path exists for swow_dict")
+	# print("path exists for swow_dict")
 	# read
 	with open('swow_dict.json', 'r') as swow_dict_file:
 		swow_dict = json.load(swow_dict_file)

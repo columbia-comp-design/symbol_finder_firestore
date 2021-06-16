@@ -76,9 +76,7 @@
 			contentType: "application/json; charset=utf-8",
 			async: false,
 			success: function (data, text) {
-				console.log('success')
 				$('#startLoader').attr("style", "display:none")
-				console.log(data)
 				username_dict = data;
 				populate_username_btns();
 			},
@@ -331,7 +329,7 @@
 	}
 
 	function add_username_button(username) {
-		console.log(username)
+		// console.log(username)
 		var username_btn = document.createElement("BUTTON");
 		username_btn.innerHTML = username;
 		username_btn.id = username + '_btn';
@@ -341,7 +339,7 @@
 	}
 
 	function add_concept_button(concept) {
-		console.log(concept)
+		// console.log(concept)
 		var concept_btn = document.createElement("BUTTON");
 		concept_btn.innerHTML = concept;
 		concept_btn.id = concept + '_btn';

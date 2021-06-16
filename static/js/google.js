@@ -6,7 +6,9 @@
 */
 //new repo
 //change it to your own keys
-var api_key = "AIzaSyC8IhKmkYCKLLd2lNKx42UBGT268f9k8ew"
+// var api_key = "AIzaSyC8IhKmkYCKLLd2lNKx42UBGT268f9k8ew"
+var api_key = "AIzaSyB8cr4TYHQ_1hekmF0qT6m6UYW-Jlyr1dE"
+
 
 // Extracts the actual urls from the Google API results
 extract_links = function (search_results) {
@@ -19,8 +21,6 @@ extract_links = function (search_results) {
 }
 
 goog = function (t) {
-
-
   return $.ajax({
     type: "GET",
     dataType: 'JSON',
@@ -146,9 +146,10 @@ function isObjEmpty(obj) {
 }
 
 
-search_node_by_path = function(node, path){
 // path should be an array of strings ex :  [ "_1", "_3", "_193", "_1" ]
 // node has to be the root node 
+search_node_by_path = function(node, path){
+    
    for(let i=0;i<path.length;i++){
     // console.log("first for path val ", path[i], " and i: ", i);
 
@@ -231,14 +232,15 @@ multi_google_search = function (term, parent_term, tree_title_click, node_path_k
 }
 
 
+
+
 google_all_clusters = function (clusters) {
   var async_request = [];
   var responses = [];
   var cluster_dict = {};
   var cdict = {};
   for (var i = 0; i < clusters.length; i++) {
-    console.log(clusters[i])
-
+    
     var cluster_title = clusters[i];
     cdict[cluster_title] = {};
     var cluster_words = cluster_title.split(",");
@@ -258,37 +260,47 @@ google_all_clusters = function (clusters) {
         url: "https://www.googleapis.com/customsearch/v1",
         data: ({
           'key': api_key,
-          'cx': '015890050991066315514:iz21fmvdyja',
+          // 'cx': '015890050991066315514:iz21fmvdyja',
+          'cx': '015314052705546372023:zcpr29-rprc', // NEW IMPROVED CX FROM EVAN!
           'alt': 'json',
           'q': concept_searched + " " + cluster_word,
           'searchType': 'image',
           'filter': '1', // removes duplicates?
-          'start': '1', // starting image for search (can only return 10 at a time)
+          // 'start': '1', // starting image for search (can only return 10 at a time)
           'safe': 'active',
         }),
         jsonp: "$callback",
         success: function (e, data) {
-          console.log(i)
+          // console.log(i)
           responses.push(e);
         }
       }));
     }
 
-  }
 
+
+  //   //SPARE COPY IN CASE I MESS UP!
   $.when.apply(null, async_request).done(function () {
-    console.log("all requests complete.")
+    console.log("Google_all_clusters complete. Responses:")
     console.log(responses);
-    // var cdict = {}
+    console.log(responses.length);
+    // for (i in responses) {
+
     for (var i = 0; i < responses.length; i++) {
       var response = responses[i];
       var search_term = response.queries.request[0].searchTerms;
       var urls = extract_links(response);
+      // console.log("response: "+i)
+      // console.log(search_term)
+      // console.log(urls)
+
+      
       var actual_word = search_term.replace(concept_searched, "")
       actual_word = actual_word.trim();
       var cluster_title = cluster_dict[actual_word]
       cdict[cluster_title][actual_word] = urls;
     }
+
 
     for (var cluster_title in cdict) {
       var cluster_words = cluster_title.split(",");
@@ -299,27 +311,33 @@ google_all_clusters = function (clusters) {
         var cluster_word = cluster_word.trim();
         // cluster_dict[cluster_word] = cluster_title;
 
-        cword_urls = cdict[cluster_title][cluster_word];
-        cword_urls_first_2 = cword_urls.slice(0, 2);
-        final_urls = final_urls.concat(cword_urls_first_2);
-        final_url_dict[cword_urls[0]] = cluster_word;
-        final_url_dict[cword_urls[1]] = cluster_word;
+        // console.log("cluster_title: "+cluster_title)
+        // console.log("cluster_word: "+cluster_word)
+        // console.log("cdict[cluster_title]")
+        // console.log(cdict[cluster_title])
+
+        if (cluster_word in cdict[cluster_title]){
+          cword_urls = cdict[cluster_title][cluster_word];
+          cword_urls_first_2 = cword_urls.slice(0, 2);
+          final_urls = final_urls.concat(cword_urls_first_2);
+          final_url_dict[cword_urls[0]] = cluster_word;
+          final_url_dict[cword_urls[1]] = cluster_word;
+        }else{
+          console.log("did not find images in cdict for cluster_title"+cluster_title+" cluster_word"+cluster_word)
+        }
       }
 
-      console.log("final_urls")
-      console.log(final_urls)
       var url_obj = {};
       url_obj[cluster_title] = final_urls;
 
-      //using 1% of swow_dict
-      // concept_dict[cluster_title].urls = url_obj;
-      // concept_dict[cluster_title].url_to_gsterm = final_url_dict;
       swow_data_for_tree_view[cluster_title].urls = url_obj;
       swow_data_for_tree_view[cluster_title].url_to_gsterm = final_url_dict;
     }
 
     fill_cluster_image_grids(clusters);
   });
+
+  }
 
 }
 
