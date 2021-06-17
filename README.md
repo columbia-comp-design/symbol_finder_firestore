@@ -190,3 +190,30 @@ pandemic	covid-19	2	-1	-1
 
 
 
+## Issues with search engine
+If the resulting images on your searches for symbols seem to be significantly different from/worse than the results on the actual google search, you can fix this.
+
+You should already have an API key, so all you'll need to do to fix this is create a programmable search engine with google, and get the search engine ID.
+Head to https://programmablesearchengine.google.com/about/ and press "Get Started". Then, press "Add" to create a new search engine:
+![](https://i.imgur.com/g9Jonom.png)
+
+In "Sites to search", enter www.google.com, and press "Create".
+
+![](https://i.imgur.com/17BPDAR.png)
+
+Then, head to the Control Panel:
+![](https://i.imgur.com/AFUIG3n.png)
+
+Scroll down on the control panel, and there are three important things for us here:
+![](https://i.imgur.com/ffVfP6x.png)
+
+1. Make sure you enable "Image search"
+2. Make sure you enable "Search the entire web"
+3. Copy the "Search engine ID" value, this is what we'll put into our code.
+
+Once you're here, you're all set, all you have to do is swap out your cx values.
+
+In /static/js/google.js there are a few ajax calls:
+![](https://i.imgur.com/Y3syFhX.png)
+
+in each of these calls, replace the 'cx' value with the your Search engine ID and the resulting symbol searches should closely resemble the results from www.google.com.
